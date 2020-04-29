@@ -37,7 +37,11 @@
     "autoload-dev": {
         "psr-4": {
             "Spatie\\Multitenancy\\Tests\\": "tests"
-        }
+        },
+        "classmap": [
+            "tests/database/migrations/landlord",
+            "tests/database/migrations"
+        ]
     },
     "scripts": {
         "test": "vendor/bin/phpunit",

@@ -3,6 +3,8 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class Tenant extends Model
 {

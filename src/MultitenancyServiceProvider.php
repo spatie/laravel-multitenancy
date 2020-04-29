@@ -2,7 +2,9 @@
 
 namespace Spatie\Multitenancy;
 
+use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Multitenancy\Models\Tenant;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
@@ -11,6 +13,10 @@ class MultitenancyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->registerPublishables();
         }
+
+        $this
+            ->configureRequests()
+            ->configureQueue();
     }
 
     public function register()
@@ -24,11 +30,37 @@ class MultitenancyServiceProvider extends ServiceProvider
             __DIR__ . '/../config/multitenancy.php' => config_path('multitenancy.php'),
         ], 'config');
 
-        if (!class_exists('CreateTenantsTable')) {
+        if (! class_exists('CreateLandlordTenantsTable')) {
             $this->publishes([
                 __DIR__ . '/../database/migrations/landlord/create_landlord_tenants_table.php.stub' => database_path('migrations/landlord' . date('Y_m_d_His', time()) . '_create_tenants_table.php'),
             ], 'migrations');
         }
+
+        return $this;
+    }
+
+    public function configureRequests(): self
+    {
+        if (! $this->app->runningInConsole()) {
+            $host = $this->app['request']->getHost();
+
+            Tenant::whereDomain($host)->firstOrFail()->configure()->use();
+        }
+
+        return $this;
+    }
+
+    public function configureQueue(): self
+    {
+        $this->app['queue']->createPayloadUsing(function () {
+            return $this->app['tenant'] ? ['tenant_id' => $this->app['tenant']->id] : [];
+        });
+
+        $this->app['events']->listen(JobProcessing::class, function ($event) {
+            if (isset($event->job->payload()['tenant_id'])) {
+                Tenant::find($event->job->payload()['tenant_id'])->configure()->use();
+            }
+        });
 
         return $this;
     }
