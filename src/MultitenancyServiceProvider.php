@@ -6,31 +6,30 @@ use Illuminate\Support\ServiceProvider;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     */
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('skeleton.php'),
-            ], 'config');
-
-            /*
-            $this->loadViewsFrom(__DIR__.'/../resources/views', 'skeleton');
-
-            $this->publishes([
-                __DIR__.'/../resources/views' => base_path('resources/views/vendor/skeleton'),
-            ], 'views');
-            */
+            $this->registerPublishables();
         }
     }
 
-    /**
-     * Register the application services.
-     */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'skeleton');
+        $this->mergeConfigFrom(__DIR__.'/../config/multitenancy.php', 'multitenancy');
+    }
+
+    protected function registerPublishables(): self
+    {
+        $this->publishes([
+            __DIR__ . '/../config/multitenancy.php' => config_path('multitenancy.php'),
+        ], 'config');
+
+        if (!class_exists('CreateTenantsTable')) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/landlord/create_landlord_tenants_table.php.stub' => database_path('migrations/landlord' . date('Y_m_d_His', time()) . '_create_tenants_table.php'),
+            ], 'migrations');
+        }
+
+        return $this;
     }
 }
