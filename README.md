@@ -24,7 +24,7 @@ composer require spatie/laravel-multitenancy
 ## Usage
 
 ``` php
-$skeleton = new Spatie\Skeleton();
+$skeleton = new Spatie\Multitenancy();
 echo $skeleton->echoPhrase('Hello, Spatie!');
 ```
 

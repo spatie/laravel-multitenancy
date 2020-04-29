@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Skeleton;
+namespace Spatie\Multitenancy;
 
 use Illuminate\Support\ServiceProvider;
 
-class SkeletonServiceProvider extends ServiceProvider
+class MultitenancyServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
