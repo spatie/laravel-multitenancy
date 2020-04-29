@@ -13,7 +13,7 @@ class Tenant extends Model
     public function configure(): self
     {
         config([
-            'database.connections.tenant.database' => $this->getDatabaseName()
+            'database.connections.tenant.database' => $this->getDatabaseName(),
         ]);
 
         DB::purge('tenant');
