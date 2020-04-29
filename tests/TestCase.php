@@ -60,7 +60,7 @@ abstract class TestCase extends Orchestra
                 'username' => 'root',
                 'host' => '127.0.1',
                 'password' => '',
-                'database' => 'laravel_mt_landlord'
+                'database' => 'laravel_mt_landlord',
             ],
 
             'database.connections.tenant' => [
@@ -68,7 +68,7 @@ abstract class TestCase extends Orchestra
                 'username' => 'root',
                 'host' => '127.0.1',
                 'password' => '',
-                'database' => 'laravel_mt_tenant_1'
+                'database' => 'laravel_mt_tenant_1',
             ],
         ]);
 
