@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Http\Middleware;
 
 use Closure;
+use Symfony\Component\HttpFoundation\Response;
 
 class EnsureValidTenantSession
 {
@@ -23,6 +24,6 @@ class EnsureValidTenantSession
 
     protected function handleInvalidTenantSession($request)
     {
-        abort(401);
+        abort(Response::HTTP_UNAUTHORIZED);
     }
 }
