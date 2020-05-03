@@ -16,7 +16,7 @@ class EnsureValidTenantSessionTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('test-middleware', function() {
+        Route::get('test-middleware', function () {
             return 'ok';
         })->middleware(['web', EnsureValidTenantSession::class]);
 
