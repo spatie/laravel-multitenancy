@@ -22,7 +22,7 @@ class MigrateTenantsCommand extends Command
 
     public function migrateTenant(Tenant $tenant): void
     {
-        $tenant->configure()->use();
+        $tenant->configure()->makeCurrent();
 
         $this->line('');
         $this->info("Migrating tenant `{$tenant->name}` (id: {$tenant->Id})...");
