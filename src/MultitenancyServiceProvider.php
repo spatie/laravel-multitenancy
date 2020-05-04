@@ -20,7 +20,6 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this
             ->configureRequests()
             ->configureQueue();
-
     }
 
     public function register()
@@ -47,7 +46,6 @@ class MultitenancyServiceProvider extends ServiceProvider
     {
         if (! $this->app->runningInConsole()) {
             $this->determineCurrentTenant();
-
         }
 
         return $this;
