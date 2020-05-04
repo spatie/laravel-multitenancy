@@ -6,7 +6,6 @@ use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
-use Spatie\Multitenancy\Tests\TestClasses\User;
 
 abstract class TestCase extends Orchestra
 {

@@ -2,7 +2,6 @@
 
 namespace Spatie\Multitenancy\Tests\Feature\Models;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
