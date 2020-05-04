@@ -5,6 +5,7 @@ namespace Spatie\Multitenancy;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
@@ -14,9 +15,12 @@ class MultitenancyServiceProvider extends ServiceProvider
             $this->registerPublishables();
         }
 
+        $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
+
         $this
             ->configureRequests()
             ->configureQueue();
+
     }
 
     public function register()
@@ -42,9 +46,8 @@ class MultitenancyServiceProvider extends ServiceProvider
     public function configureRequests(): self
     {
         if (! $this->app->runningInConsole()) {
-            $host = $this->app['request']->getHost();
+            $this->determineCurrentTenant();
 
-            Tenant::whereDomain($host)->firstOrFail()->configure()->use();
         }
 
         return $this;
@@ -63,5 +66,15 @@ class MultitenancyServiceProvider extends ServiceProvider
         });
 
         return $this;
+    }
+
+    protected function determineCurrentTenant(): void
+    {
+        /** @var TenantFinder $tenantFinder */
+        $tenantFinder = app(TenantFinder::class);
+
+        $tenant = $tenantFinder->findForRequest(request());
+
+        $tenant->makeCurrent();
     }
 }

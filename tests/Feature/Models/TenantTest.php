@@ -21,6 +21,7 @@ class TenantTest extends TestCase
     public function it_returns_the_current_tenant_and_list_of_its_users()
     {
         $this->tenant->makeCurrent();
+
         factory(User::class, 4)->create();
     }
 

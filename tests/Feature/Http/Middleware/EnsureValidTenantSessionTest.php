@@ -20,12 +20,11 @@ class EnsureValidTenantSessionTest extends TestCase
             return 'ok';
         })->middleware(['web', EnsureValidTenantSession::class]);
 
-        /** @var Tenant $tenant */
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
 
-        $this->tenant->configure()->makeCurrent();
+        $this->tenant->makeCurrent();
     }
-
 
     /** @test */
     public function it_will_set_the_tenant_id_if_it_has_not_been_set()
