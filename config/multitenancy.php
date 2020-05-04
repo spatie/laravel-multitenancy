@@ -17,5 +17,10 @@ return [
      */
     'tenant_model' => \Spatie\Multitenancy\Models\Tenant::class,
 
-
+    /*
+     * If there is a current tenant when dispatching a job, the id of the current tenant
+     * will be automatically set on the job. When the job is executed, the set
+     * tenant on the job will be made current.
+     */
+    'tenant_aware_queue' => true,
 ];

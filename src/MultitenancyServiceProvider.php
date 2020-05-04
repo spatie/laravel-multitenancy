@@ -53,13 +53,23 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     public function configureQueue(): self
     {
+        if (! config('multitenancy.tenant_aware_queue')) {
+            return $this;
+        }
+
         $this->app['queue']->createPayloadUsing(function () {
-            return $this->app['tenant'] ? ['tenant_id' => $this->app['tenant']->id] : [];
+            return $this->app['current_tenant']
+                ? ['tenant_id' => $this->app['current_tenant']->id]
+                : [];
         });
+
 
         $this->app['events']->listen(JobProcessing::class, function ($event) {
             if (isset($event->job->payload()['tenant_id'])) {
-                Tenant::find($event->job->payload()['tenant_id'])->configure()->use();
+                /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+                $tenant = Tenant::find($event->job->payload()['tenant_id']);
+
+                $tenant->makeCurrent();
             }
         });
 
@@ -68,7 +78,7 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     protected function determineCurrentTenant(): void
     {
-        /** @var TenantFinder $tenantFinder */
+        /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
         $tenantFinder = app(TenantFinder::class);
 
         $tenant = $tenantFinder->findForRequest(request());

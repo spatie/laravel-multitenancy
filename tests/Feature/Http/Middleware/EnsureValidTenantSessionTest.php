@@ -29,6 +29,8 @@ class EnsureValidTenantSessionTest extends TestCase
     /** @test */
     public function it_will_set_the_tenant_id_if_it_has_not_been_set()
     {
+        $this->withoutExceptionHandling();
+
         $this->assertNull(session('tenant_id'));
 
         $this

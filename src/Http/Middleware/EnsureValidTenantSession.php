@@ -10,12 +10,12 @@ class EnsureValidTenantSession
     public function handle($request, Closure $next)
     {
         if (! $request->session()->has('tenant_id')) {
-            $request->session()->put('tenant_id', app('tenant')->id);
+            $request->session()->put('tenant_id', app('current_tenant')->id);
 
             return $next($request);
         }
 
-        if ($request->session()->get('tenant_id') !== app('tenant')->id) {
+        if ($request->session()->get('tenant_id') !== app('current_tenant')->id) {
             return $this->handleInvalidTenantSession($request);
         }
 

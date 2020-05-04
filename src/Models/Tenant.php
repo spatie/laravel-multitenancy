@@ -15,9 +15,7 @@ class Tenant extends Model
     {
         $this->configure();
 
-        app()->forgetInstance('tenant');
-
-        app()->instance('tenant', $this);
+        $this->bindAsCurrentTenant();
 
         return $this;
     }
@@ -39,15 +37,22 @@ class Tenant extends Model
 
     public static function current(): ?self
     {
-        if (! app()->has('tenant')) {
+        if (! app()->has('current_tenant')) {
             return null;
         }
 
-        return app('tenant');
+        return app('current_tenant');
     }
 
     public function getDatabaseName(): string
     {
         return $this->database;
+    }
+
+    protected function bindAsCurrentTenant(): void
+    {
+        app()->forgetInstance('current_tenant');
+
+        app()->instance('current_tenant', $this);
     }
 }
