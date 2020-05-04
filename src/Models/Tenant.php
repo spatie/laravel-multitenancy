@@ -13,7 +13,6 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
-
         $this->configure();
 
         app()->forgetInstance('tenant');
