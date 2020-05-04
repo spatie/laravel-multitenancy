@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\Models;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
 
@@ -18,11 +19,13 @@ class TenantTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_current_tenant_and_list_of_its_users()
+    public function when_making_a_tenant_current_it_will_set_the_right_database_name_on_the_tenant_connection()
     {
+        $this->assertNull(DB::connection('tenant')->getDatabaseName());
+
         $this->tenant->makeCurrent();
 
-        factory(User::class, 4)->create();
+        $this->assertEquals('laravel_mt_tenant_1', DB::connection('tenant')->getDatabaseName());
     }
 
     /** @test */

@@ -13,9 +13,8 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
-        if (! app()->runningUnitTests()) {
-            $this->configure();
-        }
+
+        $this->configure();
 
         app()->forgetInstance('tenant');
 

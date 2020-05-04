@@ -2,11 +2,11 @@
 
 namespace Spatie\Multitenancy\Tests;
 
-use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
+use Spatie\Multitenancy\Tests\TestClasses\User;
 
 abstract class TestCase extends Orchestra
 {
@@ -21,8 +21,6 @@ abstract class TestCase extends Orchestra
         $this->migrateDb();
 
         Tenant::truncate();
-
-        User::truncate();
     }
 
     protected function getPackageProviders($app)
@@ -40,10 +38,12 @@ abstract class TestCase extends Orchestra
             ->artisan("migrate --database=landlord --path={$landLordMigrationsPath} --realpath")
             ->assertExitCode(0);
 
+        /*
         $tenantMigrationsPath = realpath(__DIR__ . '/database/migrations');
         $this
             ->artisan("migrate --database=tenant --path={$tenantMigrationsPath} --realpath")
             ->assertExitCode(0);
+        */
 
         return $this;
     }
@@ -51,8 +51,6 @@ abstract class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config(['database.default' => 'landlord']);
-
-        config(['database.default' => 'tenant']);
 
         config([
             'database.connections.landlord' => [
@@ -68,7 +66,7 @@ abstract class TestCase extends Orchestra
                 'username' => 'root',
                 'host' => '127.0.1',
                 'password' => '',
-                'database' => 'laravel_mt_tenant_1',
+                'database' => null,
             ],
         ]);
 
