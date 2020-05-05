@@ -5,7 +5,7 @@ namespace Spatie\Multitenancy\Tasks;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Models\Tenant;
 
-class ConfigureDatabase implements MakeTenantCurrentTask
+class SwitchTenantDatabase implements MakeTenantCurrentTask
 {
     public function makeCurrent(Tenant $tenant): void
     {

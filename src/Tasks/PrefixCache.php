@@ -4,7 +4,7 @@ namespace Spatie\Multitenancy\Tasks;
 
 use Spatie\Multitenancy\Models\Tenant;
 
-class ConfigureCache implements MakeTenantCurrentTask
+class PrefixCache implements MakeTenantCurrentTask
 {
     public function makeCurrent(Tenant $tenant): void
     {
