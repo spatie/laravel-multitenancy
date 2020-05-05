@@ -4,7 +4,6 @@ namespace Spatie\Multitenancy;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
-use Spatie\Multitenancy\Commands\MigrateCommand;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
