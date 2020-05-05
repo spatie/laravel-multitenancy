@@ -8,7 +8,7 @@
 
 This package provides a lightweight solution for making a Laravel app tenant aware. It assumes that every tenant has its own database, and that there is also a "landlord" database with global data.
 
-A large number of projects don't need separate databases for tenants, and could use a single database to store all data for all tenants. We highly recommand first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/). If you, after carefull consideration, want to go for the multi database route, this might be the package for you.
+A large number of projects don't need separate databases for tenants, and could use a single database to store all data for all tenants. We highly recommend first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/). If you, after careful consideration, want to go for the multi database route, this might be the package for you.
 
 Tenant configuration is stored in the `tenants` table in the landlord database.
 
