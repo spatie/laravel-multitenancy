@@ -13,11 +13,11 @@ class MigrateTenantsCommand extends Command
     {
         $tenantQuery = Tenant::query();
 
-        if ($this->argument('tenant')) {
+        if ($this->argument('tenantId')) {
             $tenantQuery = $tenantQuery->where('id', $this->argument('tenantId'));
         }
 
-        $tenantQuery::cursor()->each(fn (Tenant $tenant) => $this->migrateTenant($tenant));
+        $tenantQuery->cursor()->each(fn (Tenant $tenant) => $this->migrateTenant($tenant));
     }
 
     public function migrateTenant(Tenant $tenant): void

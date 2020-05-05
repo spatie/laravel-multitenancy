@@ -4,6 +4,8 @@ namespace Spatie\Multitenancy;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Multitenancy\Commands\MigrateCommand;
+use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
@@ -13,7 +15,9 @@ class MultitenancyServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->registerPublishables();
+            $this
+                ->registerPublishables()
+                ->bootCommands();
         }
 
         $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
@@ -103,5 +107,14 @@ class MultitenancyServiceProvider extends ServiceProvider
         $tenant = $tenantFinder->findForRequest(request());
 
         $tenant->makeCurrent();
+    }
+
+    protected function bootCommands(): self
+    {
+        $this->commands([
+            MigrateTenantsCommand::class,
+        ]);
+
+        return $this;
     }
 }
