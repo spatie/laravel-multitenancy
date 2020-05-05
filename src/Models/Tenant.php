@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
+use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 
 class Tenant extends Model
 {
@@ -13,24 +15,22 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
+        event(new MakingTenantCurrentEvent($this));
+
         $this->configure();
 
         $this->bindAsCurrentTenant();
+
+        event(new MadeTenantCurrentEvent($this));
 
         return $this;
     }
 
     protected function configure(): self
     {
-        config([
-            'database.connections.tenant.database' => $this->getDatabaseName(),
-        ]);
-
-        DB::purge('tenant');
-
-        DB::reconnect('tenant');
-
-        Schema::connection('tenant')->getConnection()->reconnect();
+        $this
+            ->configureTenantDatabase()
+            ->configureTenantCache();
 
         return $this;
     }
@@ -54,5 +54,23 @@ class Tenant extends Model
         app()->forgetInstance('current_tenant');
 
         app()->instance('current_tenant', $this);
+    }
+
+    protected function configureTenantDatabase(): self
+    {
+        config([
+            'database.connections.tenant.database' => $this->getDatabaseName(),
+        ]);
+
+        DB::purge('tenant');
+
+        return $this;
+    }
+
+    protected function configureTenantCache(): self
+    {
+        config()->set('cache.prefix', $this->id);
+
+        return $this;
     }
 }
