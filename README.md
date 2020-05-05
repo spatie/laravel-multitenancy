@@ -10,7 +10,7 @@ This package provides a lightweight solution for making a Laravel app tenant awa
 
 Tenant configuration is stored in the `tenants` table in the landlord database.
 
-By default two databases connections are set up. The `tenant` connection, and the `landlord` connection.
+By default, two databases connections are set up. The `tenant` connection, and the `landlord` connection.
 
 By default, the `tenant` connection is not set. To make a tenant current you can call `makeCurrent` on it.
 
