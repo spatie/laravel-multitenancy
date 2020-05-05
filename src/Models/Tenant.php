@@ -71,6 +71,10 @@ class Tenant extends Model
     {
         config()->set('cache.prefix', $this->id);
 
+        app('cache')->forgetDriver(
+            config('cache.default')
+        );
+
         return $this;
     }
 }
