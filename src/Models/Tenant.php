@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
+use Spatie\Multitenancy\Tasks\MakeTenantCurrentTask;
 
 class Tenant extends Model
 {
@@ -27,9 +28,9 @@ class Tenant extends Model
 
     protected function configure(): self
     {
-        $this
-            ->configureTenantDatabase()
-            ->configureTenantCache();
+        collect(config('multitenancy.make_tenant_current_tasks'))
+            ->map(fn (string $taskClassName) => app($taskClassName))
+            ->each(fn (MakeTenantCurrentTask $task) => $task->makeCurrent($this));
 
         return $this;
     }
@@ -53,27 +54,5 @@ class Tenant extends Model
         app()->forgetInstance('current_tenant');
 
         app()->instance('current_tenant', $this);
-    }
-
-    protected function configureTenantDatabase(): self
-    {
-        config([
-            'database.connections.tenant.database' => $this->getDatabaseName(),
-        ]);
-
-        DB::purge('tenant');
-
-        return $this;
-    }
-
-    protected function configureTenantCache(): self
-    {
-        config()->set('cache.prefix', $this->id);
-
-        app('cache')->forgetDriver(
-            config('cache.default')
-        );
-
-        return $this;
     }
 }

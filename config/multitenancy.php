@@ -1,5 +1,8 @@
 <?php
 
+use Spatie\Multitenancy\Tasks\ConfigureCache;
+use Spatie\Multitenancy\Tasks\ConfigureDatabase;
+
 return [
     /*
      * This class is responsible for determining which tenant should be current
@@ -34,4 +37,13 @@ return [
      */
     'landlord_connection_name' => 'landlord',
 
+    /*
+     * These tasks will be performed to make a tenant current.
+     *
+     * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
+     */
+    'make_tenant_current_tasks' => [
+        ConfigureDatabase::class,
+        ConfigureCache::class,
+    ],
 ];
