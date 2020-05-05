@@ -75,6 +75,8 @@ The code of this package is based on the code shown in [the Multitenancy in Lara
 
 This package aims to be a lightweight solution to make your app multitenancy aware. If you need more features, take a look at [hyn/multi-tenant](https://tenancy.dev/).
 
+Another option you could look at it is [stancl/tenancy](https://github.com/stancl/tenancy).
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
