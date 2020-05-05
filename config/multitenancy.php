@@ -23,4 +23,15 @@ return [
      * tenant on the job will be made current.
      */
     'tenant_aware_queue' => true,
+
+    /*
+     * The connection name to reach the a tenant database
+     */
+    'tenant_connection_name' => 'tenant',
+
+    /*
+     * The connection name to reach the a landlord database
+     */
+    'landlord_connection_name' => 'landlord',
+
 ];

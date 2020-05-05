@@ -1,12 +1,30 @@
-# Make your Laravel app usable by multiple tenants
+**DO NOT USE YET, PACKAGE IN DEVELOPMENT**
+
+# Make your Laravel app tenant aware
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-multitenancy/run-tests?label=tests)](https://github.com/spatie/:package_name/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 
+This package provides a lightweight solution for making a Laravel app tenant aware. It assumes that every tenant has its own database, and that there is also a "landlord" database with global data.
 
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+Tenant configuration is stored in the `tenants` table in the landlord database.
 
+By default two databases connections are set up. The `tenant` connection, and the `landlord` connection.
+
+By default, the `tenant` connection is not set. To make a tenant current you can call `makeCurrent` on it.
+
+```php
+Tenant::current(); // returns null
+
+$tenant = Tenant::whereDomain($host)->first();
+$tenant->makeCurrent(); // the `tenant` connection now uses the `database` of this tenant
+
+Tenant::current(); // returns the `$tenant` instance
+```
+
+The package contains a lot of niceties such as making queued jobs tenant aware, migrating all tenant databases in one go, an easy way to set a connection on a model, and much more.
+ 
 ## Support us
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us). 
@@ -21,12 +39,11 @@ You can install the package via composer:
 composer require spatie/laravel-multitenancy
 ```
 
+Coming soon...
+
 ## Usage
 
-``` php
-$skeleton = new Spatie\Multitenancy();
-echo $skeleton->echoPhrase('Hello, Spatie!');
-```
+Coming soon...
 
 ## Testing
 

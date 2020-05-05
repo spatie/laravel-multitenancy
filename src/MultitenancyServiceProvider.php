@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
@@ -18,6 +19,7 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
 
         $this
+            ->validateConfiguration()
             ->configureRequests()
             ->configureQueue();
     }
@@ -42,7 +44,22 @@ class MultitenancyServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function configureRequests(): self
+    protected function validateConfiguration()
+    {
+        $tenantConnectionName = config('multitenancy.tenant_connection_name');
+
+        if (is_null(config("database.connections.{$tenantConnectionName}"))) {
+            throw InvalidConfiguration::tenantConnectionDoesNotExist();
+        }
+
+        $landlordConnectionName = config('multitenancy.landlord_connection_name');
+
+        if (is_null(config("database.connections.{$landlordConnectionName}"))) {
+            throw InvalidConfiguration::tenantConnectionDoesNotExist();
+        }
+    }
+
+    protected function configureRequests(): self
     {
         if (! $this->app->runningInConsole()) {
             $this->determineCurrentTenant();
@@ -51,7 +68,7 @@ class MultitenancyServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function configureQueue(): self
+    protected function configureQueue(): self
     {
         if (! config('multitenancy.tenant_aware_queue')) {
             return $this;
