@@ -3,14 +3,14 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
+use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 
 class Tenant extends Model
 {
-    protected $connection = 'landlord';
+    use UsesLandlordConnection;
 
     public function makeCurrent(): self
     {
