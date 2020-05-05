@@ -44,7 +44,7 @@ class MultitenancyServiceProvider extends ServiceProvider
         return $this;
     }
 
-    protected function validateConfiguration()
+    protected function validateConfiguration(): self
     {
         $tenantConnectionName = config('multitenancy.tenant_connection_name');
 
@@ -57,6 +57,8 @@ class MultitenancyServiceProvider extends ServiceProvider
         if (is_null(config("database.connections.{$landlordConnectionName}"))) {
             throw InvalidConfiguration::tenantConnectionDoesNotExist();
         }
+
+        return $this;
     }
 
     protected function configureRequests(): self
