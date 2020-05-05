@@ -35,13 +35,21 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Installation
 
+TODO: write full installation docs
+
 You can install the package via composer:
 
 ```bash
 composer require spatie/laravel-multitenancy
 ```
 
-Coming soon...
+`tenant`, `landlord` connections
+
+```bash
+php artisan migrate --path=database/migrations/landlord --database=landlord 
+```
+
+Migrations: `php artisan tenants:migrate `
 
 ## Usage
 
