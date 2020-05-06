@@ -5,6 +5,8 @@ weight: 3
 
 Before using the following instructions, make sure you have performed [the base installation steps](/laravel-multitenancy/v1/installation/base-installation) first.
 
+ Only use the instructions on this page if you want each of your tenants have their own database. 
+
 ## Configuring the database connections
 
 When using separate database for each tenant, your Laravel app needs two database connections. One named `landlord`, which points to the database that should contain the `tenants` table and other system wide related info. The other connection, named `tenant` points to the database of the tenant that is considering the current tenant for a request.
