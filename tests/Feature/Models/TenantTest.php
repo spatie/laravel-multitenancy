@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\Tests\Feature\Models;
 
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabase;
 use Spatie\Multitenancy\Tests\TestCase;
 
 class TenantTest extends TestCase
@@ -15,6 +16,8 @@ class TenantTest extends TestCase
         parent::setUp();
 
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
+
+        config()->set('multitenancy.make_tenant_current_tasks', [SwitchTenantDatabase::class]);
     }
 
     /** @test */

@@ -44,6 +44,8 @@ class EnsureValidTenantSessionTest extends TestCase
     /** @test */
     public function it_will_allow_requests_for_the_tenant_set_in_the_session()
     {
+        $this->withoutExceptionHandling();
+
         session()->put('tenant_id', 1);
 
         $this

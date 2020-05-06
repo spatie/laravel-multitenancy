@@ -5,15 +5,18 @@ namespace Spatie\Multitenancy\Tasks;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\UsesMultitenancyConfig;
 
 class SwitchTenantDatabase implements MakeTenantCurrentTask
 {
+    use UsesMultitenancyConfig;
+
     public function makeCurrent(Tenant $tenant): void
     {
-        $tenantConnectionName = config('multitenancy.tenant_database_connection_name');
+        $tenantConnectionName = $this->tenantDatabaseConnectionName();
 
         if (is_null(config("database.connections.{$tenantConnectionName}"))) {
-            throw InvalidConfiguration::tenantConnectionDoesNotExist();
+            throw InvalidConfiguration::tenantConnectionDoesNotExist($tenantConnectionName);
         }
 
         config([

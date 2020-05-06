@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
@@ -25,9 +26,14 @@ class Tenant extends Model
         return $this;
     }
 
+    protected function makeTenantCurrentTasks(): Collection
+    {
+        return collect(config('multitenancy.make_tenant_current_tasks'));
+    }
+
     protected function configure(): self
     {
-        collect(config('multitenancy.make_tenant_current_tasks'))
+        $this->makeTenantCurrentTasks()
             ->map(fn (string $taskClassName) => app($taskClassName))
             ->each(fn (MakeTenantCurrentTask $task) => $task->makeCurrent($this));
 

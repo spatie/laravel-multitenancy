@@ -1,12 +1,15 @@
 <?php
 
-
 namespace Spatie\Multitenancy\Models\Concerns;
+
+use Spatie\Multitenancy\UsesMultitenancyConfig;
 
 trait UsesTenantConnection
 {
+    use UsesMultitenancyConfig;
+
     public function getConnectionName()
     {
-        return config('multitenancy.tenant_database_connection_name');
+        return $this->tenantDatabaseConnectionName();
     }
 }

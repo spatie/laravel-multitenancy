@@ -3,7 +3,9 @@ title: Introduction
 weight: 1
 ---
 
-**THIS PACKAGE IS WORK IN PROGRESS, DO NOT USE YET**
+Currently, the package is not publicly available, we'll release it as soon as we reach [75 sponsors on GitHub](https://github.com/sponsors/spatie). We are still polishing the package, so some things might change in the final release.
+
+---
 
 This package provides a lightweight solution for making a Laravel app tenant aware. It can determine which tenant should be the current tenant for the request. It also allows you to define what should happen when switching the current tenant to another one.
 

@@ -36,14 +36,16 @@ return [
     'tenant_aware_queue' => true,
 
     /*
-     * The connection name to reach the a tenant database
+     * The connection name to reach the a tenant database.
+     *
+     * Set to `null` to use the default connection.
      */
-    'tenant_database_connection_name' => 'default',
+    'tenant_database_connection_name' => null,
 
     /*
      * The connection name to reach the a landlord database
      */
-    'landlord_database_connection_name' => 'default',
+    'landlord_database_connection_name' => null,
 
     /*
      * This key will be used to bind the current tenant in the container.
