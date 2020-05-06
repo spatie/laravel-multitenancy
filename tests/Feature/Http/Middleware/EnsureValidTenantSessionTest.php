@@ -29,24 +29,19 @@ class EnsureValidTenantSessionTest extends TestCase
     /** @test */
     public function it_will_set_the_tenant_id_if_it_has_not_been_set()
     {
-        $this->withoutExceptionHandling();
-
         $this->assertNull(session('tenant_id'));
 
         $this
             ->get('test-middleware')
             ->assertOk();
 
-        $this->assertNotNull(session('tenant_id'));
-        $this->assertEquals($this->tenant->id, session('tenant_id'));
+        $this->assertEquals($this->tenant->id, session('ensure_valid_tenant_session_tenant_id'));
     }
 
     /** @test */
     public function it_will_allow_requests_for_the_tenant_set_in_the_session()
     {
-        $this->withoutExceptionHandling();
-
-        session()->put('tenant_id', 1);
+        session()->put('ensure_valid_tenant_session_tenant_id', 1);
 
         $this
             ->get('test-middleware')
@@ -56,7 +51,7 @@ class EnsureValidTenantSessionTest extends TestCase
     /** @test */
     public function it_will_not_allow_requests_for_other_tenants()
     {
-        session()->put('tenant_id', 2);
+        session()->put('ensure_valid_tenant_session_tenant_id', 2);
 
         $this
             ->get('test-middleware')
