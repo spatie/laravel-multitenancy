@@ -40,6 +40,6 @@ If you want to determine the "current" tenant some other way, you can [create a 
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](TODO: add link) or [use separate filesystems per tenant](TODO: add link), ... These things are perform by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](TODO: add link) or [use separate filesystems per tenant](TODO: add link), ... These things are perform by [task classes](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that will be executed when making a tenant the current one.
 
 The package can also has an option to [make the queue tenant aware](TODO: add link).

@@ -1,5 +1,6 @@
 ---
-title: Configuring the database
+title: Database
 weight: 3
 ---
 
+TODO

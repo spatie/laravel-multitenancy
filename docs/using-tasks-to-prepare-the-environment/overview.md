@@ -12,4 +12,4 @@ The package ships with various tasks to:
 
 All of these tasks are optional. When you need one, just add it to the `make_tenant_current_tasks` key of the `multitenancy` config file.
 
-You can also [create your own task](TODO: add link).
+You can also [create your own task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).

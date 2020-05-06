@@ -20,46 +20,9 @@ We invest a lot of resources into creating [best in class open source packages](
 
 We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
-## Installation
+## Documentation
 
-TODO: write full installation docs
-
-You can install the package via composer:
-
-```bash
-composer require spatie/laravel-multitenancy
-```
-
-`tenant`, `landlord` connections
-
-```bash
-php artisan migrate --path=database/migrations/landlord --database=landlord 
-```
-
-Migrations: `php artisan tenants:migrate`
-
-
-
-## Usage
-
-TODO...
-
-Tenant configuration is stored in the `tenants` table in the landlord database.
-
-By default, two databases connections are set up. The `tenant` connection, and the `landlord` connection.
-
-By default, the `tenant` connection is not set. To make a tenant current you can call `makeCurrent` on it.
-
-```php
-Tenant::current(); // returns null
-
-$tenant = Tenant::whereDomain($host)->first();
-$tenant->makeCurrent(); // the `tenant` connection now uses the `database` of this tenant
-
-Tenant::current(); // returns the `$tenant` instance
-```
-
-Coming soon...
+You can find the entire documentation for this package [on our documentation site](https://docs.spatie.be/laravel-multitenancy).
 
 ## Testing
 

@@ -1,4 +1,6 @@
 ---
-title: Configuring sending mail
+title: Mail
 weight: 5
 ---
+
+TODO
