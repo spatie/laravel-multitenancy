@@ -6,24 +6,11 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-multitenancy/run-tests?label=tests)](https://github.com/spatie/:package_name/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 
-This package provides a lightweight solution for making a Laravel app tenant aware. It assumes that every tenant has its own database, and that there is also a "landlord" database with global data.
+This package provides a lightweight solution for making a Laravel app tenant aware. It can determine which tenant should be the current tenant for the request. It also allows you to define what should happen when switching the current tenant to another one.
 
-A large number of projects don't need separate databases for tenants, and could use a single database to store all data for all tenants. We highly recommend first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/). If you, after careful consideration, want to go for the multi database route, this might be the package for you.
+It works for multitenancy projects that need to use one or multiple databases.
 
-Tenant configuration is stored in the `tenants` table in the landlord database.
-
-By default, two databases connections are set up. The `tenant` connection, and the `landlord` connection.
-
-By default, the `tenant` connection is not set. To make a tenant current you can call `makeCurrent` on it.
-
-```php
-Tenant::current(); // returns null
-
-$tenant = Tenant::whereDomain($host)->first();
-$tenant->makeCurrent(); // the `tenant` connection now uses the `database` of this tenant
-
-Tenant::current(); // returns the `$tenant` instance
-```
+Before starting with the package, we highly recommend first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/).
 
 The package contains a lot of niceties such as making queued jobs tenant aware, migrating all tenant databases in one go, an easy way to set a connection on a model, and much more.
  
@@ -52,6 +39,23 @@ php artisan migrate --path=database/migrations/landlord --database=landlord
 Migrations: `php artisan tenants:migrate `
 
 ## Usage
+
+TODO...
+
+Tenant configuration is stored in the `tenants` table in the landlord database.
+
+By default, two databases connections are set up. The `tenant` connection, and the `landlord` connection.
+
+By default, the `tenant` connection is not set. To make a tenant current you can call `makeCurrent` on it.
+
+```php
+Tenant::current(); // returns null
+
+$tenant = Tenant::whereDomain($host)->first();
+$tenant->makeCurrent(); // the `tenant` connection now uses the `database` of this tenant
+
+Tenant::current(); // returns the `$tenant` instance
+```
 
 Coming soon...
 
