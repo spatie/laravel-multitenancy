@@ -5,7 +5,7 @@ namespace Spatie\Multitenancy\Tasks;
 use Spatie\Multitenancy\Exceptions\TaskCannotBeExecuted;
 use Spatie\Multitenancy\Models\Tenant;
 
-class PrefixCache implements MakeTenantCurrentTask
+class UseSeparateCachePaths implements MakeTenantCurrentTask
 {
     public function makeCurrent(Tenant $tenant): void
     {
@@ -13,14 +13,14 @@ class PrefixCache implements MakeTenantCurrentTask
 
         $this->ensureCacheStoreSupportsPrefix($storeName);
 
-        config()->set('cache.prefix', "tenant_id_{$tenant->id}");
+        config()->set('cache.path', "tenant_id_{$tenant->id}");
 
         app('cache')->forgetDriver($storeName);
     }
 
     protected function ensureCacheStoreSupportsPrefix(string $storeName): void
     {
-        $supportedDrivers = ['memcached', 'redis'];
+        $supportedDrivers = ['file'];
 
         $driver = config("cache.stores.{$storeName}.driver");
 

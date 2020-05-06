@@ -72,9 +72,5 @@ abstract class TestCase extends Orchestra
                 'database' => null,
             ],
         ]);
-
-
-
-        config()->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
 }
