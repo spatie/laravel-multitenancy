@@ -21,7 +21,7 @@ class TenantTest extends TestCase
     }
 
     /** @test */
-    public function when_making_a_tenant_current_it_will_set_the_right_database_name_on_the_tenant_connection()
+    public function when_making_a_tenant_current_it_will_perform_the_tasks()
     {
         $this->assertNull(DB::connection('tenant')->getDatabaseName());
 
@@ -38,5 +38,20 @@ class TenantTest extends TestCase
         $this->tenant->makeCurrent();
 
         $this->assertEquals($this->tenant->id, Tenant::current()->id);
+    }
+
+    /** @test */
+    public function it_will_bind_the_current_tenant_in_the_container()
+    {
+        $containerKey = config('multitenancy.current_tenant_container_key');
+
+        $this->assertFalse(app()->has($containerKey));
+
+        $this->tenant->makeCurrent();
+
+        $this->assertTrue(app()->has($containerKey));
+
+        $this->assertInstanceOf(Tenant::class, app($containerKey));
+        $this->assertEquals($this->tenant->id, app($containerKey)->id);
     }
 }
