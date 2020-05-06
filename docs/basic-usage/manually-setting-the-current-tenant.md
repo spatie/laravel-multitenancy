@@ -1,5 +1,5 @@
 ---
-title: Manually switching the current tenant
+title: Manually setting the current tenant
 weight: 2
 ---
 

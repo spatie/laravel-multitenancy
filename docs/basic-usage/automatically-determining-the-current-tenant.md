@@ -1,5 +1,5 @@
 ---
-title: Determining the current tenant
+title: Automatically determining the current tenant
 weight: 1
 ---
 
