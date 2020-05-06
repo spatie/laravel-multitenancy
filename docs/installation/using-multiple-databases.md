@@ -92,7 +92,7 @@ You should add this task to the `make_tenant_current_tasks` key.
 ],
 ```
 
-The package also provides [other tasks](TODO: add link) that you could optionally add to `make_tenant_current_tasks`. You can also [create a custom task](TODO: add link).
+The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that you could optionally add to `make_tenant_current_tasks`. You can also [create a custom task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).
 
 ### Creating tenant databases
 
@@ -114,4 +114,4 @@ All models in your project should either use the `UsesLandLordConnection` or `Us
 
 When using multiple tenants, you probably want to [isolate the cache](TODO: add link) or [use separate filesystems per tenant](TODO: add link), ... These things are perform by task classes that will be executed when making a tenant the current one.
 
-The package can also has an option to [make the queue tenant aware](TODO: add link).
+The package can also has an option to [make the queue tenant aware](/laravel-multitenancy/v1/installation/making-queues-tenant-aware/).
