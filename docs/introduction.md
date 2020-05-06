@@ -14,4 +14,3 @@ The package contains a lot of niceties such as making queued jobs tenant aware, 
 ## We'd like to reach 75 sponsors
 
 Currently, the package is not publicly available, we'll release it as soon as we reach [75 sponsors on GitHub](https://github.com/sponsors/spatie). We are still polishing the package, so some things might change in the final release.
- 
