@@ -12,6 +12,8 @@ class EnsureValidTenantSession
 
     public function handle($request, Closure $next)
     {
+        
+
         if (! $request->session()->has('tenant_id')) {
             $request->session()->put('tenant_id', app($this->currentTenantContainerKey())->id);
 
