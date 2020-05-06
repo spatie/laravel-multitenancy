@@ -24,7 +24,6 @@ return [
         SwitchTenantDatabase::class,
         PrefixCache::class,
     ],
-
     /*
      * This class is the model used for storing configuration on tenants.
      *
