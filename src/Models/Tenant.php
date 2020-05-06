@@ -17,9 +17,9 @@ class Tenant extends Model
     {
         event(new MakingTenantCurrentEvent($this));
 
-        $this->configure();
-
-        $this->bindAsCurrentTenant();
+        $this
+            ->performTasksToMakeTenantCurrent()
+            ->bindAsCurrentTenant();
 
         event(new MadeTenantCurrentEvent($this));
 
@@ -31,7 +31,7 @@ class Tenant extends Model
         return collect(config('multitenancy.make_tenant_current_tasks'));
     }
 
-    protected function configure(): self
+    protected function performTasksToMakeTenantCurrent(): self
     {
         $this->makeTenantCurrentTasks()
             ->map(fn (string $taskClassName) => app($taskClassName))

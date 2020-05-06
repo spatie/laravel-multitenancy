@@ -3,6 +3,9 @@
 namespace Spatie\Multitenancy\Tests\Feature\Models;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
+use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabase;
 use Spatie\Multitenancy\Tests\TestCase;
@@ -53,5 +56,19 @@ class TenantTest extends TestCase
 
         $this->assertInstanceOf(Tenant::class, app($containerKey));
         $this->assertEquals($this->tenant->id, app($containerKey)->id);
+    }
+
+    /** @test */
+    public function it_will_fire_off_events_when_making_a_tenant_current()
+    {
+        Event::fake();
+
+        Event::assertNotDispatched(MakingTenantCurrentEvent::class);
+        Event::assertNotDispatched(MadeTenantCurrentEvent::class);
+
+        $this->tenant->makeCurrent();
+
+        Event::assertDispatched(MakingTenantCurrentEvent::class);
+        Event::assertDispatched(MadeTenantCurrentEvent::class);
     }
 }
