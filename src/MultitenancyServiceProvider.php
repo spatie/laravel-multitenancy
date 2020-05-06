@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends ServiceProvider
