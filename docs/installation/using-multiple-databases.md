@@ -71,7 +71,7 @@ To use that tenant finder, specify its class name in the `tenant_finder` key of 
 'tenant_finder' => Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
 ```
 
-If you want to determine the "current" tenant some other way, you can [create a custom tenant finder](TODO: add link).
+If you want to determine the "current" tenant some other way, you can [create a custom tenant finder](/laravel-multitenancy/v1/basic-usage/automatically-determining-the-current-tenant/).
 
 ### Automatically switching to the database of the current tenant
 
@@ -96,7 +96,7 @@ The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-
 
 ### Creating tenant databases
 
-Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be when a `Tenant` model gets created. TODO: add link that explains how to use boot.
+Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/laravel-multitenancy/v1/basic-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
 
 If you want to get a feel of how the package works, you could create a couple of rows in the `tenants` table, fill the `database` attribute and manually create those database.
 
@@ -112,6 +112,6 @@ All models in your project should either use the `UsesLandLordConnection` or `Us
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](TODO: add link) or [use separate filesystems per tenant](TODO: add link), ... These things are perform by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are perform by task classes that will be executed when making a tenant the current one.
 
 The package can also has an option to [make the queue tenant aware](/laravel-multitenancy/v1/installation/making-queues-tenant-aware/).

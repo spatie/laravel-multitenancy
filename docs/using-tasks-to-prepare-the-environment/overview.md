@@ -7,8 +7,8 @@ When making a tenant the current one, the tasks inside the `make_tenant_current_
 
 The package ships with various tasks to:
 
-- [switch the tenant database](TODO: add link) (required when using multiple tenant databases)
-- [prefixing the cache](TODO: add link)
+- [switch the tenant database](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/database) (required when using multiple tenant databases)
+- [prefixing the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/cache)
 
 All of these tasks are optional. When you need one, just add it to the `make_tenant_current_tasks` key of the `multitenancy` config file.
 
