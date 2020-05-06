@@ -9,6 +9,8 @@ This package can be installed via composer:
 composer require "spatie/laravel-multitenancy:^1.0"
 ```
 
+### Publishing the config file
+
 You must publish the config file:
 
 ```bash
@@ -65,7 +67,27 @@ return [
 ];
 ```
 
+### Protecting against cross tenant abuse
 
-If you prefer to use just one glorious database for all your tenants, read the installation instructions for [using a single database](/laravel-multitenancy/v1/installation/using-a-single-database). If you want to use separate databases for each tenant, head over to the installation instructions for [using multiple databases](/laravel-multitenancy/v1/installation/using-multiple-databases). 
+To prevent users from a tenant abusing their session to access another tenant you must use the `Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession` on all routes.
+
+Add it to your global middleware in `app\Http\Kernel.php`
+
+```php
+// in `app\Http\Kernel.php`
+
+protected $middleware = [
+    // ...
+    \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+];
+```
+
+This middleware will respond with an unauthorized response code (401) when the user tries use its session to view another tenant.
+
+### Next steps
+
+If you prefer to use just one glorious database for all your tenants, read the installation instructions for [using a single database](/laravel-multitenancy/v1/installation/using-a-single-database). 
+
+If you want to use separate databases for each tenant, head over to the installation instructions for [using multiple databases](/laravel-multitenancy/v1/installation/using-multiple-databases). 
 
 

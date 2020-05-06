@@ -12,13 +12,15 @@ class EnsureValidTenantSession
 
     public function handle($request, Closure $next)
     {
-        if (! $request->session()->has('tenant_id')) {
-            $request->session()->put('tenant_id', app($this->currentTenantContainerKey())->id);
+        $sessionKey = 'ensure_valid_tenant_session_tenant_id';
+
+        if (! $request->session()->has($sessionKey)) {
+            $request->session()->put($sessionKey, app($this->currentTenantContainerKey())->id);
 
             return $next($request);
         }
 
-        if ($request->session()->get('tenant_id') !== app($this->currentTenantContainerKey())->id) {
+        if ($request->session()->get($sessionKey) !== app($this->currentTenantContainerKey())->id) {
             return $this->handleInvalidTenantSession($request);
         }
 

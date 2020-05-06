@@ -8,6 +8,7 @@ use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 use Spatie\Multitenancy\Tasks\MakeTenantCurrentTask;
+use Spatie\Multitenancy\UsesMultitenancyConfig;
 
 class Tenant extends Model
 {
@@ -49,6 +50,11 @@ class Tenant extends Model
         }
 
         return app($containerKey);
+    }
+
+    public static function checkCurrent(): bool
+    {
+        return static::current() !== null;
     }
 
     public function getDatabaseName(): string

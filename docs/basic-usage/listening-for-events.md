@@ -1,6 +1,6 @@
 ---
 title: Listening for events
-weight: 5
+weight: 6
 ---
 
 The package fires events where you can listen for to perform some extra logic.
