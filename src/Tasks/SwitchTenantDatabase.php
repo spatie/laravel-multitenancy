@@ -23,6 +23,6 @@ class SwitchTenantDatabase implements MakeTenantCurrentTask
             "database.connections.{$tenantConnectionName}.database" => $tenant->getDatabaseName(),
         ]);
 
-        DB::purge('tenant');
+        DB::purge($tenantConnectionName);
     }
 }

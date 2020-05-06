@@ -51,6 +51,10 @@ abstract class TestCase extends Orchestra
     {
         config(['database.default' => 'landlord']);
 
+        config()->set('multitenancy.tenant_database_connection_name', 'tenant');
+
+        config()->set('multitenancy.landlord_database_connection_name', 'landlord');
+
         config([
             'database.connections.landlord' => [
                 'driver' => 'mysql',
@@ -68,6 +72,8 @@ abstract class TestCase extends Orchestra
                 'database' => null,
             ],
         ]);
+
+
 
         config()->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
