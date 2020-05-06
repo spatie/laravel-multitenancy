@@ -36,11 +36,13 @@ class Tenant extends Model
 
     public static function current(): ?self
     {
-        if (! app()->has('current_tenant')) {
+        $containerKey = config('multitenancy.current_tenant_container_key');
+
+        if (! app()->has($containerKey)) {
             return null;
         }
 
-        return app('current_tenant');
+        return app($containerKey);
     }
 
     public function getDatabaseName(): string
@@ -50,8 +52,10 @@ class Tenant extends Model
 
     protected function bindAsCurrentTenant(): void
     {
-        app()->forgetInstance('current_tenant');
+        $containerKey = config('multitenancy.current_tenant_container_key');
 
-        app()->instance('current_tenant', $this);
+        app()->forgetInstance($containerKey);
+
+        app()->instance($containerKey, $this);
     }
 }

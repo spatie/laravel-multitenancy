@@ -7,6 +7,6 @@ trait UsesTenantConnection
 {
     public function getConnectionName()
     {
-        return config('multitenancy.tenant_connection_name');
+        return config('multitenancy.tenant_database_connection_name');
     }
 }

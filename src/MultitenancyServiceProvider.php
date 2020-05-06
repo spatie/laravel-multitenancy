@@ -6,11 +6,14 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
+use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
+    use UsesTenantModel;
+
     public function boot()
     {
         if ($this->app->runningInConsole()) {
@@ -19,7 +22,9 @@ class MultitenancyServiceProvider extends ServiceProvider
                 ->bootCommands();
         }
 
-        $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
+        if (config('multitenancy.tenant_finder')) {
+            $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
+        }
 
         $this
             ->validateConfiguration()
@@ -49,13 +54,13 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     protected function validateConfiguration(): self
     {
-        $tenantConnectionName = config('multitenancy.tenant_connection_name');
+        $tenantConnectionName = config('multitenancy.tenant_database_connection_name');
 
         if (is_null(config("database.connections.{$tenantConnectionName}"))) {
             throw InvalidConfiguration::tenantConnectionDoesNotExist();
         }
 
-        $landlordConnectionName = config('multitenancy.landlord_connection_name');
+        $landlordConnectionName = config('multitenancy.landlord_database_connection_name');
 
         if (is_null(config("database.connections.{$landlordConnectionName}"))) {
             throw InvalidConfiguration::tenantConnectionDoesNotExist();
@@ -79,17 +84,18 @@ class MultitenancyServiceProvider extends ServiceProvider
             return $this;
         }
 
-        $this->app['queue']->createPayloadUsing(function () {
-            return $this->app['current_tenant']
-                ? ['tenant_id' => $this->app['current_tenant']->id]
+        $containerKey = config('multitenancy.current_tenant_container_key');
+
+        $this->app['queue']->createPayloadUsing(function () use ($containerKey) {
+            return $this->app[$containerKey]
+                ? ['tenant_id' => $this->app['currentTenant']->id]
                 : [];
         });
-
 
         $this->app['events']->listen(JobProcessing::class, function ($event) {
             if (isset($event->job->payload()['tenant_id'])) {
                 /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-                $tenant = Tenant::find($event->job->payload()['tenant_id']);
+                $tenant = $this->getTenantModel()::find($event->job->payload()['tenant_id']);
 
                 $tenant->makeCurrent();
             }
@@ -100,6 +106,10 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     protected function determineCurrentTenant(): void
     {
+        if (! config('multitenancy.tenant_finder')) {
+            return;
+        }
+
         /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
         $tenantFinder = app(TenantFinder::class);
 

@@ -6,6 +6,6 @@ trait UsesLandlordConnection
 {
     public function getConnectionName()
     {
-        return config('multitenancy.landlord_connection_name');
+        return config('multitenancy.landlord_database_connection_name');
     }
 }

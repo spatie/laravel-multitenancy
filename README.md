@@ -36,7 +36,9 @@ composer require spatie/laravel-multitenancy
 php artisan migrate --path=database/migrations/landlord --database=landlord 
 ```
 
-Migrations: `php artisan tenants:migrate `
+Migrations: `php artisan tenants:migrate`
+
+
 
 ## Usage
 

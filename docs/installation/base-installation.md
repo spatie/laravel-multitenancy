@@ -1,5 +1,23 @@
-<?php
+---
+title: Base installation
+weight: 1
+---
 
+This package can be installed via composer:
+
+```bash
+composer require "spatie/laravel-multitenancy:^1.0"
+```
+
+You must publish the config file:
+
+```bash
+php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="config"
+```
+
+This is the default content of the config file that will be published at `config/multitenancy.php`:
+
+```php
 use Spatie\Multitenancy\Models\Tenant;
 
 return [
@@ -20,7 +38,7 @@ return [
     'make_tenant_current_tasks' => [
 
     ],
-
+    
     /*
      * This class is the model used for storing configuration on tenants.
      *
@@ -44,9 +62,10 @@ return [
      * The connection name to reach the a landlord database
      */
     'landlord_database_connection_name' => 'default',
-
-    /*
-     * This key will be used to bind the current tenant in the container.
-     */
-    'current_tenant_container_key' => 'currentTenant',
 ];
+```
+
+
+If you prefer to use just one glorious database for all your tenants, read the installation instructions for [using a single database](/laravel-multitenancy/v1/installation/using-a-single-database). If you want to use separate databases for each tenant, head over to the installation instructions for [using multiple databases](/laravel-multitenancy/v1/installation/using-multiple-databases). 
+
+
