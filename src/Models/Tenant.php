@@ -8,7 +8,6 @@ use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 use Spatie\Multitenancy\Tasks\MakeTenantCurrentTask;
-use Spatie\Multitenancy\UsesMultitenancyConfig;
 
 class Tenant extends Model
 {
