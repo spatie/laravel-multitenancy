@@ -6,7 +6,6 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 

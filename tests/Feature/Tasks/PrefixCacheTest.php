@@ -2,7 +2,6 @@
 
 namespace Spatie\Multitenancy\Tests\Feature\Tasks;
 
-use Spatie\Multitenancy\Exceptions\TaskCannotBeExecuted;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\PrefixCache;
 use Spatie\Multitenancy\Tests\TestCase;
