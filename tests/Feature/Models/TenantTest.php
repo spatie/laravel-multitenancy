@@ -20,7 +20,7 @@ class TenantTest extends TestCase
 
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
 
-        config()->set('multitenancy.make_tenant_current_tasks', [SwitchTenantDatabase::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabase::class]);
     }
 
     /** @test */

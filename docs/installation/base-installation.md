@@ -37,7 +37,7 @@ return [
      *
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
      */
-    'make_tenant_current_tasks' => [
+    'switch_tenant_tasks' => [
 
     ],
     

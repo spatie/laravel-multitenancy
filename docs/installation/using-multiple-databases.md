@@ -77,11 +77,11 @@ If you want to determine the "current" tenant some other way, you can [create a 
 
 ### Automatically switching to the database of the current tenant
 
-When making a tenant the "current" one, the package will execute all tasks that are specified in the `make_tenant_current_tasks` key of the `multitenancy` config file.
+When making a tenant the "current" one, the package will execute all tasks that are specified in the `switch_tenant_tasks` key of the `multitenancy` config file.
 
 The package ships with a task called `SwitchTenantDatabase` to will make the tenant database connection use the database whose name is in the `database` attribute of the tenant.
 
-You should add this task to the `make_tenant_current_tasks` key.
+You should add this task to the `switch_tenant_tasks` key.
 
 ```php
 /*
@@ -89,12 +89,12 @@ You should add this task to the `make_tenant_current_tasks` key.
  *
  * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
  */
-'make_tenant_current_tasks' => [
+'switch_tenant_tasks' => [
     Spatie\Multitenancy\Tasks\SwitchTenantDatabase::class,
 ],
 ```
 
-The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that you could optionally add to `make_tenant_current_tasks`. You can also [create a custom task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).
+The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that you could optionally add to `switch_tenant_tasks`. You can also [create a custom task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).
 
 ### Creating tenant databases
 

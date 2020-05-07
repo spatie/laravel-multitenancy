@@ -16,6 +16,6 @@ interface MakeTenantCurrentTask
 }
 ```
 
-To use the tasks you should add it to the `make_tenant_current_tasks` key of the `multitenancy` config file.
+To use the tasks you should add it to the `switch_tenant_tasks` key of the `multitenancy` config file.
 
 

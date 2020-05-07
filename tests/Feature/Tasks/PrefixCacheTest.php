@@ -12,7 +12,7 @@ class PrefixCacheTest extends TestCase
     {
         parent::setUp();
 
-        config()->set('multitenancy.make_tenant_current_tasks', [PrefixCache::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [PrefixCache::class]);
 
         config()->set('cache.default', 'redis');
 

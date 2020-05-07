@@ -112,7 +112,7 @@ class MultitenancyServiceProvider extends ServiceProvider
     protected function registerTasksCollection(): self
     {
         $this->app->singleton(TasksCollection::class, function () {
-            $taskClassNames = config('multitenancy.make_tenant_current_tasks');
+            $taskClassNames = config('multitenancy.switch_tenant_tasks');
 
             return new TasksCollection($taskClassNames);
         });
