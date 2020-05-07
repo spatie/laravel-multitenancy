@@ -3,11 +3,9 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
-use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
+use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
+use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
-use Spatie\Multitenancy\Tasks\MakeTenantCurrentTask;
 
 class Tenant extends Model
 {
@@ -15,27 +13,14 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
-        event(new MakingTenantCurrentEvent($this));
-
-        $this
-            ->performTasksToMakeTenantCurrent()
-            ->bindAsCurrentTenant();
-
-        event(new MadeTenantCurrentEvent($this));
+        app(MakeTenantCurrentAction::class)->execute($this);
 
         return $this;
     }
 
-    protected function makeTenantCurrentTasks(): Collection
+    public function forget(): self
     {
-        return collect(config('multitenancy.make_tenant_current_tasks'));
-    }
-
-    protected function performTasksToMakeTenantCurrent(): self
-    {
-        $this->makeTenantCurrentTasks()
-            ->map(fn (string $taskClassName) => app($taskClassName))
-            ->each(fn (MakeTenantCurrentTask $task) => $task->makeCurrent($this));
+        app(ForgotCurrentTenantEvent::class)->execute($this);
 
         return $this;
     }
@@ -56,17 +41,26 @@ class Tenant extends Model
         return static::current() !== null;
     }
 
+    public function isCurrent(): bool
+    {
+        return optional(static::current())->id === $this->id;
+    }
+
+    public static function forgetCurrent(): ?Tenant
+    {
+        $currentTenant = static::current();
+
+        if (is_null($currentTenant)) {
+            return null;
+        }
+
+        $currentTenant->forgetCurrent();
+
+        return $currentTenant;
+    }
+
     public function getDatabaseName(): string
     {
         return $this->database;
-    }
-
-    protected function bindAsCurrentTenant(): void
-    {
-        $containerKey = config('multitenancy.current_tenant_container_key');
-
-        app()->forgetInstance($containerKey);
-
-        app()->instance($containerKey, $this);
     }
 }

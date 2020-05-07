@@ -6,6 +6,8 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
+use Spatie\Multitenancy\Tasks\SwitchTenantTask;
+use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends ServiceProvider
@@ -25,14 +27,14 @@ class MultitenancyServiceProvider extends ServiceProvider
         }
 
         $this
-            ->validateConfiguration()
             ->configureRequests()
-            ->configureQueue();
+            ->configureQueue()
+            ->registerTasksCollection();
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/multitenancy.php', 'multitenancy');
+        $this->mergeConfigFrom(__DIR__ . '/../config/multitenancy.php', 'multitenancy');
     }
 
     protected function registerPublishables(): self
@@ -47,11 +49,6 @@ class MultitenancyServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        return $this;
-    }
-
-    protected function validateConfiguration(): self
-    {
         return $this;
     }
 
@@ -109,6 +106,17 @@ class MultitenancyServiceProvider extends ServiceProvider
         $this->commands([
             MigrateTenantsCommand::class,
         ]);
+
+        return $this;
+    }
+
+    protected function registerTasksCollection(): self
+    {
+        $this->app->singleton(TasksCollection::class, function () {
+            $taskClassNames = config('multitenancy.make_tenant_current_tasks');
+
+            return new TasksCollection($taskClassNames);
+        });
 
         return $this;
     }

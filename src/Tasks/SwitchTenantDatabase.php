@@ -7,11 +7,21 @@ use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\UsesMultitenancyConfig;
 
-class SwitchTenantDatabase implements MakeTenantCurrentTask
+class SwitchTenantDatabase implements SwitchTenantTask
 {
     use UsesMultitenancyConfig;
 
     public function makeCurrent(Tenant $tenant): void
+    {
+        $this->setTenantConnectionDatabaseName($tenant->getDatabaseName());
+    }
+
+    public function forgetCurrent(): void
+    {
+        $this->setTenantConnectionDatabaseName(null);
+    }
+
+    protected function setTenantConnectionDatabaseName(?string $databaseName)
     {
         $tenantConnectionName = $this->tenantDatabaseConnectionName();
 
@@ -20,7 +30,7 @@ class SwitchTenantDatabase implements MakeTenantCurrentTask
         }
 
         config([
-            "database.connections.{$tenantConnectionName}.database" => $tenant->getDatabaseName(),
+            "database.connections.{$tenantConnectionName}.database" => $databaseName,
         ]);
 
         DB::purge($tenantConnectionName);

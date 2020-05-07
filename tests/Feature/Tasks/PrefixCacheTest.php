@@ -42,14 +42,4 @@ class PrefixCacheTest extends TestCase
         $anotherTenant->makeCurrent();
         $this->assertEquals('another-tenant-value', cache()->get('key'));
     }
-
-    /** @test **/
-    public function it_will_throw_an_exception_when_using_an_unsupported_driver()
-    {
-        $this->expectException(TaskCannotBeExecuted::class);
-
-        config()->set('cache.default', 'file');
-
-        factory(Tenant::class)->create()->makeCurrent();
-    }
 }

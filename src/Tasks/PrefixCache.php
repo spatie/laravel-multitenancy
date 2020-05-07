@@ -2,30 +2,39 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
-use Spatie\Multitenancy\Exceptions\TaskCannotBeExecuted;
 use Spatie\Multitenancy\Models\Tenant;
 
-class PrefixCache implements MakeTenantCurrentTask
+class PrefixCache implements SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant): void
+    protected ?string $originalPrefix;
+
+    private string $storeName;
+
+    private string $cacheKeyBase;
+
+    public function __construct(string $storeName = null, string $cacheKeyBase = null)
     {
-        $storeName = config('cache.default');
+        $this->originalPrefix = config('cache.prefix');
 
-        $this->ensureCacheStoreSupportsPrefix($storeName);
+        $this->storeName = $storeName ?? config('cache.default');
 
-        config()->set('cache.prefix', "tenant_id_{$tenant->id}");
-
-        app('cache')->forgetDriver($storeName);
+        $this->cacheKeyBase = $cacheKeyBase ?? 'tenant_id_';
     }
 
-    protected function ensureCacheStoreSupportsPrefix(string $storeName): void
+    public function makeCurrent(Tenant $tenant): void
     {
-        $supportedDrivers = ['memcached', 'redis'];
+        $this->setCachePrefix($this->cacheKeyBase . $tenant->id);
+    }
 
-        $driver = config("cache.stores.{$storeName}.driver");
+    public function forgetCurrent(): void
+    {
+        $this->setCachePrefix($this->originalPrefix);
+    }
 
-        if (! in_array($driver, $supportedDrivers)) {
-            throw TaskCannotBeExecuted::make($this, "tasks only supports " . implode(', ', $supportedDrivers) . " cache drivers. Used driver: `{$driver}`");
-        }
+    protected function setCachePrefix(string $prefix)
+    {
+        config()->set('cache.prefix', $prefix);
+
+        app('cache')->forgetDriver($this->storeName);
     }
 }

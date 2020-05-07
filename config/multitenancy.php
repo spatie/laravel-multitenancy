@@ -1,6 +1,7 @@
 <?php
 
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tasks\PrefixCache;
 
 return [
     /*
@@ -13,12 +14,12 @@ return [
     'tenant_finder' => null,
 
     /*
-     * These tasks will be performed to make a tenant current.
+     * These tasks will be performed when switching tenants.
      *
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
      */
-    'make_tenant_current_tasks' => [
-
+    'switch_tenant_tasks' => [
+        PrefixCache::class,
     ],
 
     /*
