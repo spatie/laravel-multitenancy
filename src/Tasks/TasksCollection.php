@@ -9,13 +9,15 @@ class TasksCollection extends Collection
     public function __construct($taskClassNames)
     {
         $tasks = collect($taskClassNames)
-            ->map(function ($task) {
-                $taskClass = $task;
-                $taskParameters = [];
+            ->map(function ($taskParameters, $taskClass) {
+                if (is_array($taskParameters) && is_numeric($taskClass)) {
+                    $taskClass = array_key_first($taskParameters);
+                    $taskParameters = $taskParameters[$taskClass];
+                }
 
-                if (is_array($task)) {
-                    $taskClass = array_key_first($task);
-                    $taskParameters = $task[$taskClass];
+                if (is_numeric($taskClass)) {
+                    $taskClass = $taskParameters;
+                    $taskParameters = [];
                 }
 
                 return app()->makeWith($taskClass, $taskParameters);

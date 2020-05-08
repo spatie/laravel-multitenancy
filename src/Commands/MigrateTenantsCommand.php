@@ -26,7 +26,7 @@ class MigrateTenantsCommand extends Command
 
         $this->line('');
         $this->info("Migrating tenant `{$tenant->name}` (id: {$tenant->Id})...");
-        $this->line("-----------------------------------------");
+        $this->line("---------------------------------------------------------");
 
         $options = ['--force' => true];
 
