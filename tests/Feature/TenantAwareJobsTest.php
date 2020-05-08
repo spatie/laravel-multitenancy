@@ -62,7 +62,7 @@ class TenantAwareJobsTest extends TestCase
         $this->artisan('queue:work --once')->assertExitCode(0);
 
         $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertNull($this->tenant->id, $currentTenantIdInJob);
+        $this->assertNull($currentTenantIdInJob);
     }
 
     /** @test */
