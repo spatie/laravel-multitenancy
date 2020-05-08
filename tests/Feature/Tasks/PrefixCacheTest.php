@@ -27,15 +27,12 @@ class PrefixCacheTest extends TestCase
         /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
         $tenant = factory(Tenant::class)->create();
         $tenant->makeCurrent();
-
         $this->assertFalse(cache()->has('key'));
         cache()->put('key', 'tenant-value');
-        $this->assertEquals('tenant-value', cache('key'));
 
         /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
         $anotherTenant = factory(Tenant::class)->create();
         $anotherTenant->makeCurrent();
-
         $this->assertFalse(cache()->has('key'));
         cache()->put('key', 'another-tenant-value');
 
