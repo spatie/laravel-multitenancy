@@ -65,7 +65,6 @@ class TenantAwareJobsTest extends TestCase
         $this->assertNull($this->tenant->id, $currentTenantIdInJob);
     }
 
-
     /** @test */
     public function it_will_inject_the_right_tenant_even_when_the_current_tenant_switches()
     {
@@ -73,20 +72,19 @@ class TenantAwareJobsTest extends TestCase
         $anotherTenant = factory(Tenant::class)->create();
 
         $this->tenant->makeCurrent();
-
         $job = new TestJob($this->valuestore);
         app(Dispatcher::class)->dispatch($job);
 
-        $anotherTenant->makeCurrent();
         $this->artisan('queue:work --once');
 
         $currentTenantIdInJob = $this->valuestore->get('tenantId');
         $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
 
+        $anotherTenant->makeCurrent();
         $job = new TestJob($this->valuestore);
         app(Dispatcher::class)->dispatch($job);
 
-        Tenant::forgetCurrent();
+        $this->artisan('queue:work --once');
 
         $currentTenantIdInJob = $this->valuestore->get('tenantId');
         $this->assertEquals($anotherTenant->id, $currentTenantIdInJob);
