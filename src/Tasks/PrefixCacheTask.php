@@ -4,7 +4,7 @@ namespace Spatie\Multitenancy\Tasks;
 
 use Spatie\Multitenancy\Models\Tenant;
 
-class PrefixCache implements SwitchTenantTask
+class PrefixCacheTask implements SwitchTenantTask
 {
     protected ?string $originalPrefix;
 

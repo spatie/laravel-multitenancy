@@ -3,7 +3,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\Tasks;
 
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\PrefixCache;
+use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 use Spatie\Multitenancy\Tests\TestCase;
 
 class PrefixCacheTest extends TestCase
@@ -12,7 +12,7 @@ class PrefixCacheTest extends TestCase
     {
         parent::setUp();
 
-        config()->set('multitenancy.switch_tenant_tasks', [PrefixCache::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [PrefixCacheTask::class]);
 
         config()->set('cache.default', 'redis');
 

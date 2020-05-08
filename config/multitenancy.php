@@ -1,7 +1,7 @@
 <?php
 
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\PrefixCache;
+use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
 return [
     /*
@@ -19,7 +19,7 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        PrefixCache::class,
+        PrefixCacheTask::class,
     ],
 
     /*
