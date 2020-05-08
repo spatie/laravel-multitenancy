@@ -89,6 +89,31 @@ class TenantTest extends TestCase
     }
 
     /** @test */
+    public function it_can_check_if_the_a_particular_tenant_is_the_current_one()
+    {
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        $tenant = factory(Tenant::class)->create();
+
+        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+        $anotherTenant = factory(Tenant::class)->create();
+
+        $this->assertFalse($tenant->isCurrent());
+        $this->assertFalse($anotherTenant->isCurrent());
+
+        $tenant->makeCurrent();
+        $this->assertTrue($tenant->isCurrent());
+        $this->assertFalse($anotherTenant->isCurrent());
+
+        $anotherTenant->makeCurrent();
+        $this->assertFalse($tenant->isCurrent());
+        $this->assertTrue($anotherTenant->isCurrent());
+
+        Tenant::forgetCurrent();
+        $this->assertFalse($tenant->isCurrent());
+        $this->assertFalse($anotherTenant->isCurrent());
+    }
+
+    /** @test */
     public function it_will_fire_off_events_when_making_a_tenant_current()
     {
         Event::fake();
