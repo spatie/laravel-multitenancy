@@ -6,7 +6,7 @@ use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 use Spatie\Multitenancy\Tests\TestCase;
 
-class PrefixCacheTest extends TestCase
+class PrefixCacheTaskTest extends TestCase
 {
     public function setUp(): void
     {
