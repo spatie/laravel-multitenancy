@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Tests;
 
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
@@ -20,6 +21,8 @@ abstract class TestCase extends Orchestra
         $this->migrateDb();
 
         Tenant::truncate();
+
+        DB::table('jobs')->truncate();
     }
 
     protected function getPackageProviders($app)
@@ -72,5 +75,10 @@ abstract class TestCase extends Orchestra
                 'database' => null,
             ],
         ]);
+    }
+
+    public function tempFile(string $fileName): string
+    {
+        return __DIR__ . "/temp/{$fileName}";
     }
 }
