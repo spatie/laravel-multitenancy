@@ -20,8 +20,10 @@ class PrefixCacheTest extends TestCase
     }
 
     /** @test */
-    public function it_will_separate_the_cache()
+    public function it_will_separate_the_cache_for_each_tenant()
     {
+        cache()->put('key', 'landlord-value');
+
         /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
         $tenant = factory(Tenant::class)->create();
         $tenant->makeCurrent();
@@ -40,5 +42,8 @@ class PrefixCacheTest extends TestCase
 
         $anotherTenant->makeCurrent();
         $this->assertEquals('another-tenant-value', cache()->get('key'));
+
+        Tenant::forgetCurrent();
+        $this->assertEquals('landlord-value', cache()->get('key'));
     }
 }

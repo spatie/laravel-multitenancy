@@ -16,7 +16,7 @@ return [
     /*
      * These tasks will be performed when switching tenants.
      *
-     * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
+     * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
         PrefixCache::class,

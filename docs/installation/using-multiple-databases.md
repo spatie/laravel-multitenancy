@@ -87,7 +87,7 @@ You should add this task to the `switch_tenant_tasks` key.
 /*
  * These tasks will be performed to make a tenant current.
  *
- * A valid task is any class that implements Spatie\Multitenancy\Tasks\MakeTenantCurrentTask
+ * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
  */
 'switch_tenant_tasks' => [
     Spatie\Multitenancy\Tasks\SwitchTenantDatabase::class,

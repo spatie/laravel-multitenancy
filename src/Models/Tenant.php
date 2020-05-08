@@ -3,8 +3,8 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
-use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 
 class Tenant extends Model
@@ -20,7 +20,7 @@ class Tenant extends Model
 
     public function forget(): self
     {
-        app(ForgotCurrentTenantEvent::class)->execute($this);
+        app(ForgetCurrentTenantAction::class)->execute($this);
 
         return $this;
     }
@@ -54,7 +54,7 @@ class Tenant extends Model
             return null;
         }
 
-        $currentTenant->forgetCurrent();
+        $currentTenant->forget();
 
         return $currentTenant;
     }
