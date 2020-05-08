@@ -49,7 +49,7 @@ class PrefixCacheTask implements SwitchTenantTask
         $this->setCachePrefix($this->originalPrefix);
     }
 
-    protected function setCachePrefix(string $prefix)
+    protected function setCachePrefix(string $prefix): void
     {
         config()->set('cache.prefix', $prefix);
 
