@@ -2,16 +2,18 @@
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
-    use UsesTenantModel;
+    use UsesTenantModel,
+        UsesMultitenancyConfig;
 
     public function boot()
     {
@@ -62,26 +64,12 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     protected function configureQueue(): self
     {
-        if (! config('multitenancy.tenant_aware_queue')) {
-            return $this;
-        }
-
-        $containerKey = config('multitenancy.current_tenant_container_key');
-
-        $this->app['queue']->createPayloadUsing(function () use ($containerKey) {
-            return $this->app[$containerKey]
-                ? ['tenant_id' => $this->app['currentTenant']->id]
-                : [];
-        });
-
-        $this->app['events']->listen(JobProcessing::class, function ($event) {
-            if (isset($event->job->payload()['tenant_id'])) {
-                /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-                $tenant = $this->getTenantModel()::find($event->job->payload()['tenant_id']);
-
-                $tenant->makeCurrent();
-            }
-        });
+        $this
+            ->getMultitenancyActionClass(
+                'make_queue_tenant_aware_action',
+                MakeQueueTenantAwareAction::class
+            )
+            ->execute();
 
         return $this;
     }

@@ -2,7 +2,7 @@
 
 namespace Spatie\Multitenancy\Models\Concerns;
 
-use Spatie\Multitenancy\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 
 trait UsesLandlordConnection
 {

@@ -1,5 +1,8 @@
 <?php
 
+use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
+use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
+use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
@@ -34,7 +37,7 @@ return [
      * will be automatically set on the job. When the job is executed, the set
      * tenant on the job will be made current.
      */
-    'tenant_aware_queue' => true,
+    'queue_is_tenant_aware_by_default' => true,
 
     /*
      * The connection name to reach the a tenant database.
@@ -52,4 +55,14 @@ return [
      * This key will be used to bind the current tenant in the container.
      */
     'current_tenant_container_key' => 'currentTenant',
+
+    /*
+     * You can customize some of the behavior of this package by using our own custom action.
+     * Your custom action should always extend the default one.
+     */
+    'actions' => [
+        'make_tenant_current_action' => MakeTenantCurrentAction::class,
+        'forget_current_tenant_action' => ForgetCurrentTenantAction::class,
+        'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
+    ],
 ];

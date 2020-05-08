@@ -13,14 +13,18 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
-        app(MakeTenantCurrentAction::class)->execute($this);
+        $this
+            ->getMultitenancyActionClass('make_tenant_current_action', MakeTenantCurrentAction::class)
+            ->execute($this);
 
         return $this;
     }
 
     public function forget(): self
     {
-        app(ForgetCurrentTenantAction::class)->execute($this);
+        $this
+            ->getMultitenancyActionClass('forget_current_tenant_action', ForgetCurrentTenantAction::class)
+            ->execute($this);
 
         return $this;
     }

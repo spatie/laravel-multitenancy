@@ -5,7 +5,7 @@ namespace Spatie\Multitenancy\Tasks;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 
 class SwitchTenantDatabase implements SwitchTenantTask
 {

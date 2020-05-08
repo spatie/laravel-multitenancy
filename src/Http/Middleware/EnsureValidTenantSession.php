@@ -3,7 +3,7 @@
 namespace Spatie\Multitenancy\Http\Middleware;
 
 use Closure;
-use Spatie\Multitenancy\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureValidTenantSession
