@@ -106,7 +106,7 @@ If you want to get a feel of how the package works, you could create a couple of
 
 When you want to migrate tenant databases, all future migrations should be stored in `database/migrations`.
 
-To perform these migrations you must perform the `tenants:migrate` command. This command will loop over all rows in the `tenants` table. It will make each tenant the current one, switch to the database of the tenant, and make that one active.
+To perform these migrations you must perform the `tenants:migrate` command. This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
 
 ### Preparing models
 
