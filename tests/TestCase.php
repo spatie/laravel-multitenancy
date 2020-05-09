@@ -63,7 +63,7 @@ abstract class TestCase extends Orchestra
                 'driver' => 'mysql',
                 'username' => 'root',
                 'host' => '127.0.1',
-                'password' => '',
+                'password' => env('DB_PASSWORD'),
                 'database' => 'laravel_mt_landlord',
             ],
 
@@ -71,7 +71,7 @@ abstract class TestCase extends Orchestra
                 'driver' => 'mysql',
                 'username' => 'root',
                 'host' => '127.0.1',
-                'password' => '',
+                'password' => env('DB_PASSWORD'),
                 'database' => null,
             ],
         ]);
