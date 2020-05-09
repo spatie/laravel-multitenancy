@@ -26,6 +26,5 @@ class MigrateTenantsCommandTest extends TestCase
     public function it_can_migrate_all_tenant_databases()
     {
         $this->artisan('tenants:migrate')->assertExitCode(0);
-
     }
 }

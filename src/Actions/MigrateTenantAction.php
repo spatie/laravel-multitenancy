@@ -60,6 +60,4 @@ class MigrateTenantAction
 
         return $options;
     }
-
-
 }
