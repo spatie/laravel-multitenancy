@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator;
-use Illuminate\Foundation\Auth\User;
+use Spatie\Multitenancy\Tests\TestClasses\User;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(User::class, fn (Generator $faker) => [
