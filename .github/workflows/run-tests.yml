@@ -29,16 +29,25 @@ jobs:
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
-      - name: Install dependencies
+    - name: Create database
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_landlord;'
+        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1;'
+        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2;'
+
+        - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          DB_PASSWORD: root
