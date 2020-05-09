@@ -3,10 +3,14 @@
 namespace Spatie\Multitenancy\Commands;
 
 use Illuminate\Console\Command;
+use Spatie\Multitenancy\Actions\MigrateTenantAction;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Tenant;
 
 class MigrateTenantsCommand extends Command
 {
+    use UsesMultitenancyConfig;
+
     protected $signature = 'tenants:migrate {tenantId?} {--fresh} {--seed}';
 
     public function handle()
@@ -22,20 +26,17 @@ class MigrateTenantsCommand extends Command
 
     public function migrateTenant(Tenant $tenant): void
     {
-        $tenant->makeCurrent();
-
         $this->line('');
         $this->info("Migrating tenant `{$tenant->name}` (id: {$tenant->Id})...");
         $this->line("---------------------------------------------------------");
 
-        $options = ['--force' => true];
+        /** @var \Spatie\Multitenancy\Actions\MigrateTenantAction $migrateTenantAction */
+        $migrateTenantAction = $this->getMultitenancyActionClass('migrate_tenant', MigrateTenantAction::class);
 
-        if ($this->option('seed')) {
-            $options['--seed'] = true;
-        }
-
-        $migrationCommand = $this->option('fresh') ? 'migrate:fresh' : 'migrate';
-
-        $this->call($migrationCommand, $options);
+        $migrateTenantAction
+            ->output($this->output)
+            ->fresh($this->option('fresh'))
+            ->seed($this->option('seed'))
+            ->execute($tenant);
     }
 }
