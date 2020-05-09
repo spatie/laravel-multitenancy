@@ -13,12 +13,6 @@
             "email": "themsaid@gmail.com",
             "homepage": "http://themsaid.com",
             "role": "Developer"
-        },
-        {
-            "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
-            "role": "Developer"
         }
     ],
     "require": {

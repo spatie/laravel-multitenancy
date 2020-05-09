@@ -46,7 +46,6 @@ If you discover any security related issues, please email freek@spatie.be instea
 
 The code of this package is based on the code shown in [the Multitenancy in Laravel series](https://www.youtube.com/watch?v=592EgykFOz4)  by Mohamed Said
 
-- [Mohammed Said](https://github.com/themsaid)
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
