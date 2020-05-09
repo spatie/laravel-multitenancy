@@ -36,13 +36,13 @@ jobs:
           coverage: none
 
       - name: Create database
-          run: |
-            sudo /etc/init.d/mysql start
-            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_landlord;'
-            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1;'
-            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2;'
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_landlord;'
+          mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1;'
+          mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2;'
 
-        - name: Install dependencies
+      - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
