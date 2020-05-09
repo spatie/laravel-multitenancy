@@ -1,6 +1,6 @@
 ---
 title: Making queues tenant aware
-weight: 4
+weight: 6
 ---
 
 The package can make queues tenant aware. To enable this behaviour by setting the `queues_are_tenant_aware_by_default` key in the `multitenancy` config file to `true`.
