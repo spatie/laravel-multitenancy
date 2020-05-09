@@ -45,7 +45,7 @@ class MakeQueueTenantAwareAction
                 return;
             }
 
-            if (! config('multitenancy.queue_is_tenant_aware_by_default')) {
+            if (! config('multitenancy.queues_are_tenant_aware_by_default')) {
                 return;
             }
             /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
@@ -65,13 +65,13 @@ class MakeQueueTenantAwareAction
             return true;
         }
 
-        if (config('multitenancy.queue_is_tenant_aware_by_default')) {
+        if (config('multitenancy.queues_are_tenant_aware_by_default')) {
             if ($job instanceof NotTenantAware) {
                 return false;
             }
         }
 
-        if (! config('multitenancy.queue_is_tenant_aware_by_default')) {
+        if (! config('multitenancy.queues_are_tenant_aware_by_default')) {
             if ($job instanceof TenantAware) {
                 return true;
             }

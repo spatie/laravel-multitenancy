@@ -37,7 +37,7 @@ return [
      * will be automatically set on the job. When the job is executed, the set
      * tenant on the job will be made current.
      */
-    'queue_is_tenant_aware_by_default' => true,
+    'queues_are_tenant_aware_by_default' => true,
 
     /*
      * The connection name to reach the a tenant database.
