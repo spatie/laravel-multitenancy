@@ -22,5 +22,9 @@
     <php>
         <env name="CACHE_DRIVER" value="file"/>
         <env name="APP_KEY" value="base64:m+pDa0MKS1KpMlxzzdVEaqFHysv3IPhrx/3TFSWBqJA=" />
+        <env name="DB_USERNAME" value="root"/>
+        <env name="DB_PASSWORD" value=""/>
+        <env name="DB_HOST" value="127.0.0.1" />
+        <env name="DB_PORT" value="3306" />
     </php>
 </phpunit>
