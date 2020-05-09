@@ -35,12 +35,12 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
-    - name: Create database
-      run: |
-        sudo /etc/init.d/mysql start
-        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_landlord;'
-        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1;'
-        mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2;'
+      - name: Create database
+          run: |
+            sudo /etc/init.d/mysql start
+            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_landlord;'
+            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1;'
+            mysql  -u root -proot -e 'CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2;'
 
         - name: Install dependencies
         run: |
