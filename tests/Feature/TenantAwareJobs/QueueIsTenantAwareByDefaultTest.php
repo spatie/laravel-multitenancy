@@ -1,14 +1,16 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature;
+namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tests\Feature\TestClasses\TestJob;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 use Spatie\Multitenancy\Tests\TestCase;
 use Spatie\Valuestore\Valuestore;
 
-class TenantAwareJobsTest extends TestCase
+class QueueIsTenantAwareByDefaultTest extends TestCase
 {
     private Tenant $tenant;
 
@@ -19,16 +21,6 @@ class TenantAwareJobsTest extends TestCase
         parent::setUp();
 
         config()->set('multitenancy.queue_is_tenant_aware_by_default', true);
-
-        config()->set('queue.default', 'database');
-
-        config()->set('queue.connections.database', [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
-            'retry_after' => 90,
-            'connection' => 'landlord',
-        ]);
 
         $this->tenant = factory(Tenant::class)->create();
 
@@ -88,5 +80,53 @@ class TenantAwareJobsTest extends TestCase
 
         $currentTenantIdInJob = $this->valuestore->get('tenantId');
         $this->assertEquals($anotherTenant->id, $currentTenantIdInJob);
+    }
+
+    /** @test */
+    public function it_will_not_make_jobs_tenant_aware_if_the_config_setting_is_set_to_false()
+    {
+        config()->set('multitenancy.queue_is_tenant_aware_by_default', false);
+
+        $this->tenant->makeCurrent();
+
+        $job = new TestJob($this->valuestore);
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $currentTenantIdInJob = $this->valuestore->get('tenantId');
+        $this->assertNull($currentTenantIdInJob);
+    }
+
+    /** @test */
+    public function it_will_always_make_jobs_tenant_aware_if_they_implement_the_TenantAware_interface()
+    {
+        config()->set('multitenancy.queue_is_tenant_aware_by_default', false);
+
+        $this->tenant->makeCurrent();
+
+        $job = new TenantAwareTestJob($this->valuestore);
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $currentTenantIdInJob = $this->valuestore->get('tenantId');
+        $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+    }
+
+    /** @test */
+    public function it_will_not_make_a_job_tenant_aware_if_it_implement_NotTenantAware()
+    {
+        config()->set('multitenancy.queue_is_tenant_aware_by_default', true);
+
+        $this->tenant->makeCurrent();
+
+        $job = new NotTenantAwareTestJob($this->valuestore);
+        app(Dispatcher::class)->dispatch($job);
+
+        $this->artisan('queue:work --once')->assertExitCode(0);
+
+        $currentTenantIdInJob = $this->valuestore->get('tenantId');
+        $this->assertNull($currentTenantIdInJob);
     }
 }

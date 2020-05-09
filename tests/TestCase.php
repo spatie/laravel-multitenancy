@@ -75,6 +75,16 @@ abstract class TestCase extends Orchestra
                 'database' => null,
             ],
         ]);
+
+        config()->set('queue.default', 'database');
+
+        config()->set('queue.connections.database', [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'connection' => 'landlord',
+        ]);
     }
 
     public function tempFile(string $fileName): string
