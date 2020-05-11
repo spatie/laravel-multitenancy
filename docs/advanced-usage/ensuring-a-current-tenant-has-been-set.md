@@ -1,6 +1,6 @@
 ---
 title: Ensuring a current tenant has been set
-weight: 5
+weight: 1
 ---
 
 In your project you probably will have many routes where you expect a tenant has been made current.

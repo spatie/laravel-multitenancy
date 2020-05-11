@@ -2,7 +2,7 @@
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\Multitenancy\Models\Tenant;
 
 class TenantCollection extends Collection

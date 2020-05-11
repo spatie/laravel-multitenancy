@@ -1,6 +1,6 @@
 ---
 title: Using a custom tenant model
-weight: 4
+weight: 6
 ---
 
 If you want to change or add behaviour on the `Tenant` model you can use your custom model. Make sure that your custom model extends the `Spatie\Multitenancy\Models\Tenant` model provided by the package.
