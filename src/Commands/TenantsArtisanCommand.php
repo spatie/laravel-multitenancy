@@ -8,13 +8,13 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class TenantsArtisanCommand extends Command
 {
-    protected $signature = 'tenants:artisan {artisanCommand} {--tenantIds=*}';
+    protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
 
     public function handle()
     {
         $tenantQuery = Tenant::query();
 
-        if ($tenantIds = $this->option('tenantIds')) {
+        if ($tenantIds = $this->option('tenant')) {
             $tenantQuery = $tenantQuery->whereIn('id', $tenantIds);
         }
 
