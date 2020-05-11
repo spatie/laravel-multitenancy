@@ -3,7 +3,6 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\BackupServer\Tasks\Backup\Support\BackupCollection;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
