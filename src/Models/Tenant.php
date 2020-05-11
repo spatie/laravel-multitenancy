@@ -65,7 +65,7 @@ class Tenant extends Model
         return $currentTenant;
     }
 
-    public function newCollection(array $models = [])
+    public function newCollection(array $models = []): TenantCollection
     {
         return new TenantCollection($models);
     }

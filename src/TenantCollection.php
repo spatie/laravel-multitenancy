@@ -11,10 +11,33 @@ class TenantCollection extends Collection
     {
         $previousCurrentTenant = Tenant::current();
 
-        $this->each(fn (Tenant $tenant) => $callable($tenant));
+        $this->each(function (Tenant $tenant) use ($callable) {
+            $tenant->makeCurrent();
 
-        optional($previousCurrentTenant)->makeCurrent();
+            $callable($tenant);
+        });
+
+        $previousCurrentTenant
+            ? $previousCurrentTenant->makeCurrent()
+            : Tenant::forgetCurrent();
 
         return $this;
+    }
+
+    public function mapCurrent(callable $callable): self
+    {
+        $previousCurrentTenant = Tenant::current();
+
+        $newCollection = $this->map(function (Tenant $tenant) use ($callable) {
+            $tenant->makeCurrent();
+
+            return $callable($tenant);
+        });
+
+        $previousCurrentTenant
+            ? $previousCurrentTenant->makeCurrent()
+            : Tenant::forgetCurrent();
+
+        return $newCollection;
     }
 }
