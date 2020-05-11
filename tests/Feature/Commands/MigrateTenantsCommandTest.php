@@ -35,7 +35,7 @@ class MigrateTenantsCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_all_tenant_databases()
     {
-        $this->artisan('tenants:migrate')->assertExitCode(0);
+        $this->artisan('tenants:artisan migrate')->assertExitCode(0);
 
         $this
             ->assertTenantDatabaseHasTable($this->tenant, 'migrations')
@@ -45,9 +45,7 @@ class MigrateTenantsCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant()
     {
-        $this->artisan('tenants:migrate', [
-            'tenantId' => $this->anotherTenant->id,
-        ])->assertExitCode(0);
+        $this->artisan('tenants:artisan migrate --tenantIds=' . $this->anotherTenant->id . '"')->assertExitCode(0);
 
         $this
             ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')

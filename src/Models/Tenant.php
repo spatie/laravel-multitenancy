@@ -3,9 +3,11 @@
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\BackupServer\Tasks\Backup\Support\BackupCollection;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
+use Spatie\Multitenancy\TenantCollection;
 
 class Tenant extends Model
 {
@@ -61,6 +63,11 @@ class Tenant extends Model
         $currentTenant->forget();
 
         return $currentTenant;
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new TenantCollection($models);
     }
 
     public function getDatabaseName(): string

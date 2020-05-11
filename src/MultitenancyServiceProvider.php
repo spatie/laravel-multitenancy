@@ -5,6 +5,7 @@ namespace Spatie\Multitenancy;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Commands\MigrateTenantsCommand;
+use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Tasks\TasksCollection;
@@ -91,7 +92,7 @@ class MultitenancyServiceProvider extends ServiceProvider
     protected function bootCommands(): self
     {
         $this->commands([
-            MigrateTenantsCommand::class,
+            TenantsArtisanCommand::class,
         ]);
 
         return $this;
