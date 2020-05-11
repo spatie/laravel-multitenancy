@@ -100,13 +100,17 @@ The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-
 
 Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/laravel-multitenancy/v1/basic-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
 
-If you want to get a feel of how the package works, you could create a couple of rows in the `tenants` table, fill the `database` attribute and manually create those database.
+If you want to get a feel of how the package works, you could create a couple of rows in the `tenants` table, fill the `database` attribute and manually create those databases.
 
 ### Migrating tenant databases
 
 When you want to migrate tenant databases, all future migrations should be stored in `database/migrations`.
 
-To perform these migrations you must perform the `tenants:migrate` command. This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
+To perform these migrations you can use [the `tenants:migrate` command](TODO: add link). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
+
+```bash
+php artisan tenants:artisan migrate
+```
 
 ### Preparing models
 
