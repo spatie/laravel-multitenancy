@@ -9,26 +9,19 @@ class TenantCollection extends Collection
 {
     public function eachCurrent(callable $callable): self
     {
-        $previousCurrentTenant = Tenant::current();
-
-        $this->each(function (Tenant $tenant) use ($callable) {
-            $tenant->makeCurrent();
-
-            $callable($tenant);
-        });
-
-        $previousCurrentTenant
-            ? $previousCurrentTenant->makeCurrent()
-            : Tenant::forgetCurrent();
-
-        return $this;
+        return $this->performCollectionMethodWhileMakingTenantsCurrent('each', $callable);
     }
 
     public function mapCurrent(callable $callable): self
     {
+        return $this->performCollectionMethodWhileMakingTenantsCurrent('map', $callable);
+    }
+
+    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable)
+    {
         $previousCurrentTenant = Tenant::current();
 
-        $newCollection = $this->map(function (Tenant $tenant) use ($callable) {
+        $collection = $this->map(function (Tenant $tenant) use ($callable) {
             $tenant->makeCurrent();
 
             return $callable($tenant);
@@ -38,6 +31,6 @@ class TenantCollection extends Collection
             ? $previousCurrentTenant->makeCurrent()
             : Tenant::forgetCurrent();
 
-        return $newCollection;
+        return $collection;
     }
 }
