@@ -1,5 +1,5 @@
 ---
-title: Cache
+title: Prefixing cache
 weight: 5
 ---
 

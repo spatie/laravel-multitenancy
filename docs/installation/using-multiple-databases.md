@@ -106,7 +106,7 @@ If you want to get a feel of how the package works, you could create a couple of
 
 When you want to migrate tenant databases, all future migrations should be stored in `database/migrations`.
 
-To perform these migrations you can use [the `tenants:migrate` command](TODO: add link). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
+To perform these migrations, you can use [the `tenants:migrate` command](/laravel-multitenancy/v1/advanced-usage/executing-artisan-commands-for-each-tenant). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
 
 ```bash
 php artisan tenants:artisan migrate
