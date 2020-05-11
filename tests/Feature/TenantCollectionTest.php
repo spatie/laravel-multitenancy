@@ -2,7 +2,6 @@
 
 namespace Spatie\Multitenancy\Tests\Feature;
 
-use PHPUnit\Util\Log\TeamCity;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantCollection;
 use Spatie\Multitenancy\Tests\TestCase;
@@ -34,7 +33,6 @@ class TenantCollectionTest extends TestCase
         $this->assertFalse(Tenant::checkCurrent());
 
         $this->tenants->eachCurrent(function (Tenant $tenant) {
-
         });
 
         $this->assertFalse(Tenant::checkCurrent());
@@ -42,7 +40,6 @@ class TenantCollectionTest extends TestCase
         $this->tenants[1]->makeCurrent();
 
         $this->tenants->eachCurrent(function (Tenant $tenant) {
-
         });
 
         $this->assertTrue($this->tenants[1]->isCurrent());
@@ -68,7 +65,6 @@ class TenantCollectionTest extends TestCase
         $this->assertFalse(Tenant::checkCurrent());
 
         $this->tenants->mapCurrent(function (Tenant $tenant) {
-
         });
 
         $this->assertFalse(Tenant::checkCurrent());
@@ -76,7 +72,6 @@ class TenantCollectionTest extends TestCase
         $this->tenants[1]->makeCurrent();
 
         $this->tenants->mapCurrent(function (Tenant $tenant) {
-
         });
 
         $this->assertTrue($this->tenants[1]->isCurrent());
