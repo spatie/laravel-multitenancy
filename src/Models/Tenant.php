@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
-use Spatie\Multitenancy\Models\Contracts\CurrentTenant;
 use Spatie\Multitenancy\TenantCollection;
 
 class Tenant extends Model

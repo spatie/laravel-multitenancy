@@ -6,5 +6,4 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class CurrentTenant extends Tenant
 {
-
 }
