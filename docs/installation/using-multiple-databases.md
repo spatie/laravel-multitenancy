@@ -140,9 +140,9 @@ class DatabaseSeeder extends Seeder
         // run tenant specific seeders
     }
 
-    public function runLandlordSpecifiSeeders()
+    public function runLandlordSpecificSeeders()
     {
-        // run tenant specific seeders
+        // run landor specific seeders
     }
 }
 ```
