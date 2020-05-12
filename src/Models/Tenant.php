@@ -12,11 +12,6 @@ class Tenant extends Model
 {
     use UsesLandlordConnection;
 
-    public function newCollection(array $models = []): TenantCollection
-    {
-        return new TenantCollection($models);
-    }
-
     public function makeCurrent(): self
     {
         $this
@@ -69,10 +64,13 @@ class Tenant extends Model
         return $currentTenant;
     }
 
-
-
     public function getDatabaseName(): string
     {
         return $this->database;
+    }
+
+    public function newCollection(array $models = []): TenantCollection
+    {
+        return new TenantCollection($models);
     }
 }

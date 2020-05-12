@@ -20,7 +20,8 @@ class TenantsArtisanCommand extends Command
 
         $artisanCommand = $this->argument('artisanCommand');
 
-        $tenantQuery->cursor()
+        $tenantQuery
+            ->cursor()
             ->each(
                 fn (Tenant $tenant) => $this->runArtisanCommandForTenant($tenant, $artisanCommand)
             );

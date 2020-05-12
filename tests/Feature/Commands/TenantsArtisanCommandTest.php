@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
 
-class MigrateTenantsCommandTest extends TestCase
+class TenantsArtisanCommandTest extends TestCase
 {
     private Tenant $tenant;
 
