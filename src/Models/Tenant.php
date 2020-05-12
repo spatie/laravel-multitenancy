@@ -73,4 +73,10 @@ class Tenant extends Model
     {
         return $this->database;
     }
+
+    public function domains() {
+        $domainModelClass = config('multitenancy.domain_model');
+
+        return $this->hasMany($domainModelClass);
+    }
 }

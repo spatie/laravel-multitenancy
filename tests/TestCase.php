@@ -5,6 +5,7 @@ namespace Spatie\Multitenancy\Tests;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\Multitenancy\Models\Domain;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
@@ -20,7 +21,11 @@ abstract class TestCase extends Orchestra
 
         $this->migrateDb();
 
+        // The below should be a suitable workaround as the current test settings are fixed to MySQL.
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Domain::truncate();
         Tenant::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         DB::table('jobs')->truncate();
     }

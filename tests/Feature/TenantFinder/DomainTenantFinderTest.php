@@ -21,9 +21,26 @@ class DomainTenantFinderTest extends TestCase
     /** @test */
     public function it_can_find_a_tenant_for_the_current_domain()
     {
-        $tenant = factory(Tenant::class)->create(['domain' => 'my-domain.com']);
+        $tenant = factory(Tenant::class)->create();
+        $tenant->domains()->create(['domain' => 'my-domain.com']);
 
         $request = Request::create('https://my-domain.com');
+
+        $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
+    }
+
+    /** @test */
+    public function it_can_find_a_tenant_that_has_multiple_domains_using_a_single_domain()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $tenant->domains()->create(['domain' => 'my-domain.com']);
+        $tenant->domains()->create(['domain' => 'my-domain.net']);
+
+        $request = Request::create('https://my-domain.com');
+
+        $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
+
+        $request = Request::create('https://my-domain.net');
 
         $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
     }
