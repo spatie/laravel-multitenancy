@@ -103,7 +103,6 @@ php artisan tenants:artisan "migrate --seed"
 This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::check()` to verify if the seeding is done for a tenant or a landlord.
 
 ```php
-<?php
 use Illuminate\Database\Seeder;use Spatie\Multitenancy\Models\Tenant;
 
 class DatabaseSeeder extends Seeder
