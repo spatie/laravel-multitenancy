@@ -48,4 +48,4 @@ Tenant::forgetCurrent();
 Tenant::current() // return null;
 ```
 
-If there was no tenant current when calling `forgetCurrent` the function will do nothing.
+If there was no tenant current when calling `forgetCurrent`, the function will do nothing.
