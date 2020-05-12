@@ -35,6 +35,7 @@ abstract class TestCase extends Orchestra
     protected function migrateDb(): self
     {
         $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
+        $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this
             ->artisan("migrate --database=landlord --path={$landLordMigrationsPath} --realpath")
@@ -61,16 +62,18 @@ abstract class TestCase extends Orchestra
         config([
             'database.connections.landlord' => [
                 'driver' => 'mysql',
-                'username' => 'root',
-                'host' => '127.0.1',
+                'username' => env('DB_USERNAME', 'root'),
+                'host' => env('DB_HOST', '127.0.0.1'),
+                'port' => env('DB_PORT', '3306'),
                 'password' => env('DB_PASSWORD'),
                 'database' => 'laravel_mt_landlord',
             ],
 
             'database.connections.tenant' => [
                 'driver' => 'mysql',
-                'username' => 'root',
-                'host' => '127.0.1',
+                'username' => env('DB_USERNAME', 'root'),
+                'host' => env('DB_HOST', '127.0.0.1'),
+                'port' => env('DB_PORT', '3306'),
                 'password' => env('DB_PASSWORD'),
                 'database' => null,
             ],
