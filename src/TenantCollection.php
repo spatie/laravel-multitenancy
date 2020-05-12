@@ -17,7 +17,7 @@ class TenantCollection extends Collection
         return $this->performCollectionMethodWhileMakingTenantsCurrent('map', $callable);
     }
 
-    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable)
+    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): self
     {
         $originalCurrentTenant = Tenant::current();
 
@@ -31,6 +31,6 @@ class TenantCollection extends Collection
             ? $originalCurrentTenant->makeCurrent()
             : Tenant::forgetCurrent();
 
-        return $collection;
+        return new self($collection);
     }
 }
