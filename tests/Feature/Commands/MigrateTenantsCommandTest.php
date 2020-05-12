@@ -4,7 +4,7 @@ namespace Spatie\Multitenancy\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\SwitchTenantDatabase;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
 
 class MigrateTenantsCommandTest extends TestCase
@@ -19,7 +19,7 @@ class MigrateTenantsCommandTest extends TestCase
 
         config(['database.default' => 'tenant']);
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabase::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
 
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
         $this->tenant->makeCurrent();

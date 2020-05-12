@@ -90,7 +90,7 @@ You should add this task to the `switch_tenant_tasks` key.
  * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
  */
 'switch_tenant_tasks' => [
-    Spatie\Multitenancy\Tasks\SwitchTenantDatabase::class,
+    Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask::class,
 ],
 ```
 

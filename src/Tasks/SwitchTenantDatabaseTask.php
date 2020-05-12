@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 
-class SwitchTenantDatabase implements SwitchTenantTask
+class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     use UsesMultitenancyConfig;
 

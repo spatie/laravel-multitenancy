@@ -66,5 +66,43 @@ After creating a task, you must register it by putting its class name in the `sw
 
 ## Accepting parameters
 
-Classes that implement `SwitchTenantTask` can accept parameters from the TODO
+Classes that implement `SwitchTenantTask` can accept parameters from the `multitenancy` config file.
 
+```php
+'switch_tenant_tasks' => [
+    \App\Support\SwitchTenantTasks\YourTask::class => ['name' => 'value', 'anotherName' => 'value'],
+    // other tasks
+],
+```
+
+In your task you can accept these parameters via the constructor. Make sure the parameter names matches those used in the config file.
+
+```php
+namespace App\Support\SwitchTenantTasks\YourTask
+
+use Spatie\Multitenancy\Tasks\SwitchTenantTask;
+
+class SwitchTenantDatabaseTask implements SwitchTenantTask
+{
+    public function __construct(string $name, string $anotherName)
+    { 
+        // do something
+    }
+}
+```
+
+You can also use the construct to inject dependencies. Just make sure the variable name does not conflict with one of the parameter names in the config file.
+
+```php
+namespace App\Support\SwitchTenantTasks\YourTask
+
+use Spatie\Multitenancy\Tasks\SwitchTenantTask;
+
+class SwitchTenantDatabaseTask implements SwitchTenantTask
+{
+    public function __construct(string $name, string $anotherName, MyDepencency $myDependency)
+    { 
+        // do something
+    }
+}
+```
