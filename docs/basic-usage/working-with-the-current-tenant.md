@@ -13,10 +13,18 @@ You can find the current method like this.
 Spatie\Multitenancy\Models\Tenant::current(); // returns the current tenant, or if not tenant is current, `null`
 ```
 
-A current tenant will also be bound in the container using the `currentTenant` key.
+A current tenant will also be bound in the container using the `currentTenant` key and `Spatie\Multitenancy\Models\Contracts\CurrentTenant` class.
 
 ```php
 app('currentTenant'); // returns the current tenant, or if not tenant is current, `null`
+```
+
+```php
+use Spatie\Multitenancy\Models\Contracts\CurrentTenant;
+
+Route::get('/current-tenant', function (CurrentTenant $currentTenant) {
+    return $currentTenant; // returns the current Tenant model
+});
 ```
 
 ### Checking if there is a current tenant

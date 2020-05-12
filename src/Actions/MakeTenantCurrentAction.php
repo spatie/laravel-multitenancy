@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\Actions;
 
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
+use Spatie\Multitenancy\Models\Contracts\CurrentTenant;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Tasks\TasksCollection;
@@ -41,9 +42,9 @@ class MakeTenantCurrentAction
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 
-        app()->forgetInstance($containerKey);
-
         app()->instance($containerKey, $tenant);
+
+        app()->instance(CurrentTenant::class, $tenant);
 
         return $this;
     }

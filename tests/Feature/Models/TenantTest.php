@@ -7,6 +7,7 @@ use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
+use Spatie\Multitenancy\Models\Contracts\CurrentTenant;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
 
@@ -32,7 +33,7 @@ class TenantTest extends TestCase
     }
 
     /** @test */
-    public function it_will_bind_the_current_tenant_in_the_container()
+    public function it_will_bind_the_current_tenant_in_the_container_by_config_key()
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 
@@ -44,6 +45,19 @@ class TenantTest extends TestCase
 
         $this->assertInstanceOf(Tenant::class, app($containerKey));
         $this->assertEquals($this->tenant->id, app($containerKey)->id);
+    }
+
+    /** @test */
+    public function it_will_bind_the_current_tenant_in_the_container_by_contract_class()
+    {
+        $this->assertFalse(app()->has(CurrentTenant::class));
+
+        $this->tenant->makeCurrent();
+
+        $this->assertTrue(app()->has(CurrentTenant::class));
+
+        $this->assertInstanceOf(Tenant::class, app(CurrentTenant::class));
+        $this->assertEquals($this->tenant->id, app(CurrentTenant::class)->id);
     }
 
     /** @test */

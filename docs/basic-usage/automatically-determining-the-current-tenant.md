@@ -19,10 +19,11 @@ In the `multitenancy` config file, you specificy the tenant finder in the `tenan
 'tenant_finder' => Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
 ```
 
-If there is a tenant returned by the tenant finder, [all configured tasks](https://docs.spatie.be/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) will be performed on it. After that the tenant instance will be bound in the container using the `currentTenant` key.
+If there is a tenant returned by the tenant finder, [all configured tasks](https://docs.spatie.be/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) will be performed on it. After that the tenant instance will be bound in the container using the `currentTenant` key and `\Spatie\Multitenancy\Models\Contracts\CurrentTenant` class.
 
 ```php
-app('currentTenant') // will return the current tenant or `null`
+app('currentTenant'); // will return the current tenant or `null`
+app(\Spatie\Multitenancy\Models\Contracts\CurrentTenant::class); // will return the current tenant or `null`
 ```
 
 You can create a tenant finder of your own. A valid tenant finder is any class that extends `Spatie\Multitenancy\TenantFinder\TenantFinder`. You must implement this abstract method:
