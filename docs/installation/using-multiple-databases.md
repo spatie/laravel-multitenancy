@@ -144,10 +144,7 @@ class DatabaseSeeder extends Seeder
     {
         // run tenant specific seeders
     }
-
 }
-
-
 ```
 
 
