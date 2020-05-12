@@ -26,6 +26,14 @@ You can find the entire documentation for this package [on our documentation sit
 
 ## Testing
 
+You'll need to create the following 3 local MySql databases to be able to run the test suite:
+
+- `laravel_mt_landlord`
+- `laravel_mt_tenant_1` 
+- `laravel_mt_tenant_2`
+
+You can run the package's tests:
+
 ``` bash
 composer test
 ```
