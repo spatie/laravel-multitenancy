@@ -21,7 +21,7 @@ class TenantCollection extends Collection
     {
         $originalCurrentTenant = Tenant::current();
 
-        $collection = $this->map(function (Tenant $tenant) use ($callable) {
+        $collection = $this->$operation(function (Tenant $tenant) use ($callable) {
             $tenant->makeCurrent();
 
             return $callable($tenant);
@@ -31,6 +31,6 @@ class TenantCollection extends Collection
             ? $originalCurrentTenant->makeCurrent()
             : Tenant::forgetCurrent();
 
-        return $collection;
+        return new static($collection->items);
     }
 }
