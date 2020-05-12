@@ -55,26 +55,6 @@ php artisan migrate --path=database/migrations/landlord --database=landlord
 
 When creating new migrations that should be performed on the landlord database, you should store them in the `database/migrations/landlord` path. After creating your own migrations, use the command above to migrate the landlord database.
 
-### Determining the current tenant
-
-Per request, the package can determine the "current" tenant. This is done by a `TenantFinder`. The package ships with a `DomainTenantFinder` that will make the tenant active who's `domain` attribute value matches the host of the current request.
-
-To use that tenant finder, specify its class name in the `tenant_finder` key of the `multitenancy` config file.
-
-```php
-// in multitenancy.php
-/*
- * This class is responsible for determining which tenant should be current
- * for the given request.
- *
- * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
- *
- */
-'tenant_finder' => Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
-```
-
-If you want to determine the "current" tenant some other way, you can [create a custom tenant finder](/laravel-multitenancy/v1/basic-usage/automatically-determining-the-current-tenant/).
-
 ### Automatically switching to the database of the current tenant
 
 When making a tenant the "current" one, the package will execute all tasks that are specified in the `switch_tenant_tasks` key of the `multitenancy` config file.
