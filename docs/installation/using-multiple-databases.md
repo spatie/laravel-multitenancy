@@ -112,6 +112,45 @@ To perform these migrations, you can use [the `tenants:migrate` command](/larave
 php artisan tenants:artisan migrate
 ```
 
+### Seeding tenant databases
+
+If you also want to seed tenant database you can execute this command:
+
+```bash
+php artisan tenants:artisan "migrate --seed"
+```
+
+This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::check()` to verify if the seeding is done for a tenant or a landlord.
+
+```php
+<?php
+use Illuminate\Database\Seeder;use Spatie\Multitenancy\Models\Tenant;
+
+class DatabaseSeeder extends Seeder
+{
+    public function run()
+    {
+        Tenant::check()
+           ? $this->runTenantSpecificSeeders()
+           : $this->runLandlordSpecificSeeders()
+    }
+    
+    public function runTenantSeeders()
+    {
+        // run tenant specific seeders
+    }
+
+    public function runLandlordSpecific()
+    {
+        // run tenant specific seeders
+    }
+
+}
+
+
+```
+
+
 ### Preparing models
 
 All models in your project should either use the `UsesLandLordConnection` or `UsesTenantConnection`, depending on if the underlying table of the models lives in the landlord or tenant database.
@@ -119,5 +158,3 @@ All models in your project should either use the `UsesLandLordConnection` or `Us
 ### Next steps
 
 When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are perform by task classes that will be executed when making a tenant the current one.
-
-The package can also has an option to [make the queue tenant aware](/laravel-multitenancy/v1/installation/making-queues-tenant-aware/).
