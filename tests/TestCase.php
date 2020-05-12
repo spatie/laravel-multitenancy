@@ -35,6 +35,7 @@ abstract class TestCase extends Orchestra
     protected function migrateDb(): self
     {
         $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
+        $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this
             ->artisan("migrate --database=landlord --path={$landLordMigrationsPath} --realpath")
