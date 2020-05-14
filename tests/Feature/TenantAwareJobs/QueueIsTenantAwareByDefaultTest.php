@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Queue\Events\JobFailed;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
@@ -25,6 +26,8 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
         $this->tenant = factory(Tenant::class)->create();
 
         $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
+
+        $this->doesntExpectEvents(JobFailed::class);
     }
 
     /** @test */
@@ -48,8 +51,6 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     {
         $job = new TestJob($this->valuestore);
         app(Dispatcher::class)->dispatch($job);
-
-        $this->tenant->makeCurrent();
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
@@ -94,7 +95,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
+        $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
         $this->assertNull($currentTenantIdInJob);
     }
 
@@ -126,7 +127,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
 
         $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
+        $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
         $this->assertNull($currentTenantIdInJob);
     }
 }

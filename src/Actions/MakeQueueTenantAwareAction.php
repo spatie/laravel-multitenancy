@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
@@ -39,7 +40,7 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingProcessed(): self
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            $tenantId = $event->job->payload()['tenantId'];
+            $tenantId = $event->job->payload()['tenantId'] ?? null;
 
             if (! $tenantId) {
                 return;
