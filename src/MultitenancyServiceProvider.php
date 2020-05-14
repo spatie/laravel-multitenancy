@@ -28,9 +28,9 @@ class MultitenancyServiceProvider extends ServiceProvider
         }
 
         $this
+            ->registerTasksCollection()
             ->configureRequests()
-            ->configureQueue()
-            ->registerTasksCollection();
+            ->configureQueue();
     }
 
     public function register()
