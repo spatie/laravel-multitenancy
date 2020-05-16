@@ -1,18 +1,16 @@
-**DO NOT USE YET, PACKAGE IN DEVELOPMENT**
-
 # Make your Laravel app tenant aware
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-multitenancy/run-tests?label=tests)](https://github.com/spatie/:package_name/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 
-This package provides a lightweight solution for making a Laravel app tenant aware. It can determine which tenant should be the current tenant for the request. It also allows you to define what should happen when switching the current tenant to another one.
+This package can make a Laravel app tenant aware. The philosophy of this package is that it should only provide the bare essentials to enable multitenancy.
 
-It works for multitenancy projects that need to use one or multiple databases.
+The package can determine which tenant should be the current tenant for the request. It also allows you to define what should happen when switching the current tenant to another one. It works for multitenancy projects that need to use one or multiple databases.
 
 Before starting with the package, we highly recommend first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/).
 
-The package contains a lot of niceties such as making queued jobs tenant aware, migrating all tenant databases in one go, an easy way to set a connection on a model, and much more.
+The package contains a lot of niceties such as making queued jobs tenant aware, making an artisan command run for each tenant, an easy way to set a connection on a model, and much more.
  
 ## Support us
 
