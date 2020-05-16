@@ -32,7 +32,7 @@ class TenantsArtisanCommand extends Command
     public function runArtisanCommandForTenant(Tenant $tenant, string $artisanCommand): void
     {
         $this->line('');
-        $this->info("Running command for tenant `{$tenant->name}` (id: {$tenant->Id})...");
+        $this->info("Running command for tenant `{$tenant->name}` (id: {$tenant->getKey()})...");
         $this->line("---------------------------------------------------------");
 
         $tenant->makeCurrent();
