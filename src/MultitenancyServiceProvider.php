@@ -23,11 +23,8 @@ class MultitenancyServiceProvider extends ServiceProvider
                 ->bootCommands();
         }
 
-        if (config('multitenancy.tenant_finder')) {
-            $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
-        }
-
         $this
+            ->registerTenantFinder()
             ->registerTasksCollection()
             ->configureRequests()
             ->configureQueue();
@@ -53,26 +50,7 @@ class MultitenancyServiceProvider extends ServiceProvider
         return $this;
     }
 
-    protected function configureRequests(): self
-    {
-        if (! $this->app->runningInConsole()) {
-            $this->determineCurrentTenant();
-        }
 
-        return $this;
-    }
-
-    protected function configureQueue(): self
-    {
-        $this
-            ->getMultitenancyActionClass(
-                'make_queue_tenant_aware_action',
-                MakeQueueTenantAwareAction::class
-            )
-            ->execute();
-
-        return $this;
-    }
 
     protected function determineCurrentTenant(): void
     {
@@ -107,4 +85,35 @@ class MultitenancyServiceProvider extends ServiceProvider
 
         return $this;
     }
+
+    protected function registerTenantFinder(): self
+    {
+        if (config('multitenancy.tenant_finder')) {
+            $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
+        }
+
+        return $this;
+    }
+
+    protected function configureRequests(): self
+    {
+        if (! $this->app->runningInConsole()) {
+            $this->determineCurrentTenant();
+        }
+
+        return $this;
+    }
+
+    protected function configureQueue(): self
+    {
+        $this
+            ->getMultitenancyActionClass(
+                'make_queue_tenant_aware_action',
+                MakeQueueTenantAwareAction::class
+            )
+            ->execute();
+
+        return $this;
+    }
+
 }
