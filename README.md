@@ -59,6 +59,7 @@ The code of this package is based on the code shown in [the Multitenancy in Lara
 
 - [hyn/multi-tenant](https://tenancy.dev)
 - [stancl/tenancy](https://github.com/stancl/tenancy)
+- [gecche/laravel-multidomain](https://github.com/gecche/laravel-multidomain)
 
 ## License
 
