@@ -115,5 +115,4 @@ class MultitenancyServiceProvider extends ServiceProvider
 
         return $this;
     }
-
 }
