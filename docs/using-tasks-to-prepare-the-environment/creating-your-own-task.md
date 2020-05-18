@@ -3,7 +3,7 @@ title: Creating your own task
 weight: 2
 ---
 
-A task is any class that implements `Spatie\Multitenancy\Tasks\SwitchTenantTask`. Here how that interface looks like.
+A task is any class that implements `Spatie\Multitenancy\Tasks\SwitchTenantTask`. Here is how that interface looks like.
 
 ```php
 namespace Spatie\Multitenancy\Tasks;
@@ -18,12 +18,11 @@ interface SwitchTenantTask
 }
 ```
 
-The `makeCurrent` function will be called when making a tenant current. A common thing to do whould be to dynamically change some configuration values.
+The `makeCurrent` function will be called when making a tenant current. A common thing to do would be to dynamically change some configuration values.
 
 `forgetCurrent` will be called when forgetting a tenant. This function should restore the original environment. An important thing to note is that `SwitchTenantTask` are singletons, so you could store the original values as a property and reach for them later.
 
 Here is an example implementation where we are going to use a prefix when a tenant is current, and clear out that prefix when forgetting the tenant.
-
 
 ```php
 namespace Spatie\Multitenancy\Tasks;

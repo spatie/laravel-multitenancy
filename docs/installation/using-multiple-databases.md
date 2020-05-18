@@ -18,7 +18,7 @@ Next, let's create the connections themselves. In the `database` config file, in
 In the example below the `mysql` driver is used, but you can use any driver you'd like. For the `tenant` connection you should set the `database` to `null`. The package will dynamically set the database name depending on the tenant that's considered the current one.
 
 ```php
-// in config/databases.
+// in config/database.php
 
 'connections' => [
     'tenant' => [
