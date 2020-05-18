@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Multitenancy\Models\Tenant;
 
@@ -14,11 +15,17 @@ class TenantsArtisanCommand extends Command
     {
         $tenantQuery = Tenant::query();
 
-        if ($tenantIds = $this->option('tenant')) {
-            $tenantQuery = $tenantQuery->whereIn('id', $tenantIds);
+        if (!$artisanCommand = $this->argument('artisanCommand')) {
+            $artisanCommand = $this->ask('Command to run?');
         }
 
-        $artisanCommand = $this->argument('artisanCommand');
+        if (!$tenantIds = $this->option('tenant')) {
+            $tenantIds = $this->ask('What tenant ID? Nothing for all tenants.');
+        }
+
+        if ($tenantIds) {
+            $tenantQuery->whereIn('id', Arr::wrap($tenantIds));
+        }
 
         $tenantQuery
             ->cursor()
