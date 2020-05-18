@@ -15,15 +15,11 @@ class TenantsArtisanCommand extends Command
     {
         $tenantQuery = Tenant::query();
 
-        if (!$artisanCommand = $this->argument('artisanCommand')) {
-            $artisanCommand = $this->ask('Command to run?');
+        if (! $artisanCommand = $this->argument('artisanCommand')) {
+            $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
         }
 
-        if (!$tenantIds = $this->option('tenant')) {
-            $tenantIds = $this->ask('What tenant ID? Nothing for all tenants.');
-        }
-
-        if ($tenantIds) {
+        if ($tenantIds = $this->option('tenant')) {
             $tenantQuery->whereIn('id', Arr::wrap($tenantIds));
         }
 
