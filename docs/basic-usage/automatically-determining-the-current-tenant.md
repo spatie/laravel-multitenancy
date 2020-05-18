@@ -5,7 +5,7 @@ weight: 1
 
 At the start of each request, the package will try to determine which tenant should be active for the current request. The package ships with a class named `DomainTenantFinder` that will try to find a `Tenant` whose `domain` attribute matches with the hostname of the current request.
 
-In the `multitenancy` config file, you specificy the tenant finder in the `tenant_finder` key.
+In the `multitenancy` config file, you specify the tenant finder in the `tenant_finder` key.
 
 ```php
 // in multitenancy.php
