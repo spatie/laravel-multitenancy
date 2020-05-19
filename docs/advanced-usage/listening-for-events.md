@@ -23,6 +23,6 @@ This event will fire when a tenant is being forgotten. At this point none of [th
 
 It has one public property `$tenant`, that contains and instance of `Spatie\Multitenancy\Models\Tenant`
 
-## `\Spatie\Multitenancy\Events\FogotCurrentTenantEvent`
+## `\Spatie\Multitenancy\Events\ForgotCurrentTenantEvent`
 
 This event will fire when a tenant has been forgotten. At this point the `forgotCurrent` method of all of [the tasks](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) have been executed. `currentTenant` in the container will have been emptied.
