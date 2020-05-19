@@ -14,7 +14,7 @@ We recommend registering this middleware as route middleware.
 
 protected $routeMiddleware = [
    // ...
-   'tentant' => \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+   'tenant' => \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
 ];
 ```
 
