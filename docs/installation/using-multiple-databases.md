@@ -100,7 +100,7 @@ If you also want to seed tenant database you can execute this command:
 php artisan tenants:artisan "migrate --seed"
 ```
 
-This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::check()` to verify if the seeding is done for a tenant or a landlord.
+This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::checkCurrent()` to verify if the seeding is done for a tenant or a landlord.
 
 ```php
 use Illuminate\Database\Seeder;use Spatie\Multitenancy\Models\Tenant;
@@ -109,12 +109,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        Tenant::check()
+        Tenant::checkCurrent()
            ? $this->runTenantSpecificSeeders()
            : $this->runLandlordSpecificSeeders()
     }
     
-    public function runTenantSeeders()
+    public function runTenantSpecificSeeders()
     {
         // run tenant specific seeders
     }
