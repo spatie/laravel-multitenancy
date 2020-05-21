@@ -49,7 +49,7 @@ class MakeQueueTenantAwareAction
                 return;
             }
             /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-            if (! $tenant = $this->getTenantModel()::find($event->job->payload()['tenantId'])) {
+            if (! $tenant = $this->getTenantModel()::find($tenantId)) {
                 return;
             }
 
