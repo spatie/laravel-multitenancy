@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.1.2 - 2020-05-24
+
+- remove unused import from config (#20)
+
 ## 1.1.1 - 2020-05-21
 
 - use the configured tenant model in artisan command (#17)
