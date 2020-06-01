@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
     {
         Tenant::checkCurrent()
            ? $this->runTenantSpecificSeeders()
-           : $this->runLandlordSpecificSeeders()
+           : $this->runLandlordSpecificSeeders();
     }
     
     public function runTenantSpecificSeeders()
