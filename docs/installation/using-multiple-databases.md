@@ -42,7 +42,7 @@ With the database connection set up we can migrate the landlord database.
 First, you must publish the migration file:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="migrations-multi-db"
+php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="migrations"
 ```
 
 The command above will publish a migration in `database/migrations/landlord` that will create the `tenants` table.
@@ -78,7 +78,7 @@ The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-
 
 ### Creating tenant databases
 
-Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/laravel-multitenancy/v1/basic-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
+Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/laravel-multitenancy/v1/advanced-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
 
 If you want to get a feel of how the package works, you could create a couple of rows in the `tenants` table, fill the `database` attribute and manually create those databases.
 
@@ -100,7 +100,7 @@ If you also want to seed tenant database you can execute this command:
 php artisan tenants:artisan "migrate --seed"
 ```
 
-This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::check()` to verify if the seeding is done for a tenant or a landlord.
+This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::checkCurrent()` to verify if the seeding is done for a tenant or a landlord.
 
 ```php
 use Illuminate\Database\Seeder;use Spatie\Multitenancy\Models\Tenant;
@@ -109,12 +109,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        Tenant::check()
+        Tenant::checkCurrent()
            ? $this->runTenantSpecificSeeders()
            : $this->runLandlordSpecificSeeders()
     }
     
-    public function runTenantSeeders()
+    public function runTenantSpecificSeeders()
     {
         // run tenant specific seeders
     }
@@ -133,4 +133,4 @@ All models in your project should either use the `UsesLandLordConnection` or `Us
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are perform by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are perform by task classes that will be executed when making a tenant the current one.

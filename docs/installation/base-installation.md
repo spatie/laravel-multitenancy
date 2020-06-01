@@ -101,9 +101,11 @@ Add it to your global middleware in `app\Http\Kernel.php`
 ```php
 // in `app\Http\Kernel.php`
 
-protected $middleware = [
-    // ...
-    \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+protected $middlewareGroups = [
+    'web' => [
+        // ...
+        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+    ]
 ];
 ```
 
