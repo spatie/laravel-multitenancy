@@ -20,7 +20,6 @@ class MultitenancyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this
                 ->registerPublishables();
-
         }
 
         $this
