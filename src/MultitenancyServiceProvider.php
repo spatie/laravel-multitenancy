@@ -19,11 +19,12 @@ class MultitenancyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this
-                ->registerPublishables()
-                ->bootCommands();
+                ->registerPublishables();
+
         }
 
         $this
+            ->bootCommands()
             ->registerTenantFinder()
             ->registerTasksCollection()
             ->configureRequests()
