@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
 
     public function runLandlordSpecificSeeders()
     {
-        // run landor specific seeders
+        // run landlord specific seeders
     }
 }
 ```
