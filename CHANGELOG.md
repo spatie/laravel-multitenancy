@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.1.3 - 2020-06-01
+
+- always register the tenants artisan command, so it may be called from web requests as well.
+
 ## 1.1.2 - 2020-05-24
 
 - remove unused import from config (#20)
