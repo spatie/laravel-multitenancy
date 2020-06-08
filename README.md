@@ -12,7 +12,7 @@ Before starting with the package, we highly recommend first watching [this talk 
 
 The package contains a lot of niceties such as making queued jobs tenant aware, making an artisan command run for each tenant, an easy way to set a connection on a model, and much more.
 
-Are you a visual learner? Then watch [this video](https://spatie.be/videos/spatie-package-source-dives/laravel-multitenancy) that covers how you can use laravel-responsecache and how it works under the hood.
+Are you a visual learner? Then watch [this video](https://spatie.be/videos/laravel-package-training/laravel-multitenancy) that covers how you can use laravel-multitenancy and how it works under the hood.
 
 ## Support us
 
