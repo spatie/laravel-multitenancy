@@ -64,7 +64,7 @@ The code of this package is based on the code shown in [the Multitenancy in Lara
 ## Alternatives
 
 - [tenancy/tenancy](https://tenancy.dev)
-- [stancl/tenancy](https://github.com/stancl/tenancy)
+- [stancl/tenancy](https://tenancyforlaravel.com)
 - [gecche/laravel-multidomain](https://github.com/gecche/laravel-multidomain)
 - [romegadigital/multitenancy](https://github.com/romegasoftware/multitenancy)
 
