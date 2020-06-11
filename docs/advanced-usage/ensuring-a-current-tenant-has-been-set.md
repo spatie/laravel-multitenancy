@@ -7,14 +7,17 @@ In your project you probably will have many routes where you expect a tenant has
 
 You can ensure that a current tenant has been set by applying the `\Spatie\Multitenancy\Http\Middleware\NeedsTenant` middleware on those routes.
 
-We recommend registering this middleware as route middleware.
+We recommend registering this middleware in a group alongside `\Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession`, to also verify that the session is not being abused across multiple tenants.
 
 ```php
-// in app/Http/Kernel
+// in `app\Http\Kernel.php`
 
-protected $routeMiddleware = [
-   // ...
-   'tenant' => \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+protected $middlewareGroups = [
+    // ...
+    'tenant' => [
+        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+    ]
 ];
 ```
 

@@ -94,9 +94,9 @@ return [
 
 ### Protecting against cross tenant abuse
 
-To prevent users from a tenant abusing their session to access another tenant you must use the `Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession` on all routes.
+To prevent users from a tenant abusing their session to access another tenant, you must use the `Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession` middleware on all tenant-aware routes.
 
-Add it to your global middleware in `app\Http\Kernel.php`
+If all your application routes are tenant-aware, you can add it to your global middleware in `app\Http\Kernel.php`
 
 ```php
 // in `app\Http\Kernel.php`
@@ -104,12 +104,37 @@ Add it to your global middleware in `app\Http\Kernel.php`
 protected $middlewareGroups = [
     'web' => [
         // ...
+        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
         \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
     ]
 ];
 ```
 
-This middleware will respond with an unauthorized response code (401) when the user tries use its session to view another tenant.
+If only some routes are tenant-aware, create a new middleware group:
+
+```php
+// in `app\Http\Kernel.php`
+
+protected $middlewareGroups = [
+    // ...
+    'tenant' => [
+        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+    ]
+];
+```
+
+Then apply the group to the appropriate routes:
+
+```php
+// in a routes file
+
+Route::middleware('tenant')->group(function() {
+    // routes
+});
+```
+
+This middleware will respond with an unauthorized response code (401) when the user tries to use their session to view another tenant. Make sure to include `\Spatie\Multitenancy\Http\Middleware\NeedsTenant` first, as this will [handle any cases where a valid tenant cannot be found](/laravel-multitenancy/v1/advanced-usage/ensuring-a-current-tenant-has-been-set).
 
 ### Next steps
 
