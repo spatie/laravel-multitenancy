@@ -22,8 +22,9 @@ class TenantsArtisanCommand extends Command
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
         }
 
-        if ($tenantIds = $this->option('tenant')) {
-            $tenantQuery->whereIn('id', Arr::wrap($tenantIds));
+        if ($tenants = $this->option('tenant')) {
+            $tenantQuery->whereIn('id', Arr::wrap($tenants))
+                ->orWhereIn('domain', Arr::wrap($tenants));
         }
 
         $tenantQuery
