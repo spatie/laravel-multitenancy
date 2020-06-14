@@ -47,18 +47,6 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     }
 
     /** @test */
-    public function it_will_not_break_when_no_tenant_is_set()
-    {
-        $job = new TestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertNull($currentTenantIdInJob);
-    }
-
-    /** @test */
     public function it_will_inject_the_right_tenant_even_when_the_current_tenant_switches()
     {
         /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
