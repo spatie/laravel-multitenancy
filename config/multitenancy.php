@@ -40,14 +40,14 @@ return [
     'queues_are_tenant_aware_by_default' => true,
 
     /*
-     * The connection name to reach the a tenant database.
+     * The connection name to reach the tenant database.
      *
      * Set to `null` to use the default connection.
      */
     'tenant_database_connection_name' => null,
 
     /*
-     * The connection name to reach the a landlord database
+     * The connection name to reach the landlord database
      */
     'landlord_database_connection_name' => null,
 
