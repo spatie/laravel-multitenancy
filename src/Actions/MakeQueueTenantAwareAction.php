@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
+use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
@@ -28,9 +29,7 @@ class MakeQueueTenantAwareAction
                 return [];
             }
 
-            return Tenant::current()
-                ? ['tenantId' => Tenant::current()->id]
-                : [];
+            return ['tenantId' => optional(Tenant::current())->id];
         });
 
         return $this;
@@ -39,18 +38,15 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingProcessed(): self
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            $tenantId = $event->job->payload()['tenantId'] ?? null;
-
-            if (! $tenantId) {
+            if (! array_key_exists('tenantId', $event->job->payload())) {
                 return;
             }
 
-            if (! config('multitenancy.queues_are_tenant_aware_by_default')) {
-                return;
-            }
+            $tenantId = $event->job->payload()['tenantId'];
+
             /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-            if (! $tenant = $this->getTenantModel()::find($tenantId)) {
-                return;
+            if (! $tenantId || ! ($tenant = $this->getTenantModel()::find($tenantId))) {
+                throw NoCurrentTenant::make();
             }
 
             $tenant->makeCurrent();
