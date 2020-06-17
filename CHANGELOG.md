@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.1.4 - 2020-06-17
+
+- improve error handling of tenant aware jobs
+
 ## 1.1.3 - 2020-06-01
 
 - always register the tenants artisan command, so it may be called from web requests as well.
