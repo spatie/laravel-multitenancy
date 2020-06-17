@@ -43,6 +43,6 @@ class TestJob implements ShouldQueue, NotTenantAware
 
 ## When the tenant cannot be retrieved
 
-If a tenant aware job is unable to retrieve the tenant, for example because the tenant was deleted before the job was processed, the job will fail with an instance of `Spatie\Multitenancy\Exceptions\NoCurrentTenant`.
+If a tenant aware job is unable to retrieve the tenant, for example because the tenant was deleted before the job was processed, the job will fail with an instance of `Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob`.
 
 On the other hand, a job that is not tenant aware will make no modifications to the current tenant, which may still be set from a previous job. As such, it is important that your jobs make no assumptions about the active tenant unless they are tenant aware.

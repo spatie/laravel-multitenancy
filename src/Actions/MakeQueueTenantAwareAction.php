@@ -3,7 +3,7 @@
 namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
-use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
+use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
@@ -42,14 +42,7 @@ class MakeQueueTenantAwareAction
                 return;
             }
 
-            $tenantId = $event->job->payload()['tenantId'];
-
-            /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-            if (! $tenantId || ! ($tenant = $this->getTenantModel()::find($tenantId))) {
-                throw NoCurrentTenant::make();
-            }
-
-            $tenant->makeCurrent();
+            $this->findTenant($event)->makeCurrent();
         });
 
         return $this;
@@ -76,5 +69,26 @@ class MakeQueueTenantAwareAction
         }
 
         return true;
+    }
+
+    protected function findTenant(JobProcessing $event): Tenant
+    {
+        $tenantId = $event->job->payload()['tenantId'];
+
+        if (! $tenantId) {
+            $event->job->delete();
+
+            throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
+        }
+
+
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        if (! $tenant = $this->getTenantModel()::find($tenantId)) {
+            $event->job->delete();
+
+            throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
+        }
+
+        return $tenant;
     }
 }

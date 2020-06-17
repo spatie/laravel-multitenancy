@@ -4,7 +4,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Contracts\Bus\Dispatcher;
-use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
+use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
@@ -12,7 +12,7 @@ use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 use Spatie\Multitenancy\Tests\TestCase;
 use Spatie\Valuestore\Valuestore;
 
-class JobIsDeletedWhenTenantCannotBeRetrievedTest extends TestCase
+class TenantAwareJobThatCannotFindTenantTest extends TestCase
 {
     private Tenant $tenant;
 
@@ -39,7 +39,7 @@ class JobIsDeletedWhenTenantCannotBeRetrievedTest extends TestCase
 
         try {
             app(Dispatcher::class)->dispatch($job);
-        } catch (NoCurrentTenant $e) {
+        } catch (CurrentTenantCouldNotBeDeterminedInTenantAwareJob $exception) {
             // Assert the job did not run
             $this->assertFalse($this->valuestore->has('tenantId'));
 
@@ -58,7 +58,7 @@ class JobIsDeletedWhenTenantCannotBeRetrievedTest extends TestCase
 
         try {
             app(Dispatcher::class)->dispatch($job);
-        } catch (NoCurrentTenant $e) {
+        } catch (CurrentTenantCouldNotBeDeterminedInTenantAwareJob $exception) {
             $this->assertFalse($this->valuestore->has('tenantId'));
 
             return;
