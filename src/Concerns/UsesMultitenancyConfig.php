@@ -39,6 +39,6 @@ trait UsesMultitenancyConfig
 
     public function getTenantArtisanSearchFields() : array
     {
-        return Arr::wrap(config('multitenancy.tenant_artisan_search_fields') ?? 'id');
+        return Arr::wrap(config('multitenancy.tenant_artisan_search_fields'));
     }
 }

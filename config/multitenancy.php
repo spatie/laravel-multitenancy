@@ -18,10 +18,10 @@ return [
 
     /*
      * These fields are used by tenant:artisan command to match one or more tenant
-     *
-     * Set to `null` to use only id
      */
-    'tenant_artisan_search_fields' => null,
+    'tenant_artisan_search_fields' => [
+        'id',
+    ],
 
     /*
      * These tasks will be performed when switching tenants.
