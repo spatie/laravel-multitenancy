@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Concerns;
 
+use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 
 trait UsesMultitenancyConfig
@@ -34,5 +35,10 @@ trait UsesMultitenancyConfig
         }
 
         return app($configuredClass);
+    }
+
+    public function getTenantArtisanSearchFields() : array
+    {
+        return Arr::wrap(config('multitenancy.tenant_artisan_search_fields') ?? 'id');
     }
 }
