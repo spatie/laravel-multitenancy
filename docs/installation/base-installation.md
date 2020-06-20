@@ -31,8 +31,8 @@ use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
 return [
     /*
-     * This class is responsible for determining which tenant should be current
-     * for the given request.
+     * This class is responsible for determining which tenant should be the
+     * current tenant for the given request.
      *
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
      *
@@ -49,7 +49,7 @@ return [
     ],
 
     /*
-     * This class is the model used for storing configuration on tenants.
+     * This class is the model used for storing configuration of tenants.
      *
      * It must be or extend `Spatie\Multitenancy\Models\Tenant::class`
      */
@@ -63,14 +63,14 @@ return [
     'queues_are_tenant_aware_by_default' => true,
 
     /*
-     * The connection name to reach the a tenant database.
+     * The connection name to reach the tenant database.
      *
      * Set to `null` to use the default connection.
      */
     'tenant_database_connection_name' => null,
 
     /*
-     * The connection name to reach the a landlord database
+     * The connection name to reach the landlord database.
      */
     'landlord_database_connection_name' => null,
 
@@ -80,7 +80,7 @@ return [
     'current_tenant_container_key' => 'currentTenant',
 
     /*
-     * You can customize some of the behavior of this package by using our own custom action.
+     * You can customize some of the behavior of this package by using your own custom action.
      * Your custom action should always extend the default one.
      */
     'actions' => [
