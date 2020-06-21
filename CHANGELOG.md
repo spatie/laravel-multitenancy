@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.1.5 - 2020-06-21
+
+- allow mass assignment when creating a new tenant by default (#57)
+
 ## 1.1.4 - 2020-06-17
 
 - improve error handling of tenant aware jobs
