@@ -15,7 +15,7 @@ First, you must publish and run the migration:
 
 ```bash
 php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="migrations"
-php artisan migrate
+php artisan migrate --path=database/migrations/landlord
 ```
 
 This will create the `tenants` table which holds configuration per tenant.
