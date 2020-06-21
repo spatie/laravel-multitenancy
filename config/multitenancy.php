@@ -59,6 +59,12 @@ return [
     'landlord_database_connection_name' => null,
 
     /*
+     * Using `\Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask`, could be useful to
+     * set up the tenant database connection as default connection.
+     */
+    'tenant_database_connection_as_default' => false,
+
+    /*
      * This key will be used to bind the current tenant in the container.
      */
     'current_tenant_container_key' => 'currentTenant',

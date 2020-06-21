@@ -11,14 +11,22 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     use UsesMultitenancyConfig;
 
+    private string $originalDefaultConnection;
+
     public function makeCurrent(Tenant $tenant): void
     {
+        $this->originalDefaultConnection = config('database.default');
+
         $this->setTenantConnectionDatabaseName($tenant->getDatabaseName());
     }
 
     public function forgetCurrent(): void
     {
         $this->setTenantConnectionDatabaseName(null);
+
+        config([
+            "database.default" => $this->originalDefaultConnection,
+        ]);
     }
 
     protected function setTenantConnectionDatabaseName(?string $databaseName)
@@ -32,6 +40,12 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
         ]);
+
+        if ($this->tenantDatabaseConnectionAsDefault()) {
+            config([
+                "database.default" => $this->tenantDatabaseConnectionName(),
+            ]);
+        }
 
         DB::purge($tenantConnectionName);
     }
