@@ -54,6 +54,27 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
+    /** @test */
+    public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
+    {
+        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
+
+        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')
+            ->expectsOutput("No tenant(s) found.");
+    }
+
+    /** @test */
+    public function it_can_migrate_a_specific_tenant_by_domain()
+    {
+        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
+
+        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')->assertExitCode(0);
+
+        $this
+            ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
+            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+    }
+
     protected function assertTenantDatabaseHasTable(Tenant $tenant, string $tableName): self
     {
         $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);

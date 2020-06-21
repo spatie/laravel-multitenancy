@@ -5,12 +5,13 @@ namespace Spatie\Multitenancy\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
 
 class TenantsArtisanCommand extends Command
 {
-    use UsesTenantModel;
+    use UsesTenantModel, UsesMultitenancyConfig;
 
     protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
 
@@ -22,8 +23,16 @@ class TenantsArtisanCommand extends Command
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
         }
 
-        if ($tenantIds = $this->option('tenant')) {
-            $tenantQuery->whereIn('id', Arr::wrap($tenantIds));
+        if ($tenants = $this->option('tenant')) {
+            $tenantQuery->where(function ($query) use ($tenants) {
+                collect($this->getTenantArtisanSearchFields())
+                    ->each(fn ($field) => $query->orWhereIn($field, Arr::wrap($tenants)));
+            });
+
+            if ($tenantQuery->count() === 0) {
+                $this->error('No tenant(s) found.');
+                return;
+            }
         }
 
         $tenantQuery

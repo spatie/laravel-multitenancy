@@ -17,6 +17,13 @@ return [
     'tenant_finder' => null,
 
     /*
+     * These fields are used by tenant:artisan command to match one or more tenant
+     */
+    'tenant_artisan_search_fields' => [
+        'id',
+    ],
+
+    /*
      * These tasks will be performed when switching tenants.
      *
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
