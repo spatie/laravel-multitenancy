@@ -29,7 +29,7 @@ class TenantsArtisanCommand extends Command
                     ->each(fn ($field) => $query->orWhereIn($field, Arr::wrap($tenants)));
             });
 
-            if ($tenantQuery->count() == 0) {
+            if ($tenantQuery->count() === 0) {
                 $this->error('No tenant(s) found.');
                 return;
             }
