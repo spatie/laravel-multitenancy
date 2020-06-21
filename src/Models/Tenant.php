@@ -12,6 +12,8 @@ class Tenant extends Model
 {
     use UsesLandlordConnection;
 
+    protected $guarded = [];
+
     public function makeCurrent(): self
     {
         $this
@@ -34,7 +36,7 @@ class Tenant extends Model
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 
-        if (! app()->has($containerKey)) {
+        if (!app()->has($containerKey)) {
             return null;
         }
 
