@@ -8,9 +8,9 @@ If you need to execute tenant-code, without setting it as current, you can use t
 For example, let's say we need to flush the cache for a tenant using our landlord API:
 ```php
 Route::delete('/api/{tenant}/flush-cache', static function (Tenant $tenant) {
-   $result = $tenant->execute(fn (Tenant $tenant) => cache()->flush());
+    $result = $tenant->execute(fn (Tenant $tenant) => cache()->flush());
    
-   return json_encode([ "success" => $result ]);
+    return json_encode([ "success" => $result ]);
 });
 ```
 
@@ -21,11 +21,11 @@ $currentTenant->makeCurrent();
 cache()->set('used_at', '1987-02-21');
 
 $beta_used_at = \Spatie\Multitenancy\Models\Tenant::query()
-  ->where('domain', 'example-tenant-2.spatie.be')
-  ->first()
-  ->execute(static function (Tenant $tenant) {
+    ->where('domain', 'example-tenant-2.spatie.be')
+    ->first()
+    ->execute(function (Tenant $tenant) {
         return tap('2020-02-21', fn ($used_at) => cache()->set('used_at', $used_at));
-  }); 
+    }); 
   
 echo cache()->get('used_at') . PHP_EOL; // Returns: '1987-02-21'
 echo $beta_used_at . PHP_EOL; // Returns: '2020-02-21'
@@ -33,8 +33,9 @@ echo $beta_used_at . PHP_EOL; // Returns: '2020-02-21'
 
 Or, more simple, dispatch a job tenant-aware from our landlord API route:
 ```php
-Route::post('/api/{tenant}/reminder', static function (Tenant $tenant) {
-   dispatch(ExpirationReminder());
-   return json_encode([ 'success' => true ]);
+Route::post('/api/{tenant}/reminder', function (Tenant $tenant) {
+    return json_encode([ 
+        'data' => $tenant->run(fn () => dispatch(ExpirationReminder())),
+    ]);
 });
 ```
