@@ -76,7 +76,7 @@ class Tenant extends Model
         return new TenantCollection($models);
     }
 
-    public function run(callable $callable)
+    public function execute(callable $callable)
     {
         $originalCurrentTenant = Tenant::current();
 

@@ -19,7 +19,7 @@ class TenantCollection extends Collection
 
     protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): self
     {
-        $collection = $this->$operation(fn (Tenant $tenant) => $tenant->run($callable));
+        $collection = $this->$operation(fn (Tenant $tenant) => $tenant->execute($callable));
 
         return new static($collection->items);
     }

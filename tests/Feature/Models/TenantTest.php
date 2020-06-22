@@ -141,13 +141,13 @@ class TenantTest extends TestCase
     }
 
     /** @test */
-    public function it_will_runs_a_callable_and_then_restore_the_previous_state()
+    public function it_will_execute_a_callable_and_then_restore_the_previous_state()
     {
         Tenant::forgetCurrent();
 
         $this->assertNull(Tenant::current());
 
-        $response = $this->tenant->run(function (Tenant $tenant) {
+        $response = $this->tenant->execute(function (Tenant $tenant) {
             $this->assertEquals($tenant->id, Tenant::current()->id);
 
             return $tenant->id;
