@@ -1,0 +1,40 @@
+---
+title: Tenant isolated environment
+weight: 9
+---
+
+If you need to execute tenant-code, without setting it as current, you can use the method `execute` available in the `Tenant` model: it will create an isolated environment valid only for the callable code.
+
+For example, let's say we need to flush the cache for a tenant using our landlord API:
+```php
+Route::delete('/api/{tenant}/flush-cache', static function (Tenant $tenant) {
+   $result = $tenant->execute(fn (Tenant $tenant) => cache()->flush());
+   
+   return json_encode([ "success" => $result ]);
+});
+```
+
+Another scenario is when you need to work with a tenant, but you have already a tenant up:
+```php
+$currentTenant = \Spatie\Multitenancy\Models\Tenant::where('domain', 'example-tenant-1.spatie.be')->first();
+$currentTenant->makeCurrent();
+cache()->set('used_at', '1987-02-21');
+
+$beta_used_at = \Spatie\Multitenancy\Models\Tenant::query()
+  ->where('domain', 'example-tenant-2.spatie.be')
+  ->first()
+  ->execute(static function (Tenant $tenant) {
+        return tap('2020-02-21', fn ($used_at) => cache()->set('used_at', $used_at));
+  }); 
+  
+echo cache()->get('used_at') . PHP_EOL; // Returns: '1987-02-21'
+echo $beta_used_at . PHP_EOL; // Returns: '2020-02-21'
+```
+
+Or, more simple, dispatch a job tenant-aware from our landlord API route:
+```php
+Route::post('/api/{tenant}/reminder', static function (Tenant $tenant) {
+   dispatch(ExpirationReminder());
+   return json_encode([ 'success' => true ]);
+});
+```
