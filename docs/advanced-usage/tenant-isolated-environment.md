@@ -22,18 +22,19 @@ $currentTenant = \Spatie\Multitenancy\Models\Tenant::where('domain', 'example-te
 $currentTenant->makeCurrent();
 cache()->set('used_at', '1987-02-21');
 
-$beta_used_at = \Spatie\Multitenancy\Models\Tenant::query()
+$betaUsedAt = \Spatie\Multitenancy\Models\Tenant::query()
     ->where('domain', 'example-tenant-2.spatie.be')
     ->first()
     ->execute(function (Tenant $tenant) {
         return tap('2020-02-21', fn ($used_at) => cache()->set('used_at', $used_at));
     }); 
   
-echo cache()->get('used_at') . PHP_EOL; // Returns: '1987-02-21'
-echo $beta_used_at . PHP_EOL; // Returns: '2020-02-21'
+cache()->get('used_at'); // returns '1987-02-21'
+$betaUsedAt; // returns '2020-02-21'
 ```
 
-Here's a final example, where a job is dispatched from our landlord API route:
+Here's a final example, where a job is dispatched from a landlord API route:
+
 ```php
 Route::post('/api/{tenant}/reminder', function (Tenant $tenant) {
     return json_encode([ 
