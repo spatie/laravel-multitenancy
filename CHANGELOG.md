@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.3.0 - 2020-06-25
+
+- added `$tenant->execute($callable)` to execute isolated tenant code (#60)
+
 ## 1.2.0 - 2020-06-21
 
 - `tenant:artisan` search field customizable using config (#52)
