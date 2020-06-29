@@ -21,13 +21,9 @@ class LandlordTest extends TestCase
     {
         $this->tenant->makeCurrent();
 
-        $response = Landlord::execute(function () {
-            $this->assertNull(Tenant::current());
+        $response = Landlord::execute(fn () => Tenant::current());
 
-            return "landlord";
-        });
-
-        $this->assertEquals($response, "landlord");
+        $this->assertNull($response);
 
         $this->assertEquals($this->tenant->id, Tenant::current()->id);
     }
