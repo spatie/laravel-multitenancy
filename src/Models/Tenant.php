@@ -75,4 +75,17 @@ class Tenant extends Model
     {
         return new TenantCollection($models);
     }
+
+    public function execute(callable $callable)
+    {
+        $originalCurrentTenant = Tenant::current();
+
+        $this->makeCurrent();
+
+        return tap($callable($this), static function () use ($originalCurrentTenant) {
+            $originalCurrentTenant
+                ? $originalCurrentTenant->makeCurrent()
+                : Tenant::forgetCurrent();
+        });
+    }
 }

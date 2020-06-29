@@ -139,4 +139,22 @@ class TenantTest extends TestCase
         Event::assertNotDispatched(ForgettingCurrentTenantEvent::class);
         Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
     }
+
+    /** @test */
+    public function it_will_execute_a_callable_and_then_restore_the_previous_state()
+    {
+        Tenant::forgetCurrent();
+
+        $this->assertNull(Tenant::current());
+
+        $response = $this->tenant->execute(function (Tenant $tenant) {
+            $this->assertEquals($tenant->id, Tenant::current()->id);
+
+            return $tenant->id;
+        });
+
+        $this->assertNull(Tenant::current());
+
+        $this->assertEquals($response, $this->tenant->id);
+    }
 }
