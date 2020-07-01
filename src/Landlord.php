@@ -11,6 +11,8 @@ class Landlord
 
         Tenant::forgetCurrent();
 
-        return tap($callable(), fn () => optional($originalCurrentTenant)->makeCurrent());
+        $callable();
+        
+        optional($originalCurrentTenant)->makeCurrent();
     }
 }
