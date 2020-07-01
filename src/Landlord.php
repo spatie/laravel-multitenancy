@@ -10,9 +10,11 @@ class Landlord
         $originalCurrentTenant = Tenant::current();
 
         Tenant::forgetCurrent();
-
-        $callable();
+        
+        $result = $callable();
         
         optional($originalCurrentTenant)->makeCurrent();
+        
+        return $result;
     }
 }
