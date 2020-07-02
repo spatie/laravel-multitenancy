@@ -15,7 +15,7 @@ Here is an example where we flush the cache for a tenant using our landlord API:
 Route::delete('/api/{tenant}/flush-cache', function (Tenant $tenant) {
     $result = $tenant->execute(fn (Tenant $tenant) => cache()->flush());
    
-    return json_encode([ "success" => $result ]);
+    return json_encode(["success" => $result]);
 });
 ```
 
