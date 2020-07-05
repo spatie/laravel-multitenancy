@@ -89,7 +89,7 @@ When you want to migrate tenant databases, all future migrations should be store
 To perform these migrations, you can use [the `tenants:migrate` command](/laravel-multitenancy/v1/advanced-usage/executing-artisan-commands-for-each-tenant). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
 
 ```bash
-php artisan tenants:artisan migrate
+php artisan tenants:artisan "migrate --database=tenant"
 ```
 
 ### Seeding tenant databases
@@ -97,7 +97,7 @@ php artisan tenants:artisan migrate
 If you also want to seed tenant database you can execute this command:
 
 ```bash
-php artisan tenants:artisan "migrate --seed"
+php artisan tenants:artisan "migrate --database=tenant --seed"
 ```
 
 This will cause all seeders to run. In your `DatabaseSeeder` you can use `Tenant::checkCurrent()` to verify if the seeding is done for a tenant or a landlord.
