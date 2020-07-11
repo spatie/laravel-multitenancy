@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  mysql:
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+  post_start:
+    image: alpine
+    depends_on:
+      - mysql
+    command:
+      - /bin/sh
+      - -c
+      - |
+        apk update
+        apk add mariadb-client
+        while ! mysqladmin ping -hmysql --silent; do sleep 1; done;
+        mysql -h mysql -e "CREATE DATABASE IF NOT EXISTS laravel_mt_landlord"
+        mysql -h mysql -e "CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_1"
+        mysql -h mysql -e "CREATE DATABASE IF NOT EXISTS laravel_mt_tenant_2"
