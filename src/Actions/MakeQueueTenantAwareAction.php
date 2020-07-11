@@ -2,6 +2,9 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\Events\JobProcessing;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
@@ -23,9 +26,9 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingQueued(): self
     {
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
-            $job = $payload['data']['command'];
+            $queueable = $payload['data']['command'];
 
-            if (! $this->isTenantAware($job)) {
+            if (! $this->isTenantAware($queueable)) {
                 return [];
             }
 
@@ -48,11 +51,13 @@ class MakeQueueTenantAwareAction
         return $this;
     }
 
-    protected function isTenantAware(object $job): bool
+    protected function isTenantAware(object $queueable): bool
     {
-        if ($job instanceof TenantAware) {
+        $reflection = new \ReflectionClass($this->getJobFromQueueable($queueable));
+
+        if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
-        } elseif ($job instanceof NotTenantAware) {
+        } elseif ($reflection->implementsInterface(NotTenantAware::class)) {
             return false;
         }
 
@@ -78,5 +83,19 @@ class MakeQueueTenantAwareAction
         }
 
         return $tenant;
+    }
+
+    protected function getJobFromQueueable(object $queueable)
+    {
+        switch(get_class($queueable)) {
+            case SendQueuedMailable::class:
+                return $queueable->mailable;
+            case SendQueuedNotifications::class:
+                return $queueable->notification;
+            case CallQueuedListener::class:
+                return $queueable->class;
+            default:
+                return $queueable;
+        }
     }
 }
