@@ -10,13 +10,13 @@ There are several methods available to get, set and clear the current tenant.
 You can find the current method like this.
 
 ```php
-Spatie\Multitenancy\Models\Tenant::current(); // returns the current tenant, or if not tenant is current, `null`
+Spatie\Multitenancy\Models\Tenant::current(); // returns the current tenant, or if no tenant is current, `null`
 ```
 
 A current tenant will also be bound in the container using the `currentTenant` key.
 
 ```php
-app('currentTenant'); // returns the current tenant, or if not tenant is current, `null`
+app('currentTenant'); // returns the current tenant, or if no tenant is current, `null`
 ```
 
 ### Checking if there is a current tenant
