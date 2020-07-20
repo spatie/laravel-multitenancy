@@ -59,7 +59,7 @@ When creating new migrations that should be performed on the landlord database, 
 
 When making a tenant the "current" one, the package will execute all tasks that are specified in the `switch_tenant_tasks` key of the `multitenancy` config file.
 
-The package ships with a task called `SwitchTenantDatabase` to will make the tenant database connection use the database whose name is in the `database` attribute of the tenant.
+The package ships with a task called `SwitchTenantDatabase` that will make the tenant database connection use the database whose name is in the `database` attribute of the tenant.
 
 You should add this task to the `switch_tenant_tasks` key.
 
