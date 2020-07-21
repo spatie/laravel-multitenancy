@@ -3,7 +3,7 @@ title: Switching databases
 weight: 3
 ---
 
-The `Spatie\Multitenancy\Tasks\SwitchDatabaseTask` can switch the configured database name of the `tenant` database connection. The database name used will be the in the `database` attribute of the `Tenant` model.
+The `Spatie\Multitenancy\Tasks\SwitchDatabaseTask` can switch the configured database name of the `tenant` database connection. The database name used will be in the `database` attribute of the `Tenant` model.
 
 To use this task, you should add it to the `switch_tenant_tasks` key in the `multitenancy` config file.
 
