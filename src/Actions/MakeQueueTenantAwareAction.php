@@ -52,23 +52,11 @@ class MakeQueueTenantAwareAction
     {
         if ($job instanceof TenantAware) {
             return true;
-        }
-
-        if (config('multitenancy.queues_are_tenant_aware_by_default')) {
-            if ($job instanceof NotTenantAware) {
-                return false;
-            }
-        }
-
-        if (! config('multitenancy.queues_are_tenant_aware_by_default')) {
-            if ($job instanceof TenantAware) {
-                return true;
-            }
-
+        } elseif ($job instanceof NotTenantAware) {
             return false;
         }
 
-        return true;
+        return config('multitenancy.queues_are_tenant_aware_by_default') === true;
     }
 
     protected function findTenant(JobProcessing $event): Tenant
