@@ -19,14 +19,16 @@ class SwitchTenantJobsDatabaseTask implements SwitchTenantTask
     public function makeCurrent(Tenant $tenant): void
     {
         config([
-            'queue.failed.database' => $this->tenantDatabaseConnectionName()
+            'queue.failed.database' => $this->tenantDatabaseConnectionName(),
+            'queue.connections.database.connection' => $this->tenantDatabaseConnectionName(),
         ]);
     }
 
     public function forgetCurrent(): void
     {
         config([
-            'queue.failed.database' => $this->defaultJobDatabaseConnection
+            'queue.failed.database' => $this->defaultJobDatabaseConnection,
+            'queue.connections.database.connection' => null
         ]);
     }
 }
