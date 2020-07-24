@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.5.0 - 2020-07-23
+
+- database switch fails with misconfigured tenant (#92)
+
 ## 1.4.0 - 2020-07-02
 
 - added `execute` for the landlord
