@@ -21,7 +21,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         $this->setTenantConnectionDatabaseName(null);
     }
 
-    protected function setTenantConnectionDatabaseName(?string $databaseName)
+    protected function setTenantConnectionDatabaseName(?string $databaseName): void
     {
         $tenantConnectionName = $this->tenantDatabaseConnectionName();
 
@@ -35,6 +35,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
+            "queue.failed.database" => $databaseName
         ]);
 
         DB::purge($tenantConnectionName);
