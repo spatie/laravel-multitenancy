@@ -35,7 +35,6 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
-            "queue.failed.database" => $tenantConnectionName
         ]);
 
         DB::purge($tenantConnectionName);
