@@ -25,6 +25,10 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
     {
         $tenantConnectionName = $this->tenantDatabaseConnectionName();
 
+        if ($tenantConnectionName === $this->landlordDatabaseConnectionName()) {
+            throw InvalidConfiguration::tenantConnectionIsEmptyOrEqualsToLandlordConnection();
+        }
+
         if (is_null(config("database.connections.{$tenantConnectionName}"))) {
             throw InvalidConfiguration::tenantConnectionDoesNotExist($tenantConnectionName);
         }

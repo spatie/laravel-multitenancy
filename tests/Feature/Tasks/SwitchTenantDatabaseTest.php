@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\Tasks;
 
 use Illuminate\Support\Facades\DB;
+use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
@@ -22,6 +23,16 @@ class SwitchTenantDatabaseTest extends TestCase
         $this->anotherTenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_2']);
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+    }
+
+    /** @test */
+    public function switch_fails_if_tenant_database_connection_name_equals_to_landlord_connection_name()
+    {
+        config()->set('multitenancy.tenant_database_connection_name', null);
+
+        $this->expectException(InvalidConfiguration::class);
+
+        $this->tenant->makeCurrent();
     }
 
     /** @test */
