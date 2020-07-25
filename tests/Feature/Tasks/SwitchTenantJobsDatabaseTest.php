@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\TestFailedJob;
 use Spatie\Multitenancy\Tests\TestCase;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 class SwitchTenantJobsDatabaseTest extends TestCase
 {
