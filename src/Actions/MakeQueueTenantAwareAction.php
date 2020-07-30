@@ -87,7 +87,7 @@ class MakeQueueTenantAwareAction
 
     protected function getJobFromQueueable(object $queueable)
     {
-        switch(get_class($queueable)) {
+        switch (get_class($queueable)) {
             case SendQueuedMailable::class:
                 return $queueable->mailable;
             case SendQueuedNotifications::class:
