@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.5.1 - 2020-07-30
+
+- 🐛 properly handle queued mailables and notification (#78)
+
 ## 1.5.0 - 2020-07-23
 
 - database switch fails with misconfigured tenant (#92)
