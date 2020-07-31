@@ -53,3 +53,55 @@ Tenant::first()->execute(function (Tenant $tenant) {
 ```
 
 Inside the closure passed to `execute`, the landlord is made active by forgetting the current tenant.
+
+## Testing with DatabaseTransactions for Tenant
+
+When performing testing and using `DatabaseTransactions` trait, the default setup in Laravel requires changes to ensure that the transactions are performed on the `Tenant` connection. Accordingly, the default `TestCase.php` file may be updated as below:
+
+```php
+namespace Tests;
+
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Event;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
+
+abstract class TestCase extends BaseTestCase
+{
+    use CreatesApplication, DatabaseTransactions, UsesMultitenancyConfig;
+
+    protected function connectionsToTransact()
+    {
+        return [
+            $this->landlordDatabaseConnectionName(),
+            $this->tenantDatabaseConnectionName(),
+        ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Event::listen(MadeTenantCurrentEvent::class, function () {
+            $this->beginDatabaseTransaction();
+        });
+    }
+}
+```
+
+In case a user login is performed using the `Auth` facade in the `setUp` method on a test, the tenant switching will not happen automatically. Accordingly, the `setUp` method above may be updated as below to ensure that the required tenant has been set (using the first `Tenant` as an example below)
+
+```php
+
+protected function setUp(): void
+{
+    parent::setUp();
+
+    Event::listen(MadeTenantCurrentEvent::class, function () {
+        $this->beginDatabaseTransaction();
+    });
+    
+    Tenant::first()->makeCurrent();
+}
+```
