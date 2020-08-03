@@ -35,6 +35,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
+            'database.default' => $this->tenantDatabaseConnectionName(),
         ]);
 
         DB::purge($tenantConnectionName);

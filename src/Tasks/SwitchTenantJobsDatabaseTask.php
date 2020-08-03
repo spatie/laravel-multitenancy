@@ -28,7 +28,7 @@ class SwitchTenantJobsDatabaseTask implements SwitchTenantTask
     {
         config([
             'queue.failed.database' => $this->defaultJobDatabaseConnection,
-            'queue.connections.database.connection' => null
+            'queue.connections.database.connection' => null,
         ]);
     }
 }
