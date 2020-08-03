@@ -17,6 +17,7 @@ class SwitchTenantJobsDatabaseTest extends TestCase
         parent::setUp();
 
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
+
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class, SwitchTenantJobsDatabaseTask::class]);
     }
 
