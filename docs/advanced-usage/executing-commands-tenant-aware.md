@@ -5,7 +5,7 @@ weight: 10
 
 When the `tenants:artisan` is not enough, creating commands tenant-aware could be useful: it's the case of a command that should run with the `schedule:run`.
  
-Do it is quite simple using the built-in trait `Spatie\Multitenancy\Commands\Concerns\IsTenantAware` in your command.
+Do it is quite simple using the built-in `Spatie\Multitenancy\Commands\Concerns\IsTenantAware` trait in your command.
 
 ```php
 class TenantNoopCommand extends \Illuminate\Console\Command
