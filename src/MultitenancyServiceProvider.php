@@ -50,8 +50,6 @@ class MultitenancyServiceProvider extends ServiceProvider
         return $this;
     }
 
-
-
     protected function determineCurrentTenant(): void
     {
         if (! config('multitenancy.tenant_finder')) {

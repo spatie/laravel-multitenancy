@@ -2,11 +2,13 @@
 
 namespace Spatie\Multitenancy\Tests;
 
+use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
+use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
 {
@@ -27,9 +29,22 @@ abstract class TestCase extends Orchestra
 
     protected function getPackageProviders($app)
     {
+        $this->bootCommands();
+
         return [
             MultitenancyServiceProvider::class,
         ];
+    }
+
+    protected function bootCommands() : self
+    {
+        Artisan::starting(function ($artisan) {
+            $artisan->resolveCommands([
+                TenantNoopCommand::class,
+            ]);
+        });
+
+        return $this;
     }
 
     protected function migrateDb(): self
