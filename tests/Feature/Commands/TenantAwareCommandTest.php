@@ -4,7 +4,6 @@ namespace Spatie\Multitenancy\Tests\Feature\Commands;
 
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
-use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 use Spatie\Multitenancy\Tests\TestCase;
 
 class TenantAwareCommandTest extends TestCase

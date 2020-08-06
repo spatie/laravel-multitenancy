@@ -24,6 +24,7 @@ trait TenantAware
 
         if ($tenantQuery->count() === 0) {
             $this->error('No tenant(s) found.');
+
             return -1;
         }
 
