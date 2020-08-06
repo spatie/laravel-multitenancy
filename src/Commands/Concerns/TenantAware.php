@@ -8,7 +8,7 @@ use Spatie\Multitenancy\Models\Tenant;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-trait IsTenantAware
+trait TenantAware
 {
     use UsesMultitenancyConfig;
 

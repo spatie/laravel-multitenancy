@@ -3,12 +3,12 @@
 namespace Spatie\Multitenancy\Tests\Feature\Commands\TestClasses;
 
 use Illuminate\Console\Command;
-use Spatie\Multitenancy\Commands\Concerns\IsTenantAware;
+use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Models\Tenant;
 
 class TenantNoopCommand extends Command
 {
-    use IsTenantAware;
+    use TenantAware;
 
     protected $signature = 'tenant:noop {--tenant=*}';
 
