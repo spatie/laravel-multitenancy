@@ -3,7 +3,6 @@
 namespace Spatie\Multitenancy\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
