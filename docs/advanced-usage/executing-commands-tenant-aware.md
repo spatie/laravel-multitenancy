@@ -3,32 +3,37 @@ title: Executing commands tenant-aware
 weight: 10
 ---
 
-When the `tenants:artisan` is not enough, creating commands tenant-aware could be useful: it's the case of a command that should run with the `schedule:run`.
+Commands can be made tenant aware by applying the `IsTenantAware` trait. When using the trait is is required to append `{--tenant=*}` to the command signature.
  
-Do it is quite simple using the built-in `Spatie\Multitenancy\Commands\Concerns\IsTenantAware` trait in your command.
-
 ```php
-class TenantNoopCommand extends \Illuminate\Console\Command
-{
-    use \Spatie\Multitenancy\Commands\Concerns\IsTenantAware;
+use Illuminate\Console\Command;
+use Spatie\Multitenancy\Commands\Concerns\IsTenantAware;
 
-    protected $signature = 'tenant:noop {--tenant=*}';
+class YourFavouriteCommand extends Command
+{
+    use IsTenantAware;
+
+    protected $signature = 'your-favorite-command {--tenant=*}';
 
     public function handle()
     {
-        return $this->line('The tenant is '. Tenant::current()->id);
+        return $this->line('The tenant is '. Tenant::current()->name);
     }
 }
 ```
 
-Please remember that it's crucial to extend your command signature with `{--tenant=*}`.
+When executing the command, the `handle` method will be called for each tenant. 
 
-Finally, you can execute the command for only one tenant
 ```bash
-php artisan tenant:noop --tenant=1
+php artisan your-favorite-command 
 ```
 
-Or for all tenants
+Using the example above, the name of each tenant will be written to the output of the command.
+
+
+You can also execute the command for a specific tenant:
+
+
 ```bash
-php artisan tenant:noop
+php artisan your-favorite-command  --tenant=1
 ```
