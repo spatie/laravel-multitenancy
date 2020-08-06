@@ -3,7 +3,7 @@ title: Making Artisan command tenant aware
 weight: 3
 ---
 
-Commands can be made tenant aware by applying the `IsTenantAware` trait. When using the trait it is required to append `{--tenant=*}` to the command signature.
+Commands can be made tenant aware by applying the `TenantAware` trait. When using the trait it is required to append `{--tenant=*}` to the command signature.
  
 ```php
 use Illuminate\Console\Command;
