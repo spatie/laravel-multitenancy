@@ -5,17 +5,17 @@ weight: 3
 
 Before using the following instructions, make sure you have performed [the base installation steps](/laravel-multitenancy/v1/installation/base-installation) first.
 
- Only use the instructions on this page if you want each of your tenants have their own database. 
+Only use the instructions on this page if you want each of your tenants to have their own database.
 
 ## Configuring the database connections
 
-When using separate database for each tenant, your Laravel app needs two database connections. One named `landlord`, which points to the database that should contain the `tenants` table and other system wide related info. The other connection, named `tenant` points to the database of the tenant that is considering the current tenant for a request.
+When using a separate database for each tenant, your Laravel app needs two database connections. One named `landlord`, which points to the database that should contain the `tenants` table and other system-wide related info. The other connection, named `tenant`, points to the database of the tenant that is considered the current tenant for a request.
 
 In the `multitenancy` config file, you must set a name in `tenant_database_connection_name`. You can use `tenant`, but it could be any name that you want. The `landlord_database_connection_name` must also be set. A logical value could be `landlord`, but again, you could use any name you want.
 
-Next, let's create the connections themselves. In the `database` config file, in the `connections` key you must add a database configuration for the tenant and landlord connection.
+Next, let's create the connections themselves. In the `database` config file, in the `connections` key you must add a database configuration for the tenant and landlord connections.
 
-In the example below the `mysql` driver is used, but you can use any driver you'd like. For the `tenant` connection you should set the `database` to `null`. The package will dynamically set the database name depending on the tenant that's considered the current one.
+In the example below, the `mysql` driver is used, but you can use any driver you'd like. For the `tenant` connection you should set `database` to `null`. The package will dynamically set the database name depending on the tenant that's considered the current one.
 
 ```php
 // in config/database.php
@@ -126,11 +126,10 @@ class DatabaseSeeder extends Seeder
 }
 ```
 
-
 ### Preparing models
 
 All models in your project should either use the `UsesLandLordConnection` or `UsesTenantConnection`, depending on if the underlying table of the models lives in the landlord or tenant database.
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are perform by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are performed by task classes that will be executed when making a tenant the current one.
