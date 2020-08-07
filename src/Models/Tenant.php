@@ -12,8 +12,6 @@ class Tenant extends Model
 {
     use UsesLandlordConnection;
 
-    protected $guarded = [];
-
     public function makeCurrent(): self
     {
         $this
