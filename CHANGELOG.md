@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+
+## 1.6.3 - 2020-08-07
+
+- Removed $guarded from Tenant model
+
+## 1.6.2 - 2020-08-07
+
+- TenantAware now uses the Tenant model from config
+
+## 1.6.1 - 2020-08-06
+
+- TenantsArtisanCommand now uses TenantAware trait
+
 ## 1.6.0 - 2020-08-06
 
 - added `TenantAware`
