@@ -10,8 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 trait TenantAware
 {
-    use UsesMultitenancyConfig;
-    use UsesTenantModel;
+    use UsesMultitenancyConfig,
+        UsesTenantModel;
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
