@@ -2,6 +2,8 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.6.4 - 2020-08-11
+- Forget current when making new tenant current
 
 ## 1.6.3 - 2020-08-07
 
