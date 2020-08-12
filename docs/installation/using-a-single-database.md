@@ -22,6 +22,6 @@ This will create the `tenants` table which holds configuration per tenant.
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystems/), ... These things are performed by [task classes](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or use your own separated filesystems per tenant, ... These things are performed by [task classes](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that will be executed when making a tenant the current one.
 
 The package also has an option to [make the queue tenant aware](/laravel-multitenancy/v1/basic-usage/making-queues-tenant-aware/).
