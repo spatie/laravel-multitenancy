@@ -14,6 +14,10 @@ class Tenant extends Model
 
     public function makeCurrent(): self
     {
+        if ($this->isCurrent()) {
+            return $this;
+        }
+        
         static::forgetCurrent();
 
         $this
