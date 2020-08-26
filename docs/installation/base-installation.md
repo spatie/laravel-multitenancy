@@ -89,7 +89,7 @@ return [
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
     ],
-];   
+];
 ```
 
 ### Protecting against cross tenant abuse
@@ -134,12 +134,10 @@ Route::middleware('tenant')->group(function() {
 });
 ```
 
-This middleware will respond with an unauthorized response code (401) when the user tries to use their session to view another tenant. Make sure to include `\Spatie\Multitenancy\Http\Middleware\NeedsTenant` first, as this will [handle any cases where a valid tenant cannot be found](/laravel-multitenancy/v1/advanced-usage/ensuring-a-current-tenant-has-been-set).
+This middleware will respond with an unauthorized response code (401) when the user tries to use their session to view another tenant. Make sure to include `\Spatie\Multitenancy\Http\Middleware\NeedsTenant` first, as this will [handle any cases where a valid tenant cannot be found](/docs/laravel-multitenancy/v1/advanced-usage/ensuring-a-current-tenant-has-been-set).
 
 ### Next steps
 
-If you prefer to use just one glorious database for all your tenants, read the installation instructions for [using a single database](/laravel-multitenancy/v1/installation/using-a-single-database). 
+If you prefer to use just one glorious database for all your tenants, read the installation instructions for [using a single database](/docs/laravel-multitenancy/v1/installation/using-a-single-database).
 
-If you want to use separate databases for each tenant, head over to the installation instructions for [using multiple databases](/laravel-multitenancy/v1/installation/using-multiple-databases). 
-
-
+If you want to use separate databases for each tenant, head over to the installation instructions for [using multiple databases](/docs/laravel-multitenancy/v1/installation/using-multiple-databases).

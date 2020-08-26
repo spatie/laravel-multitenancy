@@ -16,4 +16,4 @@ To use this task, you should add it to the `switch_tenant_tasks` key in the `mul
 ],
 ```
 
-If you want to change other database connection properties beside the database name, you should [create your own task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/). You can take a look at the source code of `SwitchTenantDatabaseTask` for inspiration.
+If you want to change other database connection properties beside the database name, you should [create your own task](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/). You can take a look at the source code of `SwitchTenantDatabaseTask` for inspiration.

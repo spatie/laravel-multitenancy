@@ -3,7 +3,7 @@ title: Using multiple databases
 weight: 3
 ---
 
-Before using the following instructions, make sure you have performed [the base installation steps](/laravel-multitenancy/v1/installation/base-installation) first.
+Before using the following instructions, make sure you have performed [the base installation steps](/docs/laravel-multitenancy/v1/installation/base-installation) first.
 
 Only use the instructions on this page if you want each of your tenants to have their own database.
 
@@ -37,7 +37,7 @@ In the example below, the `mysql` driver is used, but you can use any driver you
 
 ### Migrating the landlord database
 
-With the database connection set up we can migrate the landlord database. 
+With the database connection set up we can migrate the landlord database.
 
 First, you must publish the migration file:
 
@@ -50,7 +50,7 @@ The command above will publish a migration in `database/migrations/landlord` tha
 Perform this command to run that migration. The value of database option should be the landlord database connection name.
 
 ```bash
-php artisan migrate --path=database/migrations/landlord --database=landlord 
+php artisan migrate --path=database/migrations/landlord --database=landlord
 ```
 
 When creating new migrations that should be performed on the landlord database, you should store them in the `database/migrations/landlord` path. After creating your own migrations, use the command above to migrate the landlord database.
@@ -74,11 +74,11 @@ You should add this task to the `switch_tenant_tasks` key.
 ],
 ```
 
-The package also provides [other tasks](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that you could optionally add to `switch_tenant_tasks`. You can also [create a custom task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).
+The package also provides [other tasks](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) that you could optionally add to `switch_tenant_tasks`. You can also [create a custom task](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/).
 
 ### Creating tenant databases
 
-Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/laravel-multitenancy/v1/advanced-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
+Now that automatic database switching for tenants is configured, you can migrate the tenant databases. Because there are so many ways to go about it, the package does not handle creating databases. You should take care of creating new tenant databases in your own application code. A nice place to trigger this could be [when a `Tenant` model gets created](/docs/laravel-multitenancy/v1/advanced-usage/using-a-custom-tenant-model/#performing-actions-when-a-tenant-gets-created).
 
 If you want to get a feel of how the package works, you could create a couple of rows in the `tenants` table, fill the `database` attribute and manually create those databases.
 
@@ -86,7 +86,7 @@ If you want to get a feel of how the package works, you could create a couple of
 
 When you want to migrate tenant databases, all future migrations should be stored in `database/migrations`.
 
-To perform these migrations, you can use [the `tenants:migrate` command](/laravel-multitenancy/v1/advanced-usage/executing-artisan-commands-for-each-tenant). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
+To perform these migrations, you can use [the `tenants:migrate` command](/docs/laravel-multitenancy/v1/advanced-usage/executing-artisan-commands-for-each-tenant). This command will loop over all rows in the `tenants` table. It will make each tenant the current one, and migrate the database.
 
 ```bash
 php artisan tenants:artisan "migrate --database=tenant"
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
            ? $this->runTenantSpecificSeeders()
            : $this->runLandlordSpecificSeeders();
     }
-    
+
     public function runTenantSpecificSeeders()
     {
         // run tenant specific seeders
@@ -133,4 +133,4 @@ All models in your project should either use the `UsesLandLordConnection` or `Us
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are performed by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/filesystem/), ... These things are performed by task classes that will be executed when making a tenant the current one.
