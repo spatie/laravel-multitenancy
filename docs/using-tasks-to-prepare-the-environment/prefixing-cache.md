@@ -41,4 +41,4 @@ cache('key') // returns 'value-for-another-tenant'
 
 Behind the scenes, this works by dynamically changing the `cache.prefix` in the `cache` config file whenever another tenant is made current.
 
-If you want to make the cache tenant aware in another way, you should [create your own task](/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/). You can take a look at the source code of `PrefixCacheTask` for inspiration.
+If you want to make the cache tenant aware in another way, you should [create your own task](/docs/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/creating-your-own-task/). You can take a look at the source code of `PrefixCacheTask` for inspiration.
