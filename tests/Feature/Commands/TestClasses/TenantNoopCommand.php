@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Commands\TestClasses;
 
 use Illuminate\Console\Command;
-use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 
 class TenantNoopCommand extends Command
 {
@@ -16,6 +16,6 @@ class TenantNoopCommand extends Command
 
     public function handle()
     {
-        $this->line('Tenant ID is '. Tenant::current()->id);
+        $this->line('Tenant ID is ' . Tenant::current()->id);
     }
 }

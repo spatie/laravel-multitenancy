@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Http\Middleware;
 
 use Closure;
-use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Symfony\Component\HttpFoundation\Response;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 
 class EnsureValidTenantSession
 {
@@ -27,7 +27,7 @@ class EnsureValidTenantSession
         return $next($request);
     }
 
-    protected function handleInvalidTenantSession($request)
+    protected function handleInvalidTenantSession($request): void
     {
         abort(Response::HTTP_UNAUTHORIZED);
     }

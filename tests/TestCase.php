@@ -1,13 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests;
 
-use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\Facades\DB;
-use Orchestra\Testbench\Concerns\WithLaravelMigrations;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Console\Application as Artisan;
+use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
+use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
@@ -36,7 +36,7 @@ abstract class TestCase extends Orchestra
         ];
     }
 
-    protected function bootCommands() : self
+    protected function bootCommands(): self
     {
         Artisan::starting(function ($artisan) {
             $artisan->resolveCommands([

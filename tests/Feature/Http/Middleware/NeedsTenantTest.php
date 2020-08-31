@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Http\Middleware;
 
 use Illuminate\Support\Facades\Route;
-use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
-use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
+use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
 class NeedsTenantTest extends TestCase
 {

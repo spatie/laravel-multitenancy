@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace Spatie\Multitenancy\Tests\Feature;
 
 use Spatie\Multitenancy\Landlord;

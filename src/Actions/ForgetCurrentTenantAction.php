@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Actions;
 
-use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
-use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Tasks\TasksCollection;
+use Spatie\Multitenancy\Tasks\SwitchTenantTask;
+use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
+use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 
 class ForgetCurrentTenantAction
 {
@@ -17,7 +17,7 @@ class ForgetCurrentTenantAction
         $this->tasksCollection = $tasksCollection;
     }
 
-    public function execute(Tenant $tenant)
+    public function execute(Tenant $tenant): void
     {
         event(new ForgettingCurrentTenantEvent($tenant));
 
@@ -35,7 +35,7 @@ class ForgetCurrentTenantAction
         return $this;
     }
 
-    private function clearBoundCurrentTenant()
+    private function clearBoundCurrentTenant(): void
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 

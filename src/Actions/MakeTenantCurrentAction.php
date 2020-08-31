@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Actions;
 
+use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tasks\TasksCollection;
+use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
-use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\SwitchTenantTask;
-use Spatie\Multitenancy\Tasks\TasksCollection;
 
 class MakeTenantCurrentAction
 {
@@ -17,7 +17,7 @@ class MakeTenantCurrentAction
         $this->tasksCollection = $tasksCollection;
     }
 
-    public function execute(Tenant $tenant)
+    public function execute(Tenant $tenant): self
     {
         event(new MakingTenantCurrentEvent($tenant));
 

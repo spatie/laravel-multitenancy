@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace Spatie\Multitenancy;
 
 use Spatie\Multitenancy\Models\Tenant;
@@ -10,11 +11,11 @@ class Landlord
         $originalCurrentTenant = Tenant::current();
 
         Tenant::forgetCurrent();
-        
+
         $result = $callable();
-        
+
         optional($originalCurrentTenant)->makeCurrent();
-        
+
         return $result;
     }
 }

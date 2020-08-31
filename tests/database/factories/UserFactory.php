@@ -1,9 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 use Faker\Generator;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factory;
 use Spatie\Multitenancy\Tests\TestClasses\User;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 $factory->define(User::class, fn (Generator $faker) => [
     'name' => $faker->name,
     'email' => $faker->unique()->safeEmail,

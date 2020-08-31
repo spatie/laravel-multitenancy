@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
-use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
-use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 use Spatie\Multitenancy\TenantCollection;
+use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
+use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
+use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 
 class Tenant extends Model
 {
@@ -17,7 +17,7 @@ class Tenant extends Model
         if ($this->isCurrent()) {
             return $this;
         }
-        
+
         static::forgetCurrent();
 
         $this

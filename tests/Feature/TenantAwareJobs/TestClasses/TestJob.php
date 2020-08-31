@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Valuestore\Valuestore;
+use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TestJob implements ShouldQueue
 {

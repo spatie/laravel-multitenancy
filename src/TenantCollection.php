@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Database\Eloquent\Collection;
 use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Database\Eloquent\Collection;
 
 class TenantCollection extends Collection
 {

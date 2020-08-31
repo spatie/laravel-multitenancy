@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Commands;
 
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
 class TenantAwareCommandTest extends TestCase
 {
@@ -44,7 +44,7 @@ class TenantAwareCommandTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=1')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '. $this->tenant->id);
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id);
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class TenantAwareCommandTest extends TestCase
         $this
             ->artisan('tenant:noop')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '. $this->tenant->id)
-            ->expectsOutput('Tenant ID is '. $this->anotherTenant->id);
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant ID is ' . $this->anotherTenant->id);
     }
 }

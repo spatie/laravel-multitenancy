@@ -1,21 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy;
 
 use Illuminate\Support\ServiceProvider;
-use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
+use Spatie\Multitenancy\Tasks\TasksCollection;
+use Spatie\Multitenancy\TenantFinder\TenantFinder;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Tasks\TasksCollection;
-use Spatie\Multitenancy\TenantFinder\TenantFinder;
+use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 
 class MultitenancyServiceProvider extends ServiceProvider
 {
     use UsesTenantModel,
         UsesMultitenancyConfig;
 
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this
@@ -30,7 +30,7 @@ class MultitenancyServiceProvider extends ServiceProvider
             ->configureQueue();
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/multitenancy.php', 'multitenancy');
     }

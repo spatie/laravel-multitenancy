@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 $finder = Symfony\Component\Finder\Finder::create()
     ->notPath('bootstrap/*')
@@ -18,7 +18,7 @@ return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
-        'ordered_imports' => ['sortAlgorithm' => 'alpha'],
+        'ordered_imports' => ['sortAlgorithm' => 'length'],
         'no_unused_imports' => true,
         'not_operator_with_successor_space' => true,
         'trailing_comma_in_multiline_array' => true,
@@ -33,6 +33,8 @@ return PhpCsFixer\Config::create()
         'method_argument_space' => [
             'on_multiline' => 'ensure_fully_multiline',
             'keep_multiple_spaces_after_comma' => true,
-        ]
+        ],
+        'strict_comparison' => true,
+        'declare_strict_types' => true,
     ])
     ->setFinder($finder);

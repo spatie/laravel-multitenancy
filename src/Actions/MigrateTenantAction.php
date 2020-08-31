@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Actions;
 
-use Illuminate\Support\Facades\Artisan;
 use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrateTenantAction

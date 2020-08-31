@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Tasks;
 
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
 class PrefixCacheTaskTest extends TestCase
 {
@@ -24,13 +24,13 @@ class PrefixCacheTaskTest extends TestCase
     {
         cache()->put('key', 'original-value');
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        /** @var Tenant $tenant */
         $tenant = factory(Tenant::class)->create();
         $tenant->makeCurrent();
         $this->assertFalse(cache()->has('key'));
         cache()->put('key', 'tenant-value');
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+        /** @var Tenant $anotherTenant */
         $anotherTenant = factory(Tenant::class)->create();
         $anotherTenant->makeCurrent();
         $this->assertFalse(cache()->has('key'));

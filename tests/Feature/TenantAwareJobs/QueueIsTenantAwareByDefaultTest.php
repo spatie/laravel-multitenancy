@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
-use Illuminate\Contracts\Bus\Dispatcher;
+use Spatie\Valuestore\Valuestore;
 use Illuminate\Queue\Events\JobFailed;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 use Spatie\Multitenancy\Tests\TestCase;
-use Spatie\Valuestore\Valuestore;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
 
 class QueueIsTenantAwareByDefaultTest extends TestCase
 {

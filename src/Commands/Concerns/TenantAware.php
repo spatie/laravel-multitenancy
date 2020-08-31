@@ -1,17 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Commands\Concerns;
 
 use Illuminate\Support\Arr;
-use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 
 trait TenantAware
 {
-    use UsesMultitenancyConfig,
-        UsesTenantModel;
+    use UsesMultitenancyConfig, UsesTenantModel;
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tasks;
 
@@ -31,7 +31,7 @@ class PrefixCacheTask implements SwitchTenantTask
         $this->setCachePrefix($this->originalPrefix);
     }
 
-    protected function setCachePrefix(string $prefix)
+    protected function setCachePrefix(string $prefix): void
     {
         config()->set('cache.prefix', $prefix);
 

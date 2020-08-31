@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature;
 
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\TenantCollection;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\TenantCollection;
 
 class TenantCollectionTest extends TestCase
 {

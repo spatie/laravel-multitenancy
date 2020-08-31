@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
 class TenantsArtisanCommandTest extends TestCase
 {
@@ -57,16 +57,16 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
     {
-        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
+        config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
 
         $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')
-            ->expectsOutput("No tenant(s) found.");
+            ->expectsOutput('No tenant(s) found.');
     }
 
     /** @test */
     public function it_can_migrate_a_specific_tenant_by_domain()
     {
-        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
+        config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
 
         $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')->assertExitCode(0);
 

@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\TenantFinder;
 
 use Illuminate\Http\Request;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\TenantFinder\DomainTenantFinder;
 
 class DomainTenantFinderTest extends TestCase
 {

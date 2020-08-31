@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
+use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Actions\MigrateTenantAction;
+use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
-use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
-use Spatie\Multitenancy\Actions\MigrateTenantAction;
-use Spatie\Multitenancy\Models\Tenant;
 
 return [
     /*

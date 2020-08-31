@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Models\Concerns;
 
@@ -8,7 +8,7 @@ trait UsesTenantConnection
 {
     use UsesMultitenancyConfig;
 
-    public function getConnectionName()
+    public function getConnectionName(): ?string
     {
         return $this->tenantDatabaseConnectionName();
     }

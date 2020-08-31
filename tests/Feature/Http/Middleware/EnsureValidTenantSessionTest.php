@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Http\Middleware;
 
 use Illuminate\Support\Facades\Route;
-use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
 
 class EnsureValidTenantSessionTest extends TestCase
 {
@@ -18,7 +18,7 @@ class EnsureValidTenantSessionTest extends TestCase
 
         Route::get('test-middleware', fn () => 'ok')->middleware(['web', EnsureValidTenantSession::class]);
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        /** @var Tenant $tenant */
         $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
 
         $this->tenant->makeCurrent();

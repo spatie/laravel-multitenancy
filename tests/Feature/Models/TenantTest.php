@@ -1,14 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Tests\Feature\Models;
 
 use Illuminate\Support\Facades\Event;
-use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
-use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
-use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
-use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
+use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
+use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
+use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 
 class TenantTest extends TestCase
 {
@@ -77,10 +77,10 @@ class TenantTest extends TestCase
     /** @test */
     public function it_can_check_if_the_a_particular_tenant_is_the_current_one()
     {
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        /** @var Tenant $tenant */
         $tenant = factory(Tenant::class)->create();
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+        /** @var Tenant $anotherTenant */
         $anotherTenant = factory(Tenant::class)->create();
 
         $this->assertFalse($tenant->isCurrent());

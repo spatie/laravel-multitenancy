@@ -1,22 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Actions;
 
-use Illuminate\Events\CallQueuedListener;
-use Illuminate\Mail\SendQueuedMailable;
-use Illuminate\Notifications\SendQueuedNotifications;
-use Illuminate\Queue\Events\JobProcessing;
-use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
-use Spatie\Multitenancy\Jobs\NotTenantAware;
-use Spatie\Multitenancy\Jobs\TenantAware;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Events\CallQueuedListener;
+use Spatie\Multitenancy\Jobs\TenantAware;
+use Illuminate\Queue\Events\JobProcessing;
+use Spatie\Multitenancy\Jobs\NotTenantAware;
+use Illuminate\Notifications\SendQueuedNotifications;
+use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
+use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 
 class MakeQueueTenantAwareAction
 {
     use UsesTenantModel;
 
-    public function execute()
+    public function execute(): void
     {
         $this
             ->listenForJobsBeingQueued()
@@ -74,8 +74,7 @@ class MakeQueueTenantAwareAction
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
         }
 
-
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+        /** @var Tenant $tenant */
         if (! $tenant = $this->getTenantModel()::find($tenantId)) {
             $event->job->delete();
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Spatie\Multitenancy\Concerns;
 
@@ -37,7 +37,7 @@ trait UsesMultitenancyConfig
         return app($configuredClass);
     }
 
-    public function getTenantArtisanSearchFields() : array
+    public function getTenantArtisanSearchFields(): array
     {
         return Arr::wrap(config('multitenancy.tenant_artisan_search_fields'));
     }
