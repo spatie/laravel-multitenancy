@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 $finder = Symfony\Component\Finder\Finder::create()
     ->notPath('bootstrap/*')
@@ -35,6 +35,5 @@ return PhpCsFixer\Config::create()
             'keep_multiple_spaces_after_comma' => true,
         ],
         'strict_comparison' => true,
-        'declare_strict_types' => true,
     ])
     ->setFinder($finder);

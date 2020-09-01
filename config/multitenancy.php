@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
@@ -12,7 +12,6 @@ return [
      * for the given request.
      *
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
-     *
      */
     'tenant_finder' => null,
 
@@ -92,5 +91,5 @@ return [
      * https://www.spatie.be <-- should not be like this
      * https://anysubdomain.spatie.be <-- should not be like this
      */
-    'landlord_url' => env('LANDLORD_URL', 'test.test'),
+    'landlord_url' => env('LANDLORD_URL', 'landlord.domain'),
 ];
