@@ -56,7 +56,7 @@ class MultitenancyServiceProvider extends ServiceProvider
             return;
         }
 
-        /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
+        /** @var TenantFinder $tenantFinder */
         $tenantFinder = app(TenantFinder::class);
 
         $tenant = $tenantFinder->findForRequest(request());

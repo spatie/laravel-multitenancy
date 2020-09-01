@@ -73,4 +73,11 @@ return [
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
     ],
+
+    /*
+     * You can exclude any subdomains pointing to our application.
+     */
+    'excluded_subdomains' => [
+        'www'
+    ],
 ];

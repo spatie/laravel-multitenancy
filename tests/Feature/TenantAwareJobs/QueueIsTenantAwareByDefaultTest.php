@@ -49,7 +49,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     /** @test */
     public function it_will_inject_the_right_tenant_even_when_the_current_tenant_switches()
     {
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+        /** @var Tenant $anotherTenant */
         $anotherTenant = factory(Tenant::class)->create();
 
         $this->tenant->makeCurrent();
