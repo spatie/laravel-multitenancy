@@ -80,4 +80,17 @@ return [
     'excluded_subdomains' => [
         'www'
     ],
+
+    /*
+     * It is required to be set to use subdomain.
+     * Using subdomain strategy forces us to deploy this application on top level domain.
+     *
+     * Ex. spatie.be  <-- should be in this format only
+     *
+     * http://spatie.be <-- should not be like this
+     * https://spatie.be <-- should not be like this
+     * https://www.spatie.be <-- should not be like this
+     * https://anysubdomain.spatie.be <-- should not be like this
+     */
+    'landlord_url' => env('LANDLORD_URL', 'test.test'),
 ];

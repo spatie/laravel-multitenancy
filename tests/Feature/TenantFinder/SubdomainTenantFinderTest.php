@@ -21,9 +21,9 @@ class SubdomainTenantFinderTest extends TestCase
     /** @test */
     public function it_can_find_a_tenant_for_the_current_subdomain()
     {
-        $tenant = factory(Tenant::class)->create(['subdomain' => 'test']);
+        $tenant = factory(Tenant::class)->create(['subdomain' => 'any-subdomain']);
 
-        $request = Request::create('https://test.my-domain.com');
+        $request = Request::create('https://any-subdomain.test.test');
 
         $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
     }
@@ -31,7 +31,7 @@ class SubdomainTenantFinderTest extends TestCase
     /** @test */
     public function it_will_return_null_if_there_are_no_tenants_for_sudomain()
     {
-        $request = Request::create('https://test.my-domain.com');
+        $request = Request::create('https://any-subdomain.test.test');
 
         $this->assertNull($this->tenantFinder->findForRequest($request));
     }
