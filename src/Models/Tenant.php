@@ -17,7 +17,7 @@ class Tenant extends Model
         if ($this->isCurrent()) {
             return $this;
         }
-        
+
         static::forgetCurrent();
 
         $this
