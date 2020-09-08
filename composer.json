@@ -21,9 +21,9 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "laravel/legacy-factories": "^1.0",
+        "laravel/legacy-factories": "^1.0.4",
         "orchestra/testbench": "^5.0|^6.0",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.3",
         "spatie/valuestore": "^1.2"
     },
     "autoload": {
