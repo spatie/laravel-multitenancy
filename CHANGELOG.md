@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.6.7 - 2020-09-07
+
+- add support for Laravel 8
+
 ## 1.6.6 - 2020-08-24
 - Restored check isCurrent from makeCurrent
 
