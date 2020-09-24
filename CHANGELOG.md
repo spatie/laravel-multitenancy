@@ -2,22 +2,25 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.6.8 - 2020-09-24
+- add ability to dispatch events tenant aware
+
 ## 1.6.7 - 2020-09-07
 
 - add support for Laravel 8
 
 ## 1.6.6 - 2020-08-24
-- Restored check isCurrent from makeCurrent
+- restored check isCurrent from makeCurrent
 
 ## 1.6.5 - 2020-08-21
-- 🐛 Removed check isCurrent from makeCurrent
+- 🐛 removed check isCurrent from makeCurrent
 
 ## 1.6.4 - 2020-08-11
-- Forget current when making new tenant current
+- forget current when making new tenant current
 
 ## 1.6.3 - 2020-08-07
 
-- Removed $guarded from Tenant model
+- removed $guarded from Tenant model
 
 ## 1.6.2 - 2020-08-07
 
