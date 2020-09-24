@@ -94,6 +94,8 @@ class MakeQueueTenantAwareAction
                 return $queueable->notification;
             case CallQueuedListener::class:
                 return $queueable->class;
+            case BroadcastEvent::class:
+                return $queueable->event;
             default:
                 return $queueable;
         }
