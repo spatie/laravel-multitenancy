@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.6.9 - 2020-09-27
+
+- fix for BroadcastEvent (#142)
+
 ## 1.6.8 - 2020-09-24
 - add ability to dispatch events tenant aware
 
