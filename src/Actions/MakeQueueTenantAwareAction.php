@@ -11,6 +11,7 @@ use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
+use Illuminate\Broadcasting\BroadcastEvent;
 
 class MakeQueueTenantAwareAction
 {
