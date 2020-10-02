@@ -7,7 +7,7 @@ There are several methods available to get, set and clear the current tenant.
 
 ### Finding the current tenant
 
-You can find the current method like this.
+You can find the current tenant like this:
 
 ```php
 Spatie\Multitenancy\Models\Tenant::current(); // returns the current tenant, or if no tenant is current, `null`
