@@ -129,7 +129,7 @@ class DatabaseSeeder extends Seeder
 
 ### Preparing models
 
-All models in your project should either use the `UsesLandLordConnection` or `UsesTenantConnection`, depending on if the underlying table of the models lives in the landlord or tenant database.
+All models in your project should either use the `UsesLandlordConnection` or `UsesTenantConnection`, depending on if the underlying table of the models lives in the landlord or tenant database.
 
 ### Next steps
 
