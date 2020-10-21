@@ -10,6 +10,6 @@ In addition to the regular methods, `TenantCollection` provides two extra method
 ```php
 Tenant::all()->eachCurrent(function(Tenant $tenant) {
     // the passed tenant has been made current
-    Tenant::current() === $tenant->id // returns true;
+    Tenant::current()->is($tenant); // returns true;
 })
 ```
