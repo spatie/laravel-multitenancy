@@ -39,6 +39,8 @@ class DomainTenantFinderTest extends TestCase
     /** @test */
     public function it_will_return_null_if_no_tenant_can_be_found_for_the_current_domain()
     {
+        $tenant = factory(Tenant::class)->create(['domain' => 'my-domain.com']);
+
         $request = Request::create('https://another-domain.com');
 
         $this->assertNull($this->tenantFinder->findForRequest($request));
