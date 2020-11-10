@@ -92,6 +92,12 @@ To perform these migrations, you can use [the `tenants:migrate` command](/docs/l
 php artisan tenants:artisan "migrate --database=tenant"
 ```
 
+If you want to have dedicated directory for tenant migrations (`database/migrations/tenant`) you can simply run:
+
+```bash
+php artisan tenants:artisan "migrate --path=database/migrations/tenant --database=tenant" 
+```
+
 ### Seeding tenant databases
 
 If you also want to seed tenant database you can execute this command:
