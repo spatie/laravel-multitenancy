@@ -19,7 +19,7 @@ class NeedsTenant
         return $next($request);
     }
 
-    public function handleInvalidRequest(): void
+    public function handleInvalidRequest()
     {
         throw NoCurrentTenant::make();
     }
