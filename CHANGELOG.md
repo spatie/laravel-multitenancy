@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 1.6.11 - 2020-12-17
+
+- allow PHP 8
+
 ## 1.6.10 - 2020-12-03
 
 - NeedsTenant ability to return or redirect
