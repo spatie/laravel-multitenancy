@@ -3,7 +3,7 @@ title: Determining the current tenant
 weight: 4
 ---
 
-Per request, the package can determine the "current" tenant. This is done by a `TenantFinder`. The package ships with a `DomainTenantFinder` that will make the tenant active who's `domain` attribute value matches the host of the current request.
+Per request, the package can determine the "current" tenant. This is done by a `TenantFinder`. The package ships with a `DomainTenantFinder` that will make the tenant active whose `domain` attribute value matches the host of the current request.
 
 To use that tenant finder, specify its class name in the `tenant_finder` key of the `multitenancy` config file.
 

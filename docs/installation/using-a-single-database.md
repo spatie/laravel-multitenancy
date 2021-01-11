@@ -5,11 +5,11 @@ weight: 2
 
 Before using the following instructions, make sure you have performed [the base installation steps](/docs/laravel-multitenancy/v1/installation/base-installation) first.
 
- Only use the instructions on this page if you want use one database.
+ Only use the instructions on this page if you want to use one database.
 
 ### Migrating the database
 
-With the database connection set up we can migrate the landlord database.
+With the database connection set up, we can migrate the landlord database.
 
 First, you must publish and run the migration:
 

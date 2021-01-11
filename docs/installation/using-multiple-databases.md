@@ -13,9 +13,9 @@ When using a separate database for each tenant, your Laravel app needs two datab
 
 In the `multitenancy` config file, you must set a name in `tenant_database_connection_name`. You can use `tenant`, but it could be any name that you want. The `landlord_database_connection_name` must also be set. A logical value could be `landlord`, but again, you could use any name you want.
 
-Next, let's create the connections themselves. In the `database` config file, in the `connections` key you must add a database configuration for the tenant and landlord connections.
+Next, let's create the connections themselves. In the `database` config file, in the `connections` key, you must add a database configuration for the tenant and landlord connections.
 
-In the example below, the `mysql` driver is used, but you can use any driver you'd like. For the `tenant` connection you should set `database` to `null`. The package will dynamically set the database name depending on the tenant that's considered the current one.
+In the example below, the `mysql` driver is used, but you can use any driver you'd like. For the `tenant` connection, you should set `database` to `null`. The package will dynamically set the database name depending on the tenant that's considered the current one.
 
 ```php
 // in config/database.php
@@ -37,7 +37,7 @@ In the example below, the `mysql` driver is used, but you can use any driver you
 
 ### Migrating the landlord database
 
-With the database connection set up we can migrate the landlord database.
+With the database connection set up, we can migrate the landlord database.
 
 First, you must publish the migration file:
 
@@ -47,7 +47,7 @@ php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServicePr
 
 The command above will publish a migration in `database/migrations/landlord` that will create the `tenants` table.
 
-Perform this command to run that migration. The value of database option should be the landlord database connection name.
+Perform this command to run that migration. The value of the database option should be the landlord database connection name.
 
 ```bash
 php artisan migrate --path=database/migrations/landlord --database=landlord
