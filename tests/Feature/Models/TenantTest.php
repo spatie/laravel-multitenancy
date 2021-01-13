@@ -157,4 +157,26 @@ class TenantTest extends TestCase
 
         $this->assertEquals($response, $this->tenant->id);
     }
+
+    /** @test */
+    public function it_will_execute_a_delayed_callback_in_tenant_context()
+    {
+        Tenant::forgetCurrent();
+
+        $this->assertNull(Tenant::current());
+
+        $callback = $this->tenant->callback(function (Tenant $tenant) {
+            $this->assertEquals($tenant->id, Tenant::current()->id);
+
+            return $tenant->id;
+        });
+
+        $this->assertNull(Tenant::current());
+
+        $response = $callback();
+
+        $this->assertNull(Tenant::current());
+
+        $this->assertEquals($response, $this->tenant->id);
+    }
 }

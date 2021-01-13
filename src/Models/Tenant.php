@@ -92,4 +92,9 @@ class Tenant extends Model
                 : Tenant::forgetCurrent();
         });
     }
+
+    public function callback(callable $callable): \Closure
+    {
+        return fn() => $this->execute($callable);
+    }
 }
