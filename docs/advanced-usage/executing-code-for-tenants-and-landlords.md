@@ -30,7 +30,18 @@ Route::post('/api/{tenant}/reminder', function (Tenant $tenant) {
     ]);
 });
 ```
+### Executing a delayed callback in the correct Tenant context
+If you need to define a callback that will be executed in the correct Tenant context every time it is called, you can use the Tenant's `callback` method.
+A notable example for this is the use in the Laravel scheduler where you can loop through all the tenants and schedule callbacks to be executed at the given time:
 
+```php
+protected function schedule(Schedule $schedule)
+{
+    Tenant::all()->eachCurrent(function(Tenant $tenant) use ($schedule) {
+        $schedule->run($tenant->callback(fn() => cache()->flush()))->daily();
+    });
+}
+```
 
 ## Executing landlord code in tenant request
 
