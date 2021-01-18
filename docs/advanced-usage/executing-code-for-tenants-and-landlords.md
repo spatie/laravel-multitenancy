@@ -56,7 +56,7 @@ Inside the closure passed to `execute`, the landlord is made active by forgettin
 
 ## Testing with DatabaseTransactions for Tenant
 
-When performing testing and using `DatabaseTransactions` trait, the default setup in Laravel requires changes to ensure that the transactions are performed on the `Tenant` connection. Accordingly, the default `TestCase.php` file may be updated as below:
+When performing testing and using the `DatabaseTransactions` trait, the default setup in Laravel requires changes to ensure that the transactions are performed on the `Tenant` connection. Accordingly, the default `TestCase.php` file may be updated as below:
 
 ```php
 namespace Tests;
