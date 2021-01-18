@@ -95,6 +95,6 @@ class Tenant extends Model
 
     public function callback(callable $callable): \Closure
     {
-        return fn() => $this->execute($callable);
+        return fn () => $this->execute($callable);
     }
 }
