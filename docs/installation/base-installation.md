@@ -105,7 +105,7 @@ protected $middlewareGroups = [
     'web' => [
         // ...
         \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
-        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
     ]
 ];
 ```
@@ -119,7 +119,7 @@ protected $middlewareGroups = [
     // ...
     'tenant' => [
         \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
-        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class
+        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
     ]
 ];
 ```
