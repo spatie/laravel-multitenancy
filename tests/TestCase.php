@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\Tests;
 
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
@@ -25,6 +26,8 @@ abstract class TestCase extends Orchestra
         Tenant::truncate();
 
         DB::table('jobs')->truncate();
+
+        View::addLocation(__DIR__ .'/stubs/views');
     }
 
     protected function getPackageProviders($app)
