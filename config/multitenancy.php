@@ -4,6 +4,7 @@ use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
+use Spatie\Multitenancy\Jobs\QueueableToJobEnum;
 use Spatie\Multitenancy\Models\Tenant;
 
 return [
@@ -73,4 +74,9 @@ return [
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
     ],
+
+    /*
+     *
+     */
+    'queueable_to_job' => QueueableToJobEnum::class,
 ];
