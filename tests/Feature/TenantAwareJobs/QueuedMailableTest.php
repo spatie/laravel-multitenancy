@@ -17,7 +17,7 @@ class QueuedMailableTest extends TestCase
 
         config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
         config()->set('queue.default', 'sync');
-        config()->set('mail.default', 'array');
+        config()->set('mail.default', 'log');
 
         $this->tenant = factory(Tenant::class)->create();
     }
