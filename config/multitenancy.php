@@ -1,10 +1,13 @@
 <?php
 
+use Illuminate\Broadcasting\BroadcastEvent;
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
-use Spatie\Multitenancy\Jobs\QueueableToJobEnum;
 use Spatie\Multitenancy\Models\Tenant;
 
 return [
@@ -76,7 +79,15 @@ return [
     ],
 
     /*
+     * You can customize the way in which the package resolves the queuable to a job.
      *
+     * For example, using the package laravel-actions (by Loris Leiva), you can
+     * resolve JobDecorator to getAction() like so: JobDecorator::class => 'getAction'
      */
-    'queueable_to_job' => QueueableToJobEnum::class,
+    'queueable_to_job' => [
+        SendQueuedMailable::class => 'mailable',
+        SendQueuedNotifications::class => 'notification',
+        CallQueuedListener::class => 'class',
+        BroadcastEvent::class => 'event',
+    ],
 ];
