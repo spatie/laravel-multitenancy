@@ -11,7 +11,7 @@ class TenantNotifiable extends Tenant
     protected $table = 'tenants';
 
     protected $appends = [
-        'email'
+        'email',
     ];
 
     public function getEmailAttribute()
