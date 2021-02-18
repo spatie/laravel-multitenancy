@@ -7,6 +7,7 @@ use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
@@ -88,17 +89,16 @@ class MakeQueueTenantAwareAction
 
     protected function getJobFromQueueable(object $queueable)
     {
-        switch (get_class($queueable)) {
-            case SendQueuedMailable::class:
-                return $queueable->mailable;
-            case SendQueuedNotifications::class:
-                return $queueable->notification;
-            case CallQueuedListener::class:
-                return $queueable->class;
-            case BroadcastEvent::class:
-                return $queueable->event;
-            default:
-                return $queueable;
+        $job = Arr::get(config('multitenancy.queueable_to_job'), get_class($queueable));
+
+        if (! $job) {
+            return $queueable;
         }
+
+        if (method_exists($queueable, $job)) {
+            $queueable->{$job}();
+        }
+
+        return $queueable->$job;
     }
 }
