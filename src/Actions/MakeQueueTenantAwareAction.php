@@ -93,7 +93,9 @@ class MakeQueueTenantAwareAction
 
         if (! $job) {
             return $queueable;
-        } elseif (method_exists($queueable, $job)) {
+        }
+
+        if (method_exists($queueable, $job)) {
             $queueable->{$job}();
         }
 
