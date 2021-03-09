@@ -61,7 +61,7 @@ class MultitenancyServiceProvider extends ServiceProvider
 
         $tenant = $tenantFinder->findForRequest(request());
 
-        optional($tenant)->makeCurrent();
+        $tenant?->makeCurrent();
     }
 
     protected function bootCommands(): self

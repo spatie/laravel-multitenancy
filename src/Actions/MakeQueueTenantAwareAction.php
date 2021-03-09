@@ -30,7 +30,7 @@ class MakeQueueTenantAwareAction
                 return [];
             }
 
-            return ['tenantId' => optional(Tenant::current())->id];
+            return ['tenantId' => Tenant::current()?->id];
         });
 
         return $this;
