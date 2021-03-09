@@ -12,7 +12,8 @@ class MakeTenantCurrentAction
 {
     public function __construct(
         protected TasksCollection $tasksCollection
-    ) { }
+    ) {
+    }
 
     public function execute(Tenant $tenant)
     {

@@ -8,5 +8,6 @@ class MakingTenantCurrentEvent
 {
     public function __construct(
         public Tenant $tenant
-    ) { }
+    ) {
+    }
 }
