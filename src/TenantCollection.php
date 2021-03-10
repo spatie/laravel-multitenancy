@@ -9,12 +9,18 @@ class TenantCollection extends Collection
 {
     public function eachCurrent(callable $callable): self
     {
-        return $this->performCollectionMethodWhileMakingTenantsCurrent('each', $callable);
+        return $this->performCollectionMethodWhileMakingTenantsCurrent(
+            operation: 'each',
+            callable: $callable
+        );
     }
 
     public function mapCurrent(callable $callable): self
     {
-        return $this->performCollectionMethodWhileMakingTenantsCurrent('map', $callable);
+        return $this->performCollectionMethodWhileMakingTenantsCurrent(
+            operation: 'map',
+            callable: $callable
+        );
     }
 
     protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): self

@@ -37,14 +37,14 @@ class MultitenancyServiceProvider extends ServiceProvider
 
     protected function registerPublishables(): self
     {
-        $this->publishes([
+        $this->publishes(paths: [
             __DIR__ . '/../config/multitenancy.php' => config_path('multitenancy.php'),
-        ], 'config');
+        ], groups: 'config');
 
         if (! class_exists('CreateLandlordTenantsTable')) {
-            $this->publishes([
+            $this->publishes(paths: [
                 __DIR__ . '/../database/migrations/landlord/create_landlord_tenants_table.php.stub' => database_path('migrations/landlord/' . date('Y_m_d_His', time()) . '_create_landlord_tenants_table.php'),
-            ], 'migrations');
+            ], groups: 'migrations');
         }
 
         return $this;
@@ -106,8 +106,8 @@ class MultitenancyServiceProvider extends ServiceProvider
     {
         $this
             ->getMultitenancyActionClass(
-                'make_queue_tenant_aware_action',
-                MakeQueueTenantAwareAction::class
+                actionName: 'make_queue_tenant_aware_action',
+                actionClass: MakeQueueTenantAwareAction::class
             )
             ->execute();
 

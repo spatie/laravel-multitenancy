@@ -21,7 +21,10 @@ class Tenant extends Model
         static::forgetCurrent();
 
         $this
-            ->getMultitenancyActionClass('make_tenant_current_action', MakeTenantCurrentAction::class)
+            ->getMultitenancyActionClass(
+                actionName: 'make_tenant_current_action',
+                actionClass: MakeTenantCurrentAction::class
+            )
             ->execute($this);
 
         return $this;
@@ -30,7 +33,10 @@ class Tenant extends Model
     public function forget(): self
     {
         $this
-            ->getMultitenancyActionClass('forget_current_tenant_action', ForgetCurrentTenantAction::class)
+            ->getMultitenancyActionClass(
+                actionName: 'forget_current_tenant_action',
+                actionClass: ForgetCurrentTenantAction::class
+            )
             ->execute($this);
 
         return $this;
