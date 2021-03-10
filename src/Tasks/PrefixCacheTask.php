@@ -8,17 +8,15 @@ class PrefixCacheTask implements SwitchTenantTask
 {
     protected ?string $originalPrefix;
 
-    private string $storeName;
-
-    private string $cacheKeyBase;
-
-    public function __construct(string $storeName = null, string $cacheKeyBase = null)
-    {
+    public function __construct(
+        private ?string $storeName = null,
+        private ?string $cacheKeyBase = null
+    ) {
         $this->originalPrefix = config('cache.prefix');
 
-        $this->storeName = $storeName ?? config('cache.default');
+        $this->storeName ??= config('cache.default');
 
-        $this->cacheKeyBase = $cacheKeyBase ?? 'tenant_id_';
+        $this->cacheKeyBase ??= 'tenant_id_';
     }
 
     public function makeCurrent(Tenant $tenant): void
