@@ -2,7 +2,8 @@
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
@@ -10,44 +11,27 @@ use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
-class MultitenancyServiceProvider extends ServiceProvider
+class MultitenancyServiceProvider extends PackageServiceProvider
 {
     use UsesTenantModel,
         UsesMultitenancyConfig;
 
-    public function boot()
+    public function configurePackage(Package $package): void
     {
-        if ($this->app->runningInConsole()) {
-            $this
-                ->registerPublishables();
-        }
+        $package
+            ->name('laravel-multitenancy')
+            ->hasConfigFile()
+            ->hasMigration('landlord/create_landlord_tenants_table')
+            ->hasCommand(TenantsArtisanCommand::class);
+    }
 
+    public function packageBooted()
+    {
         $this
-            ->bootCommands()
             ->registerTenantFinder()
             ->registerTasksCollection()
             ->configureRequests()
             ->configureQueue();
-    }
-
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/multitenancy.php', 'multitenancy');
-    }
-
-    protected function registerPublishables(): self
-    {
-        $this->publishes(paths: [
-            __DIR__ . '/../config/multitenancy.php' => config_path('multitenancy.php'),
-        ], groups: 'config');
-
-        if (! class_exists('CreateLandlordTenantsTable')) {
-            $this->publishes(paths: [
-                __DIR__ . '/../database/migrations/landlord/create_landlord_tenants_table.php.stub' => database_path('migrations/landlord/' . date('Y_m_d_His', time()) . '_create_landlord_tenants_table.php'),
-            ], groups: 'migrations');
-        }
-
-        return $this;
     }
 
     protected function determineCurrentTenant(): void
@@ -62,15 +46,6 @@ class MultitenancyServiceProvider extends ServiceProvider
         $tenant = $tenantFinder->findForRequest(request());
 
         $tenant?->makeCurrent();
-    }
-
-    protected function bootCommands(): self
-    {
-        $this->commands([
-            TenantsArtisanCommand::class,
-        ]);
-
-        return $this;
     }
 
     protected function registerTasksCollection(): self
