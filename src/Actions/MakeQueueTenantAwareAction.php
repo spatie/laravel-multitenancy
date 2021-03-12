@@ -55,7 +55,9 @@ class MakeQueueTenantAwareAction
 
         if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
-        } elseif ($reflection->implementsInterface(NotTenantAware::class)) {
+        }
+
+        if ($reflection->implementsInterface(NotTenantAware::class)) {
             return false;
         }
 
