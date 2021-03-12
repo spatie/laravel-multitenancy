@@ -33,7 +33,7 @@ class ForgetCurrentTenantAction
         return $this;
     }
 
-    private function clearBoundCurrentTenant()
+    protected function clearBoundCurrentTenant()
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 

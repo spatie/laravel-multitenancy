@@ -9,8 +9,8 @@ class PrefixCacheTask implements SwitchTenantTask
     protected ?string $originalPrefix;
 
     public function __construct(
-        private ?string $storeName = null,
-        private ?string $cacheKeyBase = null
+        protected ?string $storeName = null,
+        protected ?string $cacheKeyBase = null
     ) {
         $this->originalPrefix = config('cache.prefix');
 
