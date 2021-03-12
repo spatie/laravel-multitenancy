@@ -19,7 +19,7 @@ In the `multitenancy` config file, you specify the tenant finder in the `tenant_
 'tenant_finder' => Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
 ```
 
-If there is a tenant returned by the tenant finder, [all configured tasks](https://docs.spatie.be/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/overview/) will be performed on it. After that, the tenant instance will be bound in the container using the `currentTenant` key.
+If there is a tenant returned by the tenant finder, [all configured tasks](https://docs.spatie.be/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/overview/) will be performed on it. After that, the tenant instance will be bound in the container using the `currentTenant` key.
 
 ```php
 app('currentTenant') // will return the current tenant or `null`

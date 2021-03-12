@@ -19,4 +19,4 @@ To use that tenant finder, specify its class name in the `tenant_finder` key of 
 'tenant_finder' => Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
 ```
 
-If you want to determine the "current" tenant some other way, you can [create a custom tenant finder](/docs/laravel-multitenancy/v1/basic-usage/automatically-determining-the-current-tenant/).
+If you want to determine the "current" tenant some other way, you can [create a custom tenant finder](/docs/laravel-multitenancy/v2/basic-usage/automatically-determining-the-current-tenant/).

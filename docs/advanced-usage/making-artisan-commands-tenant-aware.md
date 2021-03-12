@@ -42,7 +42,7 @@ php artisan your-favorite-command --tenant=1
 
 If you cannot change an Artisan command yourself, for instance a command from Laravel itself or a command from a package, you can use `tenants:artisan <artisan command>`. This command will loop over tenants and for each of them make that tenant current, and execute the artisan command.
 
-When your tenants each have their own database, you could migrate each tenant database with this command (given you are using a task like [`SwitchTenantDatabase`](https://docs.spatie.be/laravel-multitenancy/v1/using-tasks-to-prepare-the-environment/switching-databases)):
+When your tenants each have their own database, you could migrate each tenant database with this command (given you are using a task like [`SwitchTenantDatabase`](https://docs.spatie.be/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/switching-databases)):
 
 ```bash
 php artisan tenants:artisan migrate
