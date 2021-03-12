@@ -25,7 +25,7 @@ class MultitenancyServiceProvider extends PackageServiceProvider
             ->hasCommand(TenantsArtisanCommand::class);
     }
 
-    public function packageBooted()
+    public function packageBooted(): void
     {
         $this
             ->registerTenantFinder()

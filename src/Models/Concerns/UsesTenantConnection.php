@@ -8,7 +8,7 @@ trait UsesTenantConnection
 {
     use UsesMultitenancyConfig;
 
-    public function getConnectionName()
+    public function getConnectionName(): string
     {
         return $this->tenantDatabaseConnectionName();
     }
