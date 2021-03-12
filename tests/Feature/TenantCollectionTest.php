@@ -8,7 +8,7 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class TenantCollectionTest extends TestCase
 {
-    private TenantCollection $tenants;
+    protected TenantCollection $tenants;
 
     public function setUp(): void
     {

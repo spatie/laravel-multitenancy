@@ -9,7 +9,7 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class QueuedMailableTest extends TestCase
 {
-    private Tenant $tenant;
+    protected Tenant $tenant;
 
     public function setUp(): void
     {

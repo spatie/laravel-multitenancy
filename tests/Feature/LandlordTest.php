@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class LandlordTest extends TestCase
 {
-    private Tenant $tenant;
+    protected Tenant $tenant;
 
     public function setUp(): void
     {

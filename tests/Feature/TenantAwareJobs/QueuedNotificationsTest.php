@@ -9,7 +9,7 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class QueuedNotificationsTest extends TestCase
 {
-    private TenantNotifiable $tenant;
+    protected TenantNotifiable $tenant;
 
     public function setUp(): void
     {

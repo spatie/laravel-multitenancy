@@ -8,9 +8,9 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class TenantAwareCommandTest extends TestCase
 {
-    private Tenant $tenant;
+    protected Tenant $tenant;
 
-    private Tenant $anotherTenant;
+    protected Tenant $anotherTenant;
 
     public function setUp(): void
     {

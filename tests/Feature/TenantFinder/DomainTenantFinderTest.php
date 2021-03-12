@@ -9,7 +9,7 @@ use Spatie\Multitenancy\Tests\TestCase;
 
 class DomainTenantFinderTest extends TestCase
 {
-    private DomainTenantFinder $tenantFinder;
+    protected DomainTenantFinder $tenantFinder;
 
     public function setUp(): void
     {
