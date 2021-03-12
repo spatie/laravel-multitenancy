@@ -6,7 +6,7 @@ weight: 1
 This package can be installed via composer:
 
 ```bash
-composer require "spatie/laravel-multitenancy:^1.0"
+composer require "spatie/laravel-multitenancy:^2.0"
 ```
 
 ### Publishing the config file
@@ -22,22 +22,32 @@ This is the default content of the config file that will be published at `config
 ```php
 <?php
 
+use Illuminate\Broadcasting\BroadcastEvent;
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
 return [
     /*
-     * This class is responsible for determining which tenant should be the
-     * current tenant for the given request.
+     * This class is responsible for determining which tenant should be current
+     * for the given request.
      *
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
      *
      */
     'tenant_finder' => null,
+
+    /*
+     * These fields are used by tenant:artisan command to match one or more tenant
+     */
+    'tenant_artisan_search_fields' => [
+        'id',
+    ],
 
     /*
      * These tasks will be performed when switching tenants.
@@ -49,7 +59,7 @@ return [
     ],
 
     /*
-     * This class is the model used for storing configuration of tenants.
+     * This class is the model used for storing configuration on tenants.
      *
      * It must be or extend `Spatie\Multitenancy\Models\Tenant::class`
      */
@@ -70,7 +80,7 @@ return [
     'tenant_database_connection_name' => null,
 
     /*
-     * The connection name to reach the landlord database.
+     * The connection name to reach the landlord database
      */
     'landlord_database_connection_name' => null,
 
@@ -80,7 +90,7 @@ return [
     'current_tenant_container_key' => 'currentTenant',
 
     /*
-     * You can customize some of the behavior of this package by using your own custom action.
+     * You can customize some of the behavior of this package by using our own custom action.
      * Your custom action should always extend the default one.
      */
     'actions' => [
@@ -88,6 +98,19 @@ return [
         'forget_current_tenant_action' => ForgetCurrentTenantAction::class,
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
+    ],
+
+    /*
+     * You can customize the way in which the package resolves the queuable to a job.
+     *
+     * For example, using the package laravel-actions (by Loris Leiva), you can
+     * resolve JobDecorator to getAction() like so: JobDecorator::class => 'getAction'
+     */
+    'queueable_to_job' => [
+        SendQueuedMailable::class => 'mailable',
+        SendQueuedNotifications::class => 'notification',
+        CallQueuedListener::class => 'class',
+        BroadcastEvent::class => 'event',
     ],
 ];
 ```

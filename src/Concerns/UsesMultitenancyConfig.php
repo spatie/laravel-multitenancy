@@ -24,14 +24,14 @@ trait UsesMultitenancyConfig
 
     public function getMultitenancyActionClass(string $actionName, string $actionClass)
     {
-        $configuredClass = config("multitenancy.actions.{$actionName}");
-
-        if (is_null($configuredClass)) {
-            $configuredClass = $actionClass;
-        }
+        $configuredClass = config("multitenancy.actions.{$actionName}") ?? $actionClass;
 
         if (! is_a($configuredClass, $actionClass, true)) {
-            throw InvalidConfiguration::invalidAction($actionName, $configuredClass ?? '', $actionClass);
+            throw InvalidConfiguration::invalidAction(
+                actionName: $actionName,
+                configuredClass: $configuredClass ?? '',
+                actionClass: $actionClass
+            );
         }
 
         return app($configuredClass);

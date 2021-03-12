@@ -37,15 +37,11 @@ class MigrateTenantAction
 
     public function execute(Tenant $tenant): self
     {
-        $previousTenant = Tenant::current();
+        $tenant->execute(function () {
+            $migrationCommand = $this->fresh ? 'migrate:fresh' : 'migrate';
 
-        $tenant->makeCurrent();
-
-        $migrationCommand = $this->fresh ? 'migrate:fresh' : 'migrate';
-
-        Artisan::call($migrationCommand, $this->getOptions(), $this->output);
-
-        optional($previousTenant)->makeCurrent();
+            Artisan::call($migrationCommand, $this->getOptions(), $this->output);
+        });
 
         return $this;
     }

@@ -30,7 +30,7 @@ class MakeQueueTenantAwareAction
                 return [];
             }
 
-            return ['tenantId' => optional(Tenant::current())->id];
+            return ['tenantId' => Tenant::current()?->id];
         });
 
         return $this;
@@ -85,7 +85,7 @@ class MakeQueueTenantAwareAction
 
     protected function getJobFromQueueable(object $queueable)
     {
-        $job = Arr::get(config('multitenancy.queueable_to_job'), get_class($queueable));
+        $job = Arr::get(config('multitenancy.queueable_to_job'), $queueable::class);
 
         if (! $job) {
             return $queueable;

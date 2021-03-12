@@ -10,11 +10,9 @@ use Spatie\Multitenancy\Tasks\TasksCollection;
 
 class MakeTenantCurrentAction
 {
-    protected TasksCollection $tasksCollection;
-
-    public function __construct(TasksCollection $tasksCollection)
-    {
-        $this->tasksCollection = $tasksCollection;
+    public function __construct(
+        protected TasksCollection $tasksCollection
+    ) {
     }
 
     public function execute(Tenant $tenant)

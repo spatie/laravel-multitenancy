@@ -35,7 +35,7 @@ You can also execute the command for a specific tenant:
 
 
 ```bash
-php artisan your-favorite-command  --tenant=1
+php artisan your-favorite-command --tenant=1
 ```
 
 ## Using the tenants:artisan command

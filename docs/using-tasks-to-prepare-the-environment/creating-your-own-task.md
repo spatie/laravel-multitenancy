@@ -31,11 +31,9 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class PrefixCacheTask implements SwitchTenantTask
 {
-    protected ?string $originalPrefix;
-
-    public function __construct()
+    public function __construct(protected ?string $originalPrefix = null)
     {
-        $this->originalPrefix = config('cache.prefix');
+        $this->originalPrefix ??= config('cache.prefix');
     }
 
     public function makeCurrent(Tenant $tenant): void
