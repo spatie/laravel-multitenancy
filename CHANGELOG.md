@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.0.1 - 2021-03-16
+
+- upgrade dependency version of laravel-package-tools in composer.json
+
 ## 2.0.0 - 2021-03-12
 
 - drop support for PHP 7
