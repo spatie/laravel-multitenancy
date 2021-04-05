@@ -14,7 +14,7 @@ composer require "spatie/laravel-multitenancy:^2.0"
 You must publish the config file:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="multitenancy-config"
 ```
 
 This is the default content of the config file that will be published at `config/multitenancy.php`:
