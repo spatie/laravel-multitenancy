@@ -14,7 +14,7 @@ With the database connection set up, we can migrate the landlord database.
 First, you must publish and run the migration:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Spatie\Multitenancy\MultitenancyServiceProvider" --tag="multitenancy-migrations"
 php artisan migrate --path=database/migrations/landlord
 ```
 
