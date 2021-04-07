@@ -2,12 +2,17 @@
 
 namespace Spatie\Multitenancy;
 
+use Illuminate\Support\Facades\Event;
+use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
+use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
+use Laravel\Octane\Octane;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
+use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
@@ -70,6 +75,13 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
     protected function configureRequests(): self
     {
+        if (config('multitenancy.octane') && class_exists(Octane::class)) {
+            Event::listen(fn (OctaneRequestReceived $requestReceived) => $this->determineCurrentTenant());
+            Event::listen(fn (OctaneRequestTerminated $requestTerminated) => Tenant::forgetCurrent());
+
+            return $this;
+        }
+
         if (! $this->app->runningInConsole()) {
             $this->determineCurrentTenant();
         }
