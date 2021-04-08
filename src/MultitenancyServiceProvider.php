@@ -75,7 +75,7 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
     protected function configureRequests(): self
     {
-        if (config('multitenancy.octane') && class_exists(Octane::class)) {
+        if (isset($_SERVER['LARAVEL_OCTANE']) && class_exists(Octane::class)) {
             Event::listen(fn (OctaneRequestReceived $requestReceived) => $this->determineCurrentTenant());
             Event::listen(fn (OctaneRequestTerminated $requestTerminated) => Tenant::forgetCurrent());
 
