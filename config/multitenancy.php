@@ -12,11 +12,6 @@ use Spatie\Multitenancy\Models\Tenant;
 
 return [
     /*
-     * If your application uses Laravel Octane, set it to `true`.
-     */
-    'octane' => false,
-
-    /*
      * This class is responsible for determining which tenant should be current
      * for the given request.
      *
