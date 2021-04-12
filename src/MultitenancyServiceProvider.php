@@ -8,13 +8,9 @@ use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
 use Laravel\Octane\Octane;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tasks\TasksCollection;
-use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class MultitenancyServiceProvider extends PackageServiceProvider
 {
@@ -32,72 +28,14 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this
-            ->registerTenantFinder()
-            ->registerTasksCollection()
-            ->configureRequests()
-            ->configureQueue();
-    }
+        $this->app->bind(Multitenancy::class, fn ($app) => new Multitenancy($app));
 
-    protected function determineCurrentTenant(): void
-    {
-        if (! config('multitenancy.tenant_finder')) {
+        if (! isset($_SERVER['LARAVEL_OCTANE'])) {
+            $this->app[Multitenancy::class]->start();
             return;
         }
 
-        /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
-        $tenantFinder = app(TenantFinder::class);
-
-        $tenant = $tenantFinder->findForRequest(request());
-
-        $tenant?->makeCurrent();
-    }
-
-    protected function registerTasksCollection(): self
-    {
-        $this->app->singleton(TasksCollection::class, function () {
-            $taskClassNames = config('multitenancy.switch_tenant_tasks');
-
-            return new TasksCollection($taskClassNames);
-        });
-
-        return $this;
-    }
-
-    protected function registerTenantFinder(): self
-    {
-        if (config('multitenancy.tenant_finder')) {
-            $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
-        }
-
-        return $this;
-    }
-
-    protected function configureRequests(): self
-    {
-        if (isset($_SERVER['LARAVEL_OCTANE']) && class_exists(Octane::class)) {
-            Event::listen(fn (OctaneRequestReceived $requestReceived) => $this->determineCurrentTenant());
-            Event::listen(fn (OctaneRequestTerminated $requestTerminated) => Tenant::forgetCurrent());
-
-            return $this;
-        }
-
-        if (! $this->app->runningInConsole()) {
-            $this->determineCurrentTenant();
-        }
-
-        return $this;
-    }
-
-    protected function configureQueue(): self
-    {
-        $this
-            ->getMultitenancyActionClass(
-                actionName: 'make_queue_tenant_aware_action',
-                actionClass: MakeQueueTenantAwareAction::class
-            )
-            ->execute();
-
-        return $this;
+        Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
+        Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
     }
 }

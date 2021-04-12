@@ -2,10 +2,12 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Multitenancy;
 
 class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
@@ -36,6 +38,12 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
         ]);
+
+        app('db')->extend($tenantConnectionName, function ($config, $name) use ($databaseName) {
+            $config['database'] = $databaseName;
+
+            return app('db.factory')->make($config, $name);
+        });
 
         DB::purge($tenantConnectionName);
     }
