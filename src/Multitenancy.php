@@ -3,10 +3,6 @@
 namespace Spatie\Multitenancy;
 
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Event;
-use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
-use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
-use Laravel\Octane\Octane;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;

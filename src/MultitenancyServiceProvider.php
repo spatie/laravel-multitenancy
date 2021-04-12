@@ -5,7 +5,6 @@ namespace Spatie\Multitenancy;
 use Illuminate\Support\Facades\Event;
 use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
 use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
-use Laravel\Octane\Octane;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
@@ -32,6 +31,7 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
         if (! isset($_SERVER['LARAVEL_OCTANE'])) {
             $this->app[Multitenancy::class]->start();
+
             return;
         }
 
