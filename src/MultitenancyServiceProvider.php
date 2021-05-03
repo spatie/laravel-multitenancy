@@ -30,7 +30,7 @@ class MultitenancyServiceProvider extends PackageServiceProvider
         $this->app->bind(Multitenancy::class, fn ($app) => new Multitenancy($app));
 
         if (! isset($_SERVER['LARAVEL_OCTANE'])) {
-            $this->app[Multitenancy::class]->start();
+            app(Multitenancy::class)->start();
 
             return;
         }
