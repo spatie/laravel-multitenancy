@@ -2,6 +2,9 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.1.0 - 2021-05-04
+- add Laravel Octane support
+
 ## 2.0.0 - 2021-03-12
 
 - drop support for PHP 7
