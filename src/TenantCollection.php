@@ -15,10 +15,26 @@ class TenantCollection extends Collection
         );
     }
 
+    public function filterCurrent(callable $callable): self
+    {
+        return $this->performCollectionMethodWhileMakingTenantsCurrent(
+            operation: 'filter',
+            callable: $callable
+        );
+    }
+
     public function mapCurrent(callable $callable): self
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'map',
+            callable: $callable
+        );
+    }
+
+    public function rejectCurrent(callable $callable): self
+    {
+        return $this->performCollectionMethodWhileMakingTenantsCurrent(
+            operation: 'reject',
             callable: $callable
         );
     }
