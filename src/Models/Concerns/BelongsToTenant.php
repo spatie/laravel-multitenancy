@@ -4,7 +4,6 @@ namespace Spatie\Multitenancy\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
 use Spatie\Multitenancy\Models\Concerns\Scopes\TenantScope;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Multitenancy;
@@ -12,7 +11,7 @@ use Spatie\Multitenancy\Multitenancy;
 /** @mixin Model */
 trait BelongsToTenant
 {
-    public static function bootedBelongsToTenant(): void
+    public static function bootBelongsToTenant(): void
     {
         static::addGlobalScope(new TenantScope());
 
