@@ -2,6 +2,9 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.1.1 - 2021-08-18
+- add filterCurrent and rejectCurrent to TenantCollection (#275)
+
 ## 2.1.0 - 2021-05-04
 - add Laravel Octane support
 
