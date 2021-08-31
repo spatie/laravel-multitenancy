@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\Multitenancy;
 
 use Spatie\Multitenancy\Models\Tenant;
