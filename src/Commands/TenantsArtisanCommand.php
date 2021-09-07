@@ -11,7 +11,9 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class TenantsArtisanCommand extends Command
 {
-    use UsesTenantModel, UsesMultitenancyConfig, TenantAware;
+    use UsesTenantModel;
+    use UsesMultitenancyConfig;
+    use TenantAware;
 
     protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
 

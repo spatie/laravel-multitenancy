@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\Multitenancy\Tests\Feature\Models;
 
 use Illuminate\Notifications\Notifiable;

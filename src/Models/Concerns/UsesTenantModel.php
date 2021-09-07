@@ -10,6 +10,6 @@ trait UsesTenantModel
     {
         $tenantModelClass = config('multitenancy.tenant_model');
 
-        return new $tenantModelClass;
+        return new $tenantModelClass();
     }
 }

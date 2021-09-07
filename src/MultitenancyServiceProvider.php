@@ -13,8 +13,8 @@ use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 
 class MultitenancyServiceProvider extends PackageServiceProvider
 {
-    use UsesTenantModel,
-        UsesMultitenancyConfig;
+    use UsesTenantModel;
+    use UsesMultitenancyConfig;
 
     public function configurePackage(Package $package): void
     {

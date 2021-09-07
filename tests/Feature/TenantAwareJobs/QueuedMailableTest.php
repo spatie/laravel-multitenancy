@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Support\Facades\Mail;

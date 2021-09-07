@@ -12,8 +12,8 @@ use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class Multitenancy
 {
-    use UsesTenantModel,
-        UsesMultitenancyConfig;
+    use UsesTenantModel;
+    use UsesMultitenancyConfig;
 
     public function __construct(public Application $app)
     {

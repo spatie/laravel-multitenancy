@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Contracts\Bus\Dispatcher;

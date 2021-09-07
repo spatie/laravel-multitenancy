@@ -39,7 +39,7 @@ abstract class TestCase extends Orchestra
         ];
     }
 
-    protected function bootCommands() : self
+    protected function bootCommands(): self
     {
         Artisan::starting(function ($artisan) {
             $artisan->resolveCommands([

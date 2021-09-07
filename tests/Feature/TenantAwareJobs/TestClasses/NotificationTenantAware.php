@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses;
 
 use Illuminate\Bus\Queueable;
@@ -18,7 +19,7 @@ class NotificationTenantAware extends Notification implements ShouldQueue, Tenan
 
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject('Message')
             ->greeting('Hello!')
             ->line('Say goodbye!');

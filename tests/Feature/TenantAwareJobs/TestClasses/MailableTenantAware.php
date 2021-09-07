@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
