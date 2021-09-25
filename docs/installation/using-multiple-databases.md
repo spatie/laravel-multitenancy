@@ -24,13 +24,19 @@ In the example below, the `mysql` driver is used, but you can use any driver you
     'tenant' => [
         'driver' => 'mysql',
         'database' => null,
-        // other options such as host, username, password, ...
+        'host' => '127.0.0.1',
+        'username' => 'userTenantDbUser',
+        'password' => '',
+        // And other options if needed ...
     ],
 
     'landlord' => [
         'driver' => 'mysql',
         'database' => 'name_of_landlord_db',
-        // other options such as host, username, password, ...
+        'host' => '127.0.0.1',
+        'username' => 'userLandlordDbUser',
+        'password' => '',
+        // And other options if needed ...
     ],
 ```
 
