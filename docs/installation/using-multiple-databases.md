@@ -25,7 +25,7 @@ In the example below, the `mysql` driver is used, but you can use any driver you
         'driver' => 'mysql',
         'database' => null,
         'host' => '127.0.0.1',
-        'username' => 'userTenantDbUser',
+        'username' => 'root',
         'password' => '',
         // And other options if needed ...
     ],
@@ -34,7 +34,7 @@ In the example below, the `mysql` driver is used, but you can use any driver you
         'driver' => 'mysql',
         'database' => 'name_of_landlord_db',
         'host' => '127.0.0.1',
-        'username' => 'userLandlordDbUser',
+        'username' => 'root',
         'password' => '',
         // And other options if needed ...
     ],
