@@ -54,7 +54,7 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsRetryRequested(): self
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
-            if (!array_key_exists('tenantId', $event->payload())) {
+            if (! array_key_exists('tenantId', $event->payload())) {
                 return;
             }
 
