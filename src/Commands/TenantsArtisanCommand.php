@@ -23,6 +23,8 @@ class TenantsArtisanCommand extends Command
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
         }
 
+        $artisanCommand = addslashes($artisanCommand);
+
         $tenant = Tenant::current();
 
         $this->line('');
