@@ -9,7 +9,7 @@ When the behaviour is enabled, the package will keep track of which tenant is th
 
 ## Make specific jobs tenant aware
 
-If you don't want to make all jobs tenant aware, you must set the `queues_are_tenant_aware_by_default` config key to `false`. Jobs that should be tenant aware should implement the empty marker interface `Spatie\Multitenancy\Jobs\TenantAware`.
+If you don't want to make all jobs tenant aware, you must set the `queues_are_tenant_aware_by_default` config key to `false`. Jobs that should be tenant aware should implement the empty marker interface `Spatie\Multitenancy\Jobs\TenantAware` or should be added to the config `tenant_aware_jobs`.
 
 ```php
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,9 +24,16 @@ class TestJob implements ShouldQueue, TenantAware
 }
 ```
 
+or, using the config `multitenancy.php`:
+```php
+'tenant_aware_jobs' => [
+    TestJob::class,
+],
+```
+
 ## Making specific jobs not tenant aware
 
-Jobs that never should be tenant aware should implement the empty marker interface `Spatie\Multitenancy\Jobs\NotTenantAware`.
+Jobs that never should be tenant aware should implement the empty marker interface `Spatie\Multitenancy\Jobs\NotTenantAware` or should be added to the config `not_tenant_aware_jobs`.
  
 ```php
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,6 +47,14 @@ class TestJob implements ShouldQueue, NotTenantAware
     }
 }
 ```
+
+or, using the config `multitenancy.php`:
+```php
+'not_tenant_aware_jobs' => [
+    TestJob::class,
+],
+```
+
 
 ## When the tenant cannot be retrieved
 

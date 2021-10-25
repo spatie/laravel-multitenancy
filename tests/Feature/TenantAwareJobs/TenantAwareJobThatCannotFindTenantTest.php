@@ -96,6 +96,7 @@ class TenantAwareJobThatCannotFindTenantTest extends TestCase
     public function it_will_not_touch_the_tenant_if_the_job_is_not_tenant_aware()
     {
         $this->tenant->makeCurrent();
+
         $job = new NotTenantAwareTestJob($this->valuestore);
 
         // Simulate a tenant being set from a previous queue job
