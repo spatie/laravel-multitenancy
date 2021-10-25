@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.2.0 - Unreleased
+- Handle JobRetryRequested queue event and fix (#259)
+- 🐛 tenants:artisan backslashes (#296)
+
 ## 2.1.1 - 2021-08-18
 - add filterCurrent and rejectCurrent to TenantCollection (#275)
 
