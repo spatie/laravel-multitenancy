@@ -76,11 +76,11 @@ class MakeQueueTenantAwareAction
             return false;
         }
 
-        if (in_array($reflection->name, config('multitenancy.tenant_aware_jobs'), true)) {
+        if (in_array($reflection->name, config('multitenancy.tenant_aware_jobs'))) {
             return true;
         }
 
-        if (in_array($reflection->name, config('multitenancy.not_tenant_aware_jobs'), true)) {
+        if (in_array($reflection->name, config('multitenancy.not_tenant_aware_jobs'))) {
             return false;
         }
 
