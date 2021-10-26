@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
-## 2.2.0 - Unreleased
+## 2.2.0 - 2021-10-26
 - Handle JobRetryRequested queue event and fix (#259)
 - 🐛 tenants:artisan backslashes (#296)
 
