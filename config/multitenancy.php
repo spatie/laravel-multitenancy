@@ -90,4 +90,18 @@ return [
         CallQueuedListener::class => 'class',
         BroadcastEvent::class => 'event',
     ],
+
+    /*
+     * Jobs tenant aware even if these don't implement the TenantAware interface.
+     */
+    'tenant_aware_jobs' => [
+        // ...
+    ],
+
+    /*
+     * Jobs not tenant aware even if these don't implement the NotTenantAware interface.
+     */
+    'not_tenant_aware_jobs' => [
+        // ...
+    ],
 ];
