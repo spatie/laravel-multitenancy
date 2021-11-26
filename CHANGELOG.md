@@ -2,14 +2,25 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.0 - 2021-11-26
+
+## What's Changed
+
+- Add route cache path switcher by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/308
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2021-10-26
+
 - Handle JobRetryRequested queue event and fix (#259)
 - 🐛 tenants:artisan backslashes (#296)
 
 ## 2.1.1 - 2021-08-18
+
 - add filterCurrent and rejectCurrent to TenantCollection (#275)
 
 ## 2.1.0 - 2021-05-04
+
 - add Laravel Octane support
 
 ## 2.0.0 - 2021-03-12
