@@ -2,6 +2,9 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Support\Env;
+use Spatie\Multitenancy\Models\Tenant;
+
 class SwitchRouteCacheTask implements SwitchTenantTask
 {
     public function makeCurrent(Tenant $tenant): void
