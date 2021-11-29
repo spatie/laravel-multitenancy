@@ -4,7 +4,6 @@ All notable changes to `laravel-multitenancy` will be documented in this file
 
 ## 2.3.0 - 2021-11-26
 
-## What's Changed
 
 - Add route cache path switcher by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/308
 
