@@ -2,8 +2,13 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
-## 2.3.0 - 2021-11-26
+## 2.3.1 - 2021-11-29
 
+- Reload Router instance when switching route cache on Laravel Octane by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/309
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.0...2.3.1
+
+## 2.3.0 - 2021-11-26
 
 - Add route cache path switcher by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/308
 
