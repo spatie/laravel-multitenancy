@@ -60,7 +60,7 @@ class Tenant extends Model
 
     public function isCurrent(): bool
     {
-        return optional(static::current())->id === $this->id;
+        return static::current()?->id === $this->id;
     }
 
     public static function forgetCurrent(): ?Tenant
