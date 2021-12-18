@@ -143,6 +143,14 @@ class DatabaseSeeder extends Seeder
 
 All models in your project should either use the `UsesLandlordConnection` or `UsesTenantConnection`, depending on if the underlying table of the models lives in the landlord or tenant database.
 
+### Setting session connection
+
+You should set the environment variable `SESSION_CONNECTION` within your `.env` file to use your configured tenant connection, if using database based sessions for each tenant (e.g. with Laravel Jetstream / Fortify).
+
+```
+SESSION_CONNECTION=tenant
+```
+
 ### Next steps
 
 When using multiple tenants, you probably want to [isolate the cache](/docs/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/docs/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/filesystem/), ... These things are performed by task classes that will be executed when making a tenant the current one.
