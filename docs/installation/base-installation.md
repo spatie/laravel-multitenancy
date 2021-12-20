@@ -115,6 +115,17 @@ return [
 ];
 ```
 
+In Lumen, you need to manually write the `config/multitenancy.php` file. 
+After adding it, register the configuration and the provider adding add those two rows into your `bootstrap/app.php` file:
+
+```php
+$app->configure('multitenancy');
+```
+```php
+$app->register(Spatie\Multitenancy\MultitenancyServiceProvider::class);
+```
+
+
 ### Protecting against cross tenant abuse
 
 To prevent users from a tenant abusing their session to access another tenant, you must use the `Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession` middleware on all tenant-aware routes.
