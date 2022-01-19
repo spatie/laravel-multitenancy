@@ -40,6 +40,7 @@ class MakeQueueTenantAwareAction
 
     protected function listenForJobsBeingProcessed(): self
     {
+        app('events')->listen('*', fn($event) => dump($event));
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
             if (! array_key_exists('tenantId', $event->job->payload())) {
                 return;
