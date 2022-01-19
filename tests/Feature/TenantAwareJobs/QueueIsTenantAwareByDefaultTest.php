@@ -34,7 +34,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     }
 
     /** @test */
-    public function it_will_inject_the_current_tenant_id()
+    public function it_will_inject_the_current_tenant_id_in_a_job()
     {
         $this->tenant->makeCurrent();
 
