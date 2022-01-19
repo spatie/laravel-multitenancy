@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
@@ -21,13 +22,15 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     {
         parent::setUp();
 
+        Event::fake();
+
         config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
         $this->tenant = factory(Tenant::class)->create();
 
         $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
 
-        $this->doesntExpectEvents(JobFailed::class);
+        Event::assertNotDispatched(JobFailed::class);
     }
 
     /** @test */
