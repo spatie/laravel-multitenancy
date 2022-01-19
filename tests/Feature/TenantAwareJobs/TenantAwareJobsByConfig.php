@@ -22,7 +22,7 @@ class TenantAwareJobsByConfig extends TestCase
         config()->set('queue.default', 'sync');
         config()->set('mail.default', 'log');
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
         $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
     }
 

@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Tests;
 
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
@@ -19,7 +20,9 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__ . '/database/factories');
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        );
 
         $this->migrateDb();
 

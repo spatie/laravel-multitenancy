@@ -14,7 +14,7 @@ class LandlordTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
     }
 
     /** @test */

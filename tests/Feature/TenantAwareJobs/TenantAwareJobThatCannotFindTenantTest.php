@@ -24,7 +24,7 @@ class TenantAwareJobThatCannotFindTenantTest extends TestCase
         config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
         config()->set('queue.default', 'sync');
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
 
         $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
     }

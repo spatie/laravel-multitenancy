@@ -18,7 +18,7 @@ class TenantTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
     }
 
     /** @test */
@@ -78,10 +78,10 @@ class TenantTest extends TestCase
     public function it_can_check_if_the_a_particular_tenant_is_the_current_one()
     {
         /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $tenant = factory(Tenant::class)->create();
+        $tenant = Tenant::factory()->create();
 
         /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = factory(Tenant::class)->create();
+        $anotherTenant = Tenant::factory()->create();
 
         $this->assertFalse($tenant->isCurrent());
         $this->assertFalse($anotherTenant->isCurrent());

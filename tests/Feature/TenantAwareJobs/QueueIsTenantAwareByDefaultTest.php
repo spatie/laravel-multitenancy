@@ -22,11 +22,11 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     {
         parent::setUp();
 
-        Event::fake();
+        Event::fake(JobFailed::class);
 
         config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
 
         $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
 
@@ -53,7 +53,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     public function it_will_inject_the_right_tenant_even_when_the_current_tenant_switches()
     {
         /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = factory(Tenant::class)->create();
+        $anotherTenant = Tenant::factory()->create();
 
         $this->tenant->makeCurrent();
         $job = new TestJob($this->valuestore);

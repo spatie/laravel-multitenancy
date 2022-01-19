@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^8.0",
+        "illuminate/support": "^9.0|^8.0",
         "spatie/laravel-package-tools": "^1.9"
     },
     "require-dev": {
@@ -30,7 +30,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Multitenancy\\": "src"
+            "Spatie\\Multitenancy\\": "src",
+            "Spatie\\Multitenancy\\Database\\Factories\\": "database/factories"
+
         }
     },
     "autoload-dev": {

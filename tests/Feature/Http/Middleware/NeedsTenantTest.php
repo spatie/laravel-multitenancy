@@ -20,7 +20,7 @@ class NeedsTenantTest extends TestCase
 
         Route::get('middleware-test', fn () => 'ok')->middleware(NeedsTenant::class);
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
     }
 
     /** @test */

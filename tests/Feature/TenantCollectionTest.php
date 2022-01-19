@@ -14,7 +14,7 @@ class TenantCollectionTest extends TestCase
     {
         parent::setUp();
 
-        factory(Tenant::class, 3)->create();
+        Tenant::factory()->count(3)->create();
 
         $this->tenants = Tenant::get();
     }
