@@ -22,7 +22,7 @@ class QueueIsTenantAwareByDefaultTest extends TestCase
     {
         parent::setUp();
 
-        Event::fake();
+        Event::fake(JobFailed::class);
 
         config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
