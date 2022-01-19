@@ -30,7 +30,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Multitenancy\\": "src"
+            "Spatie\\Multitenancy\\": "src",
+            "Spatie\\Multitenancy\\Database\\Factories\\": "database/factories"
+
         }
     },
     "autoload-dev": {

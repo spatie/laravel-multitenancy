@@ -21,11 +21,11 @@ class TenantsArtisanCommandTest extends TestCase
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
 
-        $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
+        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
         $this->tenant->makeCurrent();
         Schema::connection('tenant')->dropIfExists('migrations');
 
-        $this->anotherTenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_2']);
+        $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
         $this->anotherTenant->makeCurrent();
         Schema::connection('tenant')->dropIfExists('migrations');
 

@@ -20,7 +20,7 @@ class QueuedNotificationsTest extends TestCase
         config()->set('queue.default', 'sync');
         config()->set('mail.default', 'log');
 
-        $this->tenant = factory(TenantNotifiable::class)->create();
+        $this->tenant = TenantNotifiable::factory()->create();
     }
 
     /** @test */

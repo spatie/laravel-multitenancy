@@ -19,7 +19,7 @@ class EnsureValidTenantSessionTest extends TestCase
         Route::get('test-middleware', fn () => 'ok')->middleware(['web', EnsureValidTenantSession::class]);
 
         /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $this->tenant = factory(Tenant::class)->create(['database' => 'laravel_mt_tenant_1']);
+        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
 
         $this->tenant->makeCurrent();
     }

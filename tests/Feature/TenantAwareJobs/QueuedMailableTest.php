@@ -20,7 +20,7 @@ class QueuedMailableTest extends TestCase
         config()->set('queue.default', 'sync');
         config()->set('mail.default', 'log');
 
-        $this->tenant = factory(Tenant::class)->create();
+        $this->tenant = Tenant::factory()->create();
     }
 
     /** @test */

@@ -19,12 +19,12 @@ class SwitchRouteCacheTaskTest extends TestCase
     public function it_will_use_a_different_routes_cache_environment_variable_for_each_tenant()
     {
         /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $tenant = factory(Tenant::class)->create();
+        $tenant = Tenant::factory()->create();
         $tenant->makeCurrent();
         $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php", env('APP_ROUTES_CACHE'));
 
         /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = factory(Tenant::class)->create();
+        $anotherTenant = Tenant::factory()->create();
         $anotherTenant->makeCurrent();
         $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$anotherTenant->id}.php", env('APP_ROUTES_CACHE'));
 
