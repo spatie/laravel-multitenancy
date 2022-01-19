@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.2 - 2022-01-19
+
+- add support for Laravel 9
+
 ## 2.3.1 - 2021-11-29
 
 - Reload Router instance when switching route cache on Laravel Octane by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/309
