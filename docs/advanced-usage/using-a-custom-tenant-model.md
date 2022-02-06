@@ -29,7 +29,7 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class CustomTenantModel extends Tenant
 {
-    public static function booted()
+    protected static function booted()
     {
         static::creating(fn(CustomTenantModel $model) => $model->createDatabase());
     }
