@@ -11,5 +11,5 @@ In addition to the regular methods, `TenantCollection` provides four extra metho
 Tenant::all()->eachCurrent(function(Tenant $tenant) {
     // the passed tenant has been made current
     Tenant::current()->is($tenant); // returns true;
-})
+});
 ```
