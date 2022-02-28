@@ -4,16 +4,9 @@ All notable changes to `laravel-multitenancy` will be documented in this file
 
 ## 2.3.3 - 2022-02-28
 
-## What's Changed
-
 - docs: change method visibility in example by @medvinator in https://github.com/spatie/laravel-multitenancy/pull/326
 - added ; in the php code by @MJunaidAhmad in https://github.com/spatie/laravel-multitenancy/pull/329
 - Removing typehint for compatibility by @telkins in https://github.com/spatie/laravel-multitenancy/pull/336
-
-## New Contributors
-
-- @medvinator made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/326
-- @MJunaidAhmad made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/329
 
 **Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.2...2.3.3
 
