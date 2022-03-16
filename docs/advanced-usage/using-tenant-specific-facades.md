@@ -20,7 +20,7 @@ class ClearFacadeInstancesTask implements SwitchTenantTask
 {
     public function makeCurrent(Tenant $tenant): void
     {
-        tap($tenant);
+        // tenant is already current
     }
 
     public function forgetCurrent(): void
@@ -51,7 +51,7 @@ class ClearFacadeInstancesTask implements SwitchTenantTask
 {
     public function makeCurrent(Tenant $tenant): void
     {
-        tap($tenant);
+        // tenant is already current
     }
 
     public function forgetCurrent(): void
