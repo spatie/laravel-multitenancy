@@ -13,7 +13,7 @@ You should specify the class name of your model in the `tenant_model` key of the
  *
  * It must be or extend `Spatie\Multitenancy\Models\Tenant::class`
  */
-'tenant_model' => \App\Models\CustomTenantModel::class,
+'tenant_model' => \App\Models\Tenant\CustomTenantModel::class,
 ```
 
 ## Performing actions when a tenant gets created
@@ -29,6 +29,8 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class CustomTenantModel extends Tenant
 {
+    protected $table = 'tenants';
+
     protected static function booted()
     {
         static::creating(fn(CustomTenantModel $model) => $model->createDatabase());
