@@ -36,6 +36,7 @@ return [
         // \Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
         // \Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask::class,
         // \Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
+        // \Spatie\Multitenancy\Tasks\SwitchRootUrlTask::class,
     ],
 
     /*
