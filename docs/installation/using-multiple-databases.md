@@ -145,4 +145,4 @@ All models in your project should either use the `UsesLandlordConnection` or `Us
 
 ### Next steps
 
-When using multiple tenants, you probably want to [isolate the cache](/docs/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/prefixing-cache/) or [use separate filesystems per tenant](/docs/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/filesystem/), ... These things are performed by task classes that will be executed when making a tenant the current one.
+When using multiple tenants, you probably want to [isolate the cache](/docs/laravel-multitenancy/v2/using-tasks-to-prepare-the-environment/prefixing-cache/). This is performed by task classes that will be executed when making a tenant the current one.
