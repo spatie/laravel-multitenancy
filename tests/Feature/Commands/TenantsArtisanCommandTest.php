@@ -74,7 +74,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         $this->artisan('tenants:artisan', [
             'artisanCommand' => 'migrate',
-            '--tenant' => $this->anotherTenant->domain
+            '--tenant' => $this->anotherTenant->domain,
         ])->assertExitCode(0);
 
         $this
