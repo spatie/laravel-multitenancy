@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.4 - 2022-03-30
+
+## What's Changed
+
+- Remove link to filesystem doc that doesn't exist by @skoontastic in https://github.com/spatie/laravel-multitenancy/pull/349
+- Fix migration tests by @masterix21 in https://github.com/spatie/laravel-multitenancy/pull/352
+- Improves the SwitchRouteCacheTask by @masterix21 in https://github.com/spatie/laravel-multitenancy/pull/351
+
+## New Contributors
+
+- @skoontastic made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/349
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.3...2.4.0
+
 ## 2.3.3 - 2022-02-28
 
 - docs: change method visibility in example by @medvinator in https://github.com/spatie/laravel-multitenancy/pull/326
