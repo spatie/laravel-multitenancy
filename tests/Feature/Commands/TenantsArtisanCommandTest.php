@@ -61,7 +61,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         $this->artisan('tenants:artisan', [
                 'artisanCommand' => 'migrate',
-                '--tenant' => $this->anotherTenant->id
+                '--tenant' => $this->anotherTenant->id,
             ])
             ->expectsOutput("No tenant(s) found.")
             ->assertExitCode(-1);
