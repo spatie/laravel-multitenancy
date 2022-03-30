@@ -9,7 +9,6 @@ are static. However, if you're using dynamic routes, for example different route
 to keep a separate route cache for each tenant.
 
 The `Spatie\Multitenancy\Tasks\SwitchRouteCacheTask` can switch the configured `APP_ROUTES_CACHE` environment variable to a tenant specific value.
--------- : `bootstrap/cache/routes-v7-tenant-{$tenant->id}.php`.
 
 To use this task, you should uncomment it in the `switch_tenant_tasks` section of the `multitenancy` config file.
 
