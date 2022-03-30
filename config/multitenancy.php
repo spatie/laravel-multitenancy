@@ -69,6 +69,12 @@ return [
      */
     'current_tenant_container_key' => 'currentTenant',
 
+    /**
+     * Set it to `true` if you like to cache the tenant(s) routes
+     * in a shared file using the `SwitchRouteCacheTask`.
+     */
+    'shared_routes_cache' => false,
+
     /*
      * You can customize some of the behavior of this package by using our own custom action.
      * Your custom action should always extend the default one.
