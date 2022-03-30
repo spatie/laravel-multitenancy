@@ -59,8 +59,13 @@ class TenantsArtisanCommandTest extends TestCase
     {
         config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
 
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')
-            ->expectsOutput("No tenant(s) found.");
+        $result = $this->artisan('tenants:artisan', [
+            'artisanCommand' => 'migrate',
+            '--tenant' => $this->anotherTenant->id
+        ]);
+
+        $result->expectsOutput("No tenant(s) found.");
+        $result->assertExitCode(-1);
     }
 
     /** @test */
@@ -68,7 +73,10 @@ class TenantsArtisanCommandTest extends TestCase
     {
         config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
 
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')->assertExitCode(0);
+        $this->artisan('tenants:artisan', [
+            'artisanCommand' => 'migrate',
+            '--tenant' => $this->anotherTenant->domain
+        ])->assertExitCode(0);
 
         $this
             ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
