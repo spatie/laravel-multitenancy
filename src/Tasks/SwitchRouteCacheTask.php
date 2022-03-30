@@ -26,6 +26,10 @@ class SwitchRouteCacheTask implements SwitchTenantTask
 
     protected function getCachedRoutesPath(Tenant $tenant): string
     {
+        if (config('multitenancy.shared_routes_cache', false)) {
+            return "bootstrap/cache/routes-v7-tenants.php";
+        }
+
         return "bootstrap/cache/routes-v7-tenant-{$tenant->id}.php";
     }
 
