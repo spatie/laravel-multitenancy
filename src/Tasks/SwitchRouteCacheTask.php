@@ -11,10 +11,7 @@ class SwitchRouteCacheTask implements SwitchTenantTask
     {
         Env::getRepository()->set('APP_ROUTES_CACHE', $this->getCachedRoutesPath($tenant));
 
-        if (isset($_SERVER['LARAVEL_OCTANE']) && app()->routesAreCached()) {
-            // Laravel Octane will load the routes cache only once when initializing the application.
-            // To undo this and reload the proper route cache based of `APP_ROUTES_CACHE`, we need to reinitialize the `Router`.
-
+        if (app()->routesAreCached() && $this->shouldReinitializeRouter()) {
             require app()->getCachedRoutesPath();
         }
     }
@@ -26,6 +23,17 @@ class SwitchRouteCacheTask implements SwitchTenantTask
 
     protected function getCachedRoutesPath(Tenant $tenant): string
     {
+        if (config('multitenancy.shared_routes_cache')) {
+            return "bootstrap/cache/routes-v7-tenants.php";
+        }
+
         return "bootstrap/cache/routes-v7-tenant-{$tenant->id}.php";
+    }
+
+    protected function shouldReinitializeRouter(): bool
+    {
+        return isset($_SERVER['LARAVEL_OCTANE'])
+            || app()->runningInConsole()
+            || app()->runningUnitTests();
     }
 }
