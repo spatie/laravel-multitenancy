@@ -20,7 +20,7 @@ trait TenantAware
         $tenantQuery = $this->getTenantModel()::query()
             ->when(! blank($tenants), function ($query) use ($tenants) {
                 collect($this->getTenantArtisanSearchFields())
-                    ->each(fn ($field) => $query->orWhereIn($field, Arr::wrap($tenants)));
+                    ->each(fn ($field) => $query->orWhereIn($field, $tenants));
             });
 
         if ($tenantQuery->count() === 0) {
