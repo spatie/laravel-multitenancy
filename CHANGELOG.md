@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.5 - 2022-04-08
+
+## What's Changed
+
+- Refresh connection resolver for models after switching database by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/355
+- Fix cache prefixes not being updated by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/355
+- Better compatibility with Octane
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.4...2.3.5
+
 ## 2.3.4 - 2022-03-30
 
 ## What's Changed
