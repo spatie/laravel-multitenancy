@@ -46,8 +46,6 @@ class SwitchTenantDatabaseTest extends TestCase
         $this->assertEquals('laravel_mt_tenant_1', DB::connection('tenant')->getDatabaseName());
         $this->assertEquals('laravel_mt_tenant_1', app(User::class)->getConnection()->getDatabaseName());
 
-        app()->forgetInstance('db'); // simulates a new Octane request
-
         $this->anotherTenant->makeCurrent();
 
         $this->assertEquals('laravel_mt_tenant_2', DB::connection('tenant')->getDatabaseName());

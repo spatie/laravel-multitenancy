@@ -45,5 +45,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         });
 
         DB::purge($tenantConnectionName);
+
+        Model::setConnectionResolver(app('db'));
     }
 }
