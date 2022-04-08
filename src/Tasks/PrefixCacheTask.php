@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Support\Facades\Cache;
 use Spatie\Multitenancy\Models\Tenant;
 
 class PrefixCacheTask implements SwitchTenantTask
@@ -34,5 +35,12 @@ class PrefixCacheTask implements SwitchTenantTask
         config()->set('cache.prefix', $prefix);
 
         app('cache')->forgetDriver($this->storeName);
+
+        // This is important because the `CacheManager` will have the `$app['config']` array cached
+        // with old prefixes on the `cache` instance. Simply calling `forgetDriver` only removes
+        // the `$store` but doesn't update the `$app['config']`.
+        app()->forgetInstance('cache');
+
+        Cache::clearResolvedInstances();
     }
 }

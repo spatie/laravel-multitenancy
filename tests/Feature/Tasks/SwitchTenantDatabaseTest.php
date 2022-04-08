@@ -7,6 +7,7 @@ use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 use Spatie\Multitenancy\Tests\TestCase;
+use Spatie\Multitenancy\Tests\TestClasses\User;
 
 class SwitchTenantDatabaseTest extends TestCase
 {
@@ -43,10 +44,12 @@ class SwitchTenantDatabaseTest extends TestCase
         $this->tenant->makeCurrent();
 
         $this->assertEquals('laravel_mt_tenant_1', DB::connection('tenant')->getDatabaseName());
+        $this->assertEquals('laravel_mt_tenant_1', app(User::class)->getConnection()->getDatabaseName());
 
         $this->anotherTenant->makeCurrent();
 
         $this->assertEquals('laravel_mt_tenant_2', DB::connection('tenant')->getDatabaseName());
+        $this->assertEquals('laravel_mt_tenant_2', app(User::class)->getConnection()->getDatabaseName());
 
         Tenant::forgetCurrent();
 

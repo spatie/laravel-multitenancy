@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
@@ -44,5 +45,8 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         });
 
         DB::purge($tenantConnectionName);
+
+        // Octane will have an old `db` instance in the Model::$resolver.
+        Model::setConnectionResolver(app('db'));
     }
 }
