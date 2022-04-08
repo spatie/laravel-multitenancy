@@ -46,6 +46,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 
         DB::purge($tenantConnectionName);
 
+        // Octane will have an old `db` instance in the Model::$resolver.
         Model::setConnectionResolver(app('db'));
     }
 }
