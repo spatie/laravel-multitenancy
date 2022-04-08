@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
