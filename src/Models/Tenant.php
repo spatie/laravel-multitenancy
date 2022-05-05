@@ -14,7 +14,7 @@ class Tenant extends Model
     use UsesLandlordConnection;
     use HasFactory;
 
-    public function makeCurrent(): self
+    public function makeCurrent(): static
     {
         if ($this->isCurrent()) {
             return $this;
@@ -32,7 +32,7 @@ class Tenant extends Model
         return $this;
     }
 
-    public function forget(): self
+    public function forget(): static
     {
         $this
             ->getMultitenancyActionClass(
@@ -44,7 +44,7 @@ class Tenant extends Model
         return $this;
     }
 
-    public static function current(): ?self
+    public static function current(): ?static
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 
