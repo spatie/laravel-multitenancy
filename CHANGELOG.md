@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.6 - 2022-05-17
+
+## What's Changed
+
+- Docs: fix the link to the video introduction by @PovilasKorop in https://github.com/spatie/laravel-multitenancy/pull/361
+- Change return type hint for `Tenant` class from `self` to `static` by @ksassnowski in https://github.com/spatie/laravel-multitenancy/pull/365
+
+## New Contributors
+
+- @PovilasKorop made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/361
+- @ksassnowski made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/365
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.5...2.3.6
+
 ## 2.3.5 - 2022-04-08
 
 ## What's Changed
