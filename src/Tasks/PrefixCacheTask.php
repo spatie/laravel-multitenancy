@@ -41,6 +41,9 @@ class PrefixCacheTask implements SwitchTenantTask
         // the `$store` but doesn't update the `$app['config']`.
         app()->forgetInstance('cache');
 
+        //This is important because the Cache Repository is using an old version of the CacheManager
+        app()->forgetInstance('cache.store');
+
         Cache::clearResolvedInstances();
     }
 }
