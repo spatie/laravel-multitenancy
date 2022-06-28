@@ -19,6 +19,24 @@ class PrefixCacheTaskTest extends TestCase
         cache()->flush();
     }
 
+
+    /** @test */
+    public function it_will_separate_the_cache_prefix_for_each_tenant()
+    {
+        $originalPrefix = config('cache.prefix').':';
+        $this->assertEquals($originalPrefix, cache()->getStore()->getPrefix());
+
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
+        $tenantOne = Tenant::factory()->create();
+        $tenantOne->makeCurrent();
+        $this->assertEquals('tenant_id_'.$tenantOne->id.':', cache()->getStore()->getPrefix());
+
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
+        $tenantTwo = Tenant::factory()->create();
+        $tenantTwo->makeCurrent();
+        $this->assertEquals('tenant_id_'.$tenantTwo->id.':', cache()->getStore()->getPrefix());
+    }
+
     /** @test */
     public function it_will_separate_the_cache_for_each_tenant()
     {
