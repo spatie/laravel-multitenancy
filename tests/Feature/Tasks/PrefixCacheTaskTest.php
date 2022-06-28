@@ -22,27 +22,27 @@ class PrefixCacheTaskTest extends TestCase
     /** @test */
     public function it_will_separate_the_cache_for_each_tenant()
     {
-        cache()->put('key', 'original-value');
+        cache()->put('key', 'cache-landlord');
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $tenant = Tenant::factory()->create();
-        $tenant->makeCurrent();
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
+        $tenantOne = Tenant::factory()->create();
+        $tenantOne->makeCurrent();
         $this->assertFalse(cache()->has('key'));
-        cache()->put('key', 'tenant-value');
+        cache()->put('key', 'tenant-one');
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = Tenant::factory()->create();
-        $anotherTenant->makeCurrent();
+        /** @var \Spatie\Multitenancy\Models\Tenant $tenantTwo */
+        $tenantTwo = Tenant::factory()->create();
+        $tenantTwo->makeCurrent();
         $this->assertFalse(cache()->has('key'));
-        cache()->put('key', 'another-tenant-value');
+        cache()->put('key', 'tenant-two');
 
-        $tenant->makeCurrent();
-        $this->assertEquals('tenant-value', cache()->get('key'));
+        $tenantOne->makeCurrent();
+        $this->assertEquals('tenant-one', cache()->get('key'));
 
-        $anotherTenant->makeCurrent();
-        $this->assertEquals('another-tenant-value', cache()->get('key'));
+        $tenantTwo->makeCurrent();
+        $this->assertEquals('tenant-two', cache()->get('key'));
 
         Tenant::forgetCurrent();
-        $this->assertEquals('original-value', cache()->get('key'));
+        $this->assertEquals('cache-landlord', cache()->get('key'));
     }
 }
