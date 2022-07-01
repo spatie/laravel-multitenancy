@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.7 - 2022-07-01
+
+### What's Changed
+
+- Prefix Cache Task - Cache Store by @moisish in https://github.com/spatie/laravel-multitenancy/pull/374
+
+### New Contributors
+
+- @moisish made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/374
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.6...2.3.7
+
 ## 2.3.6 - 2022-05-17
 
 ## What's Changed
