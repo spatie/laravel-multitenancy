@@ -19,6 +19,8 @@ class PrefixCacheTaskTest extends TestCase
         app()->forgetInstance('cache');
 
         app()->forgetInstance('cache.store');
+
+        app('cache')->flush();
     }
 
 
