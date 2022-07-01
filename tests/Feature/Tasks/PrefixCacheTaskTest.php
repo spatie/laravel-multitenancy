@@ -18,7 +18,9 @@ class PrefixCacheTaskTest extends TestCase
 
         config()->set('cache.default', 'redis');
 
-        cache()->flush();
+        app()->forgetInstance('cache');
+
+        app()->forgetInstance('cache.store');
     }
 
 
