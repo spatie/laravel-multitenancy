@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.8 - 2022-09-08
+
+### What's Changed
+
+- Replace id with getKey() so uuids could be used as primary keys by @lartisan in https://github.com/spatie/laravel-multitenancy/pull/392
+
+### New Contributors
+
+- @lartisan made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/392
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.7...2.3.8
+
 ## 2.3.7 - 2022-07-01
 
 ### What's Changed
