@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Request;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
@@ -33,7 +34,7 @@ class Multitenancy
         Tenant::forgetCurrent();
     }
 
-    public function determineCurrentTenant(): void
+    public function determineCurrentTenant(?Request $request = null): void
     {
         if (! $this->app['config']->get('multitenancy.tenant_finder')) {
             return;
@@ -42,7 +43,7 @@ class Multitenancy
         /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
         $tenantFinder = $this->app[TenantFinder::class];
 
-        $tenant = $tenantFinder->findForRequest($this->app['request']);
+        $tenant = $tenantFinder->findForRequest($request ?? $this->app['request']);
 
         $tenant?->makeCurrent();
     }
