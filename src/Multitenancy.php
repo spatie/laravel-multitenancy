@@ -33,7 +33,7 @@ class Multitenancy
         Tenant::forgetCurrent();
     }
 
-    protected function determineCurrentTenant(): void
+    public function determineCurrentTenant(): void
     {
         if (! $this->app['config']->get('multitenancy.tenant_finder')) {
             return;
