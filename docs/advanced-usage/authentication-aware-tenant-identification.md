@@ -147,3 +147,31 @@ protected $middlewareGroups = [
 ```
 
 Ensure the tenant is determined prior to declaring need for tenant. Remove the `EnsureValidTenantSession` middleware, as your sessions are not separated by tenant, instead being dependent upon laravel authentication.
+
+## Prioritize the DetermineTenant middleware
+
+When utilizing route binding and form validation, the determination of the tenant must happen after authentication and before authorization.
+
+Copy the middleware priority variable $middlewarePriority from `Illuminate\Foundation\Http\Kernel` to `app/Http/Kernel` (or see Laravel [[Middleware Priority](https://laravel.com/docs/middleware#sorting-middleware), being sure to select the correct Laravel version).
+
+Place the determine tenant and needs tenant after authentication, but before substitute authorization.
+
+For example:
+
+```php
+// in `app\Http\Kernel.php`
+
+    protected $middlewarePriority = [
+        // ..
+        // if Laravel 8.x
+        \Illuminate\Session\Middleware\AuthenticateSession::class,
+        // if Laravel 9.x
+        \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
+        // ..
+        \App\Http\Middleware\DetermineTenant::class,
+        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \Illuminate\Auth\Middleware\Authorize::class,
+        // ..
+    ];
+```
