@@ -6,140 +6,116 @@ use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantCollection;
 use Spatie\Multitenancy\Tests\TestCase;
 
-class TenantCollectionTest extends TestCase
-{
-    protected TenantCollection $tenants;
+beforeEach(function () {
+    Tenant::factory()->count(3)->create();
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $this->tenants = Tenant::get();
+});
 
-        Tenant::factory()->count(3)->create();
+test('it can make each tenant current', function () {
+    $this->tenants->eachCurrent(function (Tenant $tenant) {
+        $this->assertEquals($tenant->id, Tenant::current()->id);
+    });
+});
 
-        $this->tenants = Tenant::get();
-    }
+test('after making each tenant current, the original current tenant is made current again', function () {
+    $this->assertFalse(Tenant::checkCurrent());
 
-    /** @test */
-    public function it_can_make_each_tenant_current()
-    {
-        $this->tenants->eachCurrent(function (Tenant $tenant) {
+    $this->tenants->eachCurrent(function (Tenant $tenant) {
+    });
+
+    $this->assertFalse(Tenant::checkCurrent());
+
+    $this->tenants[1]->makeCurrent();
+
+    $this->tenants->eachCurrent(function (Tenant $tenant) {
+    });
+
+    $this->assertTrue($this->tenants[1]->isCurrent());
+});
+
+test('it can map while making each tenant current', function () {
+    $tenantIds = $this->tenants
+        ->mapCurrent(function (Tenant $tenant) {
             $this->assertEquals($tenant->id, Tenant::current()->id);
-        });
-    }
 
-    /** @test */
-    public function after_making_each_tenant_current_the_original_current_tenant_is_made_current_again()
-    {
-        $this->assertFalse(Tenant::checkCurrent());
+            return $tenant->id;
+        })
+        ->toArray();
 
-        $this->tenants->eachCurrent(function (Tenant $tenant) {
-        });
+    $this->assertEquals([1, 2, 3], $tenantIds);
+});
 
-        $this->assertFalse(Tenant::checkCurrent());
+test('after mapping each current tenant the original current tenant is made current again', function () {
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->tenants[1]->makeCurrent();
+    $this->tenants->mapCurrent(function (Tenant $tenant) {
+    });
 
-        $this->tenants->eachCurrent(function (Tenant $tenant) {
-        });
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->assertTrue($this->tenants[1]->isCurrent());
-    }
+    $this->tenants[1]->makeCurrent();
 
-    /** @test */
-    public function it_can_map_while_making_each_tenant_current()
-    {
-        $tenantIds = $this->tenants
-            ->mapCurrent(function (Tenant $tenant) {
-                $this->assertEquals($tenant->id, Tenant::current()->id);
+    $this->tenants->mapCurrent(function (Tenant $tenant) {
+    });
 
-                return $tenant->id;
-            })
-            ->toArray();
+    $this->assertTrue($this->tenants[1]->isCurrent());
+});
 
-        $this->assertEquals([1, 2, 3], $tenantIds);
-    }
+test('it can filter while making each tenant current', function () {
+    $tenantIds = $this->tenants
+        ->filterCurrent(function (Tenant $tenant) {
+            $this->assertEquals($tenant->id, Tenant::current()->id);
 
-    /** @test */
-    public function after_mapping_each_current_tenant_the_original_current_tenant_is_made_current_again()
-    {
-        $this->assertFalse(Tenant::checkCurrent());
+            return $tenant->id != 2;
+        })
+        ->pluck('id')
+        ->toArray();
 
-        $this->tenants->mapCurrent(function (Tenant $tenant) {
-        });
+    $this->assertEquals([1, 3], $tenantIds);
+});
 
-        $this->assertFalse(Tenant::checkCurrent());
+test('after filtering each current tenant the original current tenant is made current again', function () {
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->tenants[1]->makeCurrent();
+    $this->tenants->filterCurrent(function (Tenant $tenant) {
+    });
 
-        $this->tenants->mapCurrent(function (Tenant $tenant) {
-        });
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->assertTrue($this->tenants[1]->isCurrent());
-    }
+    $this->tenants[1]->makeCurrent();
 
-    /** @test */
-    public function it_can_filter_while_making_each_tenant_current()
-    {
-        $tenantIds = $this->tenants
-            ->filterCurrent(function (Tenant $tenant) {
-                $this->assertEquals($tenant->id, Tenant::current()->id);
+    $this->tenants->filterCurrent(function (Tenant $tenant) {
+    });
 
-                return $tenant->id != 2;
-            })
-            ->pluck('id')
-            ->toArray();
+    $this->assertTrue($this->tenants[1]->isCurrent());
+});
 
-        $this->assertEquals([1, 3], $tenantIds);
-    }
+test('it can reject while making each tenant current', function () {
+    $tenantIds = $this->tenants
+        ->rejectCurrent(function (Tenant $tenant) {
+            $this->assertEquals($tenant->id, Tenant::current()->id);
 
-    /** @test */
-    public function after_filtering_each_current_tenant_the_original_current_tenant_is_made_current_again()
-    {
-        $this->assertFalse(Tenant::checkCurrent());
+            return $tenant->id == 2;
+        })
+        ->pluck('id')
+        ->toArray();
 
-        $this->tenants->filterCurrent(function (Tenant $tenant) {
-        });
+    $this->assertEquals([1, 3], $tenantIds);
+});
 
-        $this->assertFalse(Tenant::checkCurrent());
+test('after rejecting each current tenant the original current tenant is made current again', function () {
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->tenants[1]->makeCurrent();
+    $this->tenants->rejectCurrent(function (Tenant $tenant) {
+    });
 
-        $this->tenants->filterCurrent(function (Tenant $tenant) {
-        });
+    $this->assertFalse(Tenant::checkCurrent());
 
-        $this->assertTrue($this->tenants[1]->isCurrent());
-    }
+    $this->tenants[1]->makeCurrent();
 
-    /** @test */
-    public function it_can_reject_while_making_each_tenant_current()
-    {
-        $tenantIds = $this->tenants
-            ->rejectCurrent(function (Tenant $tenant) {
-                $this->assertEquals($tenant->id, Tenant::current()->id);
+    $this->tenants->rejectCurrent(function (Tenant $tenant) {
+    });
 
-                return $tenant->id == 2;
-            })
-            ->pluck('id')
-            ->toArray();
-
-        $this->assertEquals([1, 3], $tenantIds);
-    }
-
-    /** @test */
-    public function after_rejecting_each_current_tenant_the_original_current_tenant_is_made_current_again()
-    {
-        $this->assertFalse(Tenant::checkCurrent());
-
-        $this->tenants->rejectCurrent(function (Tenant $tenant) {
-        });
-
-        $this->assertFalse(Tenant::checkCurrent());
-
-        $this->tenants[1]->makeCurrent();
-
-        $this->tenants->rejectCurrent(function (Tenant $tenant) {
-        });
-
-        $this->assertTrue($this->tenants[1]->isCurrent());
-    }
-}
+    $this->assertTrue($this->tenants[1]->isCurrent());
+});
