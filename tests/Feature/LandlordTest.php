@@ -4,28 +4,17 @@ namespace Spatie\Multitenancy\Tests\Feature;
 
 use Spatie\Multitenancy\Landlord;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tests\TestCase;
 
-class LandlordTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    $this->tenant = Tenant::factory()->create();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+test('it will execute a callable as landlord and then restore the previous tenant', function () {
+    $this->tenant->makeCurrent();
 
-        $this->tenant = Tenant::factory()->create();
-    }
+    $response = Landlord::execute(fn () => Tenant::current());
 
-    /** @test */
-    public function it_will_execute_a_callable_as_landlord_and_then_restore_the_previous_tenant()
-    {
-        $this->tenant->makeCurrent();
+    $this->assertNull($response);
 
-        $response = Landlord::execute(fn () => Tenant::current());
-
-        $this->assertNull($response);
-
-        $this->assertEquals($this->tenant->id, Tenant::current()->id);
-    }
-}
+    $this->assertEquals($this->tenant->id, Tenant::current()->id);
+});
