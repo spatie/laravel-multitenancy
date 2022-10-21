@@ -34,7 +34,6 @@
         "psr-4": {
             "Spatie\\Multitenancy\\": "src",
             "Spatie\\Multitenancy\\Database\\Factories\\": "database/factories"
-
         }
     },
     "autoload-dev": {
@@ -47,7 +46,7 @@
         ]
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
     },
