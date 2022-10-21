@@ -5,7 +5,6 @@ namespace Spatie\Multitenancy\Tests\Feature\Commands;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
-use Spatie\Multitenancy\Tests\TestCase;
 
 beforeEach(function () {
     config(['database.default' => 'tenant']);
