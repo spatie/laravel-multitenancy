@@ -4,7 +4,6 @@ namespace Spatie\Multitenancy\Tests\Feature\Tasks;
 
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\PrefixCacheTask;
-use Spatie\Multitenancy\Tests\TestCase;
 
 beforeEach(function () {
     config()->set('multitenancy.switch_tenant_tasks', [PrefixCacheTask::class]);
