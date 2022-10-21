@@ -12,113 +12,93 @@ use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 use Spatie\Multitenancy\Tests\TestCase;
 use Spatie\Valuestore\Valuestore;
 
-class QueueIsTenantAwareByDefaultTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    Event::fake(JobFailed::class);
 
-    protected Valuestore $valuestore;
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $this->tenant = Tenant::factory()->create();
 
-        Event::fake(JobFailed::class);
+    $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
 
-        config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+    Event::assertNotDispatched(JobFailed::class);
+});
 
-        $this->tenant = Tenant::factory()->create();
+test('it will inject the current tenant id in a job', function () {
+    $this->tenant->makeCurrent();
 
-        $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
+    $job = new TestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-        Event::assertNotDispatched(JobFailed::class);
-    }
+    Tenant::forgetCurrent();
 
-    /** @test */
-    public function it_will_inject_the_current_tenant_id_in_a_job()
-    {
-        $this->tenant->makeCurrent();
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $job = new TestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
+    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+});
 
-        Tenant::forgetCurrent();
+test('it will inject the right tenant even when the current tenant switches', function () {
+    /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+    $anotherTenant = Tenant::factory()->create();
 
-        $this->artisan('queue:work --once')->assertExitCode(0);
+    $this->tenant->makeCurrent();
+    $job = new TestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
-    }
+    $this->artisan('queue:work --once');
 
-    /** @test */
-    public function it_will_inject_the_right_tenant_even_when_the_current_tenant_switches()
-    {
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = Tenant::factory()->create();
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
+    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
 
-        $this->tenant->makeCurrent();
-        $job = new TestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
+    $anotherTenant->makeCurrent();
+    $job = new TestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-        $this->artisan('queue:work --once');
+    $this->artisan('queue:work --once');
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
+    $this->assertEquals($anotherTenant->id, $currentTenantIdInJob);
+});
 
-        $anotherTenant->makeCurrent();
-        $job = new TestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
+test('it will not make jobs tenant aware if the config settings is set to false', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
-        $this->artisan('queue:work --once');
+    $this->tenant->makeCurrent();
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertEquals($anotherTenant->id, $currentTenantIdInJob);
-    }
+    $job = new TestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-    /** @test */
-    public function it_will_not_make_jobs_tenant_aware_if_the_config_setting_is_set_to_false()
-    {
-        config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->tenant->makeCurrent();
+    $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
+    $this->assertNull($currentTenantIdInJob);
+});
 
-        $job = new TestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
+test('it will always make jobs tenant aware if they implement the TenantAware interface', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
-        $this->artisan('queue:work --once')->assertExitCode(0);
+    $this->tenant->makeCurrent();
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
-        $this->assertNull($currentTenantIdInJob);
-    }
+    $job = new TenantAwareTestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-    /** @test */
-    public function it_will_always_make_jobs_tenant_aware_if_they_implement_the_TenantAware_interface()
-    {
-        config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->tenant->makeCurrent();
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
+    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+});
 
-        $job = new TenantAwareTestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
+test('it will not make a job tenant aware if it implements NotTenantAware', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
-        $this->artisan('queue:work --once')->assertExitCode(0);
+    $this->tenant->makeCurrent();
 
-        $currentTenantIdInJob = $this->valuestore->get('tenantId');
-        $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
-    }
+    $job = new NotTenantAwareTestJob($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
 
-    /** @test */
-    public function it_will_not_make_a_job_tenant_aware_if_it_implement_NotTenantAware()
-    {
-        config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
-        $this->tenant->makeCurrent();
-
-        $job = new NotTenantAwareTestJob($this->valuestore);
-        app(Dispatcher::class)->dispatch($job);
-
-        $this->artisan('queue:work --once')->assertExitCode(0);
-
-        $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
-        $this->assertNull($currentTenantIdInJob);
-    }
-}
+    $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
+    $this->assertNull($currentTenantIdInJob);
+});
