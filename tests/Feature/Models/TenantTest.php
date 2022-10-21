@@ -10,173 +10,145 @@ use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\TestCase;
 
-class TenantTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    $this->tenant = Tenant::factory()->create();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+test('it can get the current tenant', function () {
+    $this->assertNull(Tenant::current());
 
-        $this->tenant = Tenant::factory()->create();
-    }
+    $this->tenant->makeCurrent();
 
-    /** @test */
-    public function it_can_get_the_current_tenant()
-    {
-        $this->assertNull(Tenant::current());
+    $this->assertEquals($this->tenant->id, Tenant::current()->id);
+});
 
-        $this->tenant->makeCurrent();
+test('it will bind the current tenant in the container', function () {
+    $containerKey = config('multitenancy.current_tenant_container_key');
 
-        $this->assertEquals($this->tenant->id, Tenant::current()->id);
-    }
+    $this->assertFalse(app()->has($containerKey));
 
-    /** @test */
-    public function it_will_bind_the_current_tenant_in_the_container()
-    {
-        $containerKey = config('multitenancy.current_tenant_container_key');
+    $this->tenant->makeCurrent();
 
-        $this->assertFalse(app()->has($containerKey));
+    $this->assertTrue(app()->has($containerKey));
 
-        $this->tenant->makeCurrent();
+    $this->assertInstanceOf(Tenant::class, app($containerKey));
+    $this->assertEquals($this->tenant->id, app($containerKey)->id);
+});
 
-        $this->assertTrue(app()->has($containerKey));
+test('it can forget the current tenant', function () {
+    $containerKey = config('multitenancy.current_tenant_container_key');
 
-        $this->assertInstanceOf(Tenant::class, app($containerKey));
-        $this->assertEquals($this->tenant->id, app($containerKey)->id);
-    }
+    $this->tenant->makeCurrent();
+    $this->assertEquals($this->tenant->id, Tenant::current()->id);
+    $this->assertTrue(app()->has($containerKey));
 
-    /** @test */
-    public function it_can_forget_the_current_tenant()
-    {
-        $containerKey = config('multitenancy.current_tenant_container_key');
+    Tenant::forgetCurrent();
+    $this->assertNull(Tenant::current());
+    $this->assertFalse(app()->has($containerKey));
+});
 
-        $this->tenant->makeCurrent();
-        $this->assertEquals($this->tenant->id, Tenant::current()->id);
-        $this->assertTrue(app()->has($containerKey));
+test('it can check if a current tenant has been set', function () {
+    $this->assertFalse(Tenant::checkCurrent());
 
-        Tenant::forgetCurrent();
-        $this->assertNull(Tenant::current());
-        $this->assertFalse(app()->has($containerKey));
-    }
+    $this->tenant->makeCurrent();
 
-    /** @test */
-    public function it_can_check_if_a_current_tenant_has_been_set()
-    {
-        $this->assertFalse(Tenant::checkCurrent());
+    $this->assertTrue(Tenant::checkCurrent());
 
-        $this->tenant->makeCurrent();
+    Tenant::forgetCurrent();
 
-        $this->assertTrue(Tenant::checkCurrent());
+    $this->assertFalse(Tenant::checkCurrent());
+});
 
-        Tenant::forgetCurrent();
+test('it can check if a particular tenant is the current one', function () {
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
 
-        $this->assertFalse(Tenant::checkCurrent());
-    }
+    /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+    $anotherTenant = Tenant::factory()->create();
 
-    /** @test */
-    public function it_can_check_if_the_a_particular_tenant_is_the_current_one()
-    {
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $tenant = Tenant::factory()->create();
+    $this->assertFalse($tenant->isCurrent());
+    $this->assertFalse($anotherTenant->isCurrent());
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
-        $anotherTenant = Tenant::factory()->create();
+    $tenant->makeCurrent();
+    $this->assertTrue($tenant->isCurrent());
+    $this->assertFalse($anotherTenant->isCurrent());
 
-        $this->assertFalse($tenant->isCurrent());
-        $this->assertFalse($anotherTenant->isCurrent());
+    $anotherTenant->makeCurrent();
+    $this->assertFalse($tenant->isCurrent());
+    $this->assertTrue($anotherTenant->isCurrent());
 
-        $tenant->makeCurrent();
-        $this->assertTrue($tenant->isCurrent());
-        $this->assertFalse($anotherTenant->isCurrent());
+    Tenant::forgetCurrent();
+    $this->assertFalse($tenant->isCurrent());
+    $this->assertFalse($anotherTenant->isCurrent());
+});
 
-        $anotherTenant->makeCurrent();
-        $this->assertFalse($tenant->isCurrent());
-        $this->assertTrue($anotherTenant->isCurrent());
+test('it will fire off events when making a tenant current', function () {
+    Event::fake();
 
-        Tenant::forgetCurrent();
-        $this->assertFalse($tenant->isCurrent());
-        $this->assertFalse($anotherTenant->isCurrent());
-    }
+    Event::assertNotDispatched(MakingTenantCurrentEvent::class);
+    Event::assertNotDispatched(MadeTenantCurrentEvent::class);
 
-    /** @test */
-    public function it_will_fire_off_events_when_making_a_tenant_current()
-    {
-        Event::fake();
+    $this->tenant->makeCurrent();
 
-        Event::assertNotDispatched(MakingTenantCurrentEvent::class);
-        Event::assertNotDispatched(MadeTenantCurrentEvent::class);
+    Event::assertDispatched(MakingTenantCurrentEvent::class);
+    Event::assertDispatched(MadeTenantCurrentEvent::class);
+});
 
-        $this->tenant->makeCurrent();
+test('it will fire off events when forgetting the current tenant', function () {
+    Event::fake();
 
-        Event::assertDispatched(MakingTenantCurrentEvent::class);
-        Event::assertDispatched(MadeTenantCurrentEvent::class);
-    }
+    $this->tenant->makeCurrent();
 
-    /** @test */
-    public function it_will_fire_off_events_when_forgetting_the_current_tenant()
-    {
-        Event::fake();
+    Event::assertNotDispatched(ForgettingCurrentTenantEvent::class);
+    Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
 
-        $this->tenant->makeCurrent();
+    Tenant::forgetCurrent();
 
-        Event::assertNotDispatched(ForgettingCurrentTenantEvent::class);
-        Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
+    Event::assertDispatched(ForgettingCurrentTenantEvent::class);
+    Event::assertDispatched(ForgotCurrentTenantEvent::class);
+});
 
-        Tenant::forgetCurrent();
+test('it will not fire off events when forgetting the current tenant when not current tenant is set', function () {
+    Event::fake();
 
-        Event::assertDispatched(ForgettingCurrentTenantEvent::class);
-        Event::assertDispatched(ForgotCurrentTenantEvent::class);
-    }
+    Tenant::forgetCurrent();
 
-    /** @test */
-    public function it_will_not_fire_off_events_when_forgetting_the_current_tenant_when_not_current_tenant_is_set()
-    {
-        Event::fake();
+    Event::assertNotDispatched(ForgettingCurrentTenantEvent::class);
+    Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
+});
 
-        Tenant::forgetCurrent();
+test('it will execute a callable and then restore the previous state', function () {
+    Tenant::forgetCurrent();
 
-        Event::assertNotDispatched(ForgettingCurrentTenantEvent::class);
-        Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
-    }
+    $this->assertNull(Tenant::current());
 
-    /** @test */
-    public function it_will_execute_a_callable_and_then_restore_the_previous_state()
-    {
-        Tenant::forgetCurrent();
+    $response = $this->tenant->execute(function (Tenant $tenant) {
+        $this->assertEquals($tenant->id, Tenant::current()->id);
 
-        $this->assertNull(Tenant::current());
+        return $tenant->id;
+    });
 
-        $response = $this->tenant->execute(function (Tenant $tenant) {
-            $this->assertEquals($tenant->id, Tenant::current()->id);
+    $this->assertNull(Tenant::current());
 
-            return $tenant->id;
-        });
+    $this->assertEquals($response, $this->tenant->id);
+});
 
-        $this->assertNull(Tenant::current());
+test('it will execute a delayed callback in tenant context', function () {
+    Tenant::forgetCurrent();
 
-        $this->assertEquals($response, $this->tenant->id);
-    }
+    $this->assertNull(Tenant::current());
 
-    /** @test */
-    public function it_will_execute_a_delayed_callback_in_tenant_context()
-    {
-        Tenant::forgetCurrent();
+    $callback = $this->tenant->callback(function (Tenant $tenant) {
+        $this->assertEquals($tenant->id, Tenant::current()->id);
 
-        $this->assertNull(Tenant::current());
+        return $tenant->id;
+    });
 
-        $callback = $this->tenant->callback(function (Tenant $tenant) {
-            $this->assertEquals($tenant->id, Tenant::current()->id);
+    $this->assertNull(Tenant::current());
 
-            return $tenant->id;
-        });
+    $response = $callback();
 
-        $this->assertNull(Tenant::current());
+    $this->assertNull(Tenant::current());
 
-        $response = $callback();
-
-        $this->assertNull(Tenant::current());
-
-        $this->assertEquals($response, $this->tenant->id);
-    }
-}
+    $this->assertEquals($response, $this->tenant->id);
+});
