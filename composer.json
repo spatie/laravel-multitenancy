@@ -26,7 +26,6 @@
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^6.23|^7.0",
         "pestphp/pest": "^1.22",
-        "pestphp/pest-plugin-parallel": "^1.2",
         "phpunit/phpunit": "^9.4",
         "spatie/valuestore": "^1.2"
     },
