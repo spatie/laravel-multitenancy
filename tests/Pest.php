@@ -40,3 +40,8 @@ function assertTenantDatabaseDoesNotHaveTable(Tenant $tenant, string $tableName)
         "Tenant database has unexpected table  `{$tableName}`"
     );
 }
+
+function tempFile(string $fileName): string
+{
+    return __DIR__ . "/temp/{$fileName}";
+}

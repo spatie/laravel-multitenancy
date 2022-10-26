@@ -16,7 +16,7 @@ beforeEach(function () {
 
     $this->tenant = Tenant::factory()->create();
 
-    $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
+    $this->valuestore = Valuestore::make(tempFile('tenantAware.json'))->flush();
 
     Event::assertNotDispatched(JobFailed::class);
 });

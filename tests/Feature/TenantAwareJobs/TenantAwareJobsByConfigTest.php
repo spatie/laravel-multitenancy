@@ -11,7 +11,7 @@ beforeEach(function () {
     config()->set('mail.default', 'log');
 
     $this->tenant = Tenant::factory()->create();
-    $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
+    $this->valuestore = Valuestore::make(tempFile('tenantAware.json'))->flush();
 });
 
 it('succeeds with jobs in tenant aware jobs list', function () {

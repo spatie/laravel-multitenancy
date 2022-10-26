@@ -110,9 +110,4 @@ abstract class TestCase extends Orchestra
             'connection' => 'landlord',
         ]);
     }
-
-    public function tempFile(string $fileName): string
-    {
-        return __DIR__ . "/temp/{$fileName}";
-    }
 }

@@ -14,7 +14,7 @@ beforeEach(function () {
 
     $this->tenant = Tenant::factory()->create();
 
-    $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
+    $this->valuestore = Valuestore::make(tempFile('tenantAware.json'))->flush();
 });
 
 it('will fail a job when no tenant is present and queues are tenant aware by default', function () {
