@@ -11,7 +11,6 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
-use Illuminate\Support\Facades\Schema;
 
 abstract class TestCase extends Orchestra
 {
@@ -115,34 +114,5 @@ abstract class TestCase extends Orchestra
     public function tempFile(string $fileName): string
     {
         return __DIR__ . "/temp/{$fileName}";
-    }
-
-    protected function assertTenantDatabaseDoesNotHaveTable(Tenant $tenant, string $tableName): self
-    {
-        $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);
-
-        $this->assertFalse($tenantHasDatabaseTable, "Tenant database has unexpected table  `{$tableName}`");
-
-        return $this;
-    }
-
-    protected function tenantHasDatabaseTable(Tenant $tenant, string $tableName): bool
-    {
-        $tenant->makeCurrent();
-
-        $tenantHasDatabaseTable = Schema::connection('tenant')->hasTable($tableName);
-
-        Tenant::forgetCurrent();
-
-        return $tenantHasDatabaseTable;
-    }
-
-    protected function assertTenantDatabaseHasTable(Tenant $tenant, string $tableName): self
-    {
-        $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);
-
-        $this->assertTrue($tenantHasDatabaseTable, "Tenant database does not have table  `{$tableName}`");
-
-        return $this;
     }
 }

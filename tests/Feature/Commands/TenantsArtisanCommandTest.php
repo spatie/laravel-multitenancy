@@ -25,17 +25,15 @@ it('can migrate all tenant databases', function () {
         ->artisan('tenants:artisan migrate')
         ->assertExitCode(0);
 
-    $this
-        ->assertTenantDatabaseHasTable($this->tenant, 'migrations')
-        ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+    assertTenantDatabaseHasTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });
 
 it('can migrate a specific tenant', function () {
     $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')->assertExitCode(0);
 
-    $this
-        ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
-        ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+    assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });
 
 test("it can't migrate a specific tenant id when search by domain", function () {
@@ -57,7 +55,7 @@ it('can migrate a specific tenant by domain', function () {
         '--tenant' => $this->anotherTenant->domain,
     ])->assertExitCode(0);
 
-    $this
-        ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
-        ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+
+    assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });
