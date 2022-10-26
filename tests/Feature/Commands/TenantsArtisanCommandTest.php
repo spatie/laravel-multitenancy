@@ -55,7 +55,6 @@ it('can migrate a specific tenant by domain', function () {
         '--tenant' => $this->anotherTenant->domain,
     ])->assertExitCode(0);
 
-
     assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
     assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });

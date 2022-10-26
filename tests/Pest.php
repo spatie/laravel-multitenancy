@@ -1,14 +1,23 @@
 <?php
 
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
 use Spatie\Multitenancy\Models\Tenant;
 use Illuminate\Support\Facades\Schema;
 
-use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertTrue;
+/*
+|--------------------------------------------------------------------------
+| Test Case
+|--------------------------------------------------------------------------
+*/
 
 uses(Spatie\Multitenancy\Tests\TestCase::class)->in('Feature');
 
-// Functions
+/*
+|--------------------------------------------------------------------------
+| Functions
+|--------------------------------------------------------------------------
+*/
 
 function tenantHasDatabaseTable(Tenant $tenant, string $tableName): bool
 {
