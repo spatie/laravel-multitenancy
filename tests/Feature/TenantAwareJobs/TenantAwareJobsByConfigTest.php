@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
-
 use Illuminate\Contracts\Bus\Dispatcher;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;

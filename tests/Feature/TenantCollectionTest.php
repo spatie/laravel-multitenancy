@@ -1,10 +1,6 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature;
-
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\TenantCollection;
-use Spatie\Multitenancy\Tests\TestCase;
 
 beforeEach(function () {
     Tenant::factory()->count(3)->create();

@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Models;
-
 use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;

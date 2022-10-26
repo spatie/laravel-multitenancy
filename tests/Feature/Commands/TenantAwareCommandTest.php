@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Commands;
-
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 

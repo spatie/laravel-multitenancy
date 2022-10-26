@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\TenantFinder;
-
 use Illuminate\Http\Request;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\DomainTenantFinder;

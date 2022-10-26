@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature;
-
 use Spatie\Multitenancy\Landlord;
 use Spatie\Multitenancy\Models\Tenant;
 

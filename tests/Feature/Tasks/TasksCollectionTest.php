@@ -1,10 +1,7 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Tasks;
-
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\DummyTask;
-use Spatie\Multitenancy\Tests\TestCase;
 
 test('it will instantiate all class names', function () {
     $tasksCollection = new TasksCollection([DummyTask::class]);

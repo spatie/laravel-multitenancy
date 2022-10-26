@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\TenantAwareJobs;
-
 use Illuminate\Support\Facades\Notification;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Tests\Feature\Models\TenantNotifiable;
