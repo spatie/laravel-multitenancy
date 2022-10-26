@@ -17,22 +17,28 @@ beforeEach(function () {
 
 test('it will separate the cache prefix for each tenant', function () {
     $originalPrefix = config('cache.prefix') . ':';
-    $this->assertEquals($originalPrefix, app('cache')->getPrefix());
-    $this->assertEquals($originalPrefix, app('cache.store')->getPrefix());
+
+    expect($originalPrefix)
+        ->toEqual(app('cache')->getPrefix())
+        ->toEqual(app('cache.store')->getPrefix());
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantOne = Tenant::factory()->create();
     $tenantOne->makeCurrent();
     $tenantOnePrefix = 'tenant_id_' . $tenantOne->id . ':';
-    $this->assertEquals($tenantOnePrefix, app('cache')->getPrefix());
-    $this->assertEquals($tenantOnePrefix, app('cache.store')->getPrefix());
+
+    expect($tenantOnePrefix)
+        ->toEqual(app('cache')->getPrefix())
+        ->toEqual(app('cache.store')->getPrefix());
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantTwo = Tenant::factory()->create();
     $tenantTwo->makeCurrent();
     $tenantTwoPrefix = 'tenant_id_' . $tenantTwo->id . ':';
-    $this->assertEquals($tenantTwoPrefix, app('cache')->getPrefix());
-    $this->assertEquals($tenantTwoPrefix, app('cache.store')->getPrefix());
+
+    expect($tenantTwoPrefix)
+        ->toEqual(app('cache')->getPrefix())
+        ->toEqual(app('cache.store')->getPrefix());
 });
 
 test('it will separate the cache for each tenant', function () {
@@ -42,24 +48,28 @@ test('it will separate the cache for each tenant', function () {
     $tenantOne = Tenant::factory()->create();
     $tenantOne->makeCurrent();
     $tenantOneVal = 'tenant-' . $tenantOne->domain;
-    $this->assertFalse(cache()->has('key'));
+
+    expect(cache())->has('key')->toBeFalse();
+
     cache()->put('key', $tenantOneVal);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantTwo */
     $tenantTwo = Tenant::factory()->create();
     $tenantTwo->makeCurrent();
     $tenantTwoVal = 'tenant-' . $tenantTwo->domain;
-    $this->assertFalse(cache()->has('key'));
+    expect(cache())->has('key')->toBeFalse();
     cache()->put('key', $tenantTwoVal);
 
     $tenantOne->makeCurrent();
-    $this->assertEquals($tenantOneVal, app('cache')->get('key'));
-    $this->assertEquals($tenantOneVal, app('cache.store')->get('key'));
+    expect($tenantOneVal)
+        ->toEqual(app('cache')->get('key'))
+        ->toEqual(app('cache.store')->get('key'));
 
     $tenantTwo->makeCurrent();
-    $this->assertEquals($tenantTwoVal, app('cache')->get('key'));
-    $this->assertEquals($tenantTwoVal, app('cache.store')->get('key'));
+    expect($tenantTwoVal)
+        ->toEqual(app('cache')->get('key'))
+        ->toEqual(app('cache.store')->get('key'));
 
     Tenant::forgetCurrent();
-    $this->assertEquals('cache-landlord', cache()->get('key'));
+    expect(cache())->get('key')->toEqual('cache-landlord');
 });

@@ -17,25 +17,24 @@ beforeEach(function () {
 test('switch fails if tenant database connection name equals to landlord connection name', function () {
     config()->set('multitenancy.tenant_database_connection_name', null);
 
-    $this->expectException(InvalidConfiguration::class);
-
     $this->tenant->makeCurrent();
-});
+})->throws(InvalidConfiguration::class);
 
 test('when making a tenant current it will perform the tasks', function () {
-    $this->assertNull(DB::connection('tenant')->getDatabaseName());
+    expect(DB::connection('tenant'))->getDatabaseName()->toBeNull();
 
     $this->tenant->makeCurrent();
 
-    $this->assertEquals('laravel_mt_tenant_1', DB::connection('tenant')->getDatabaseName());
-    $this->assertEquals('laravel_mt_tenant_1', app(User::class)->getConnection()->getDatabaseName());
+    expect('laravel_mt_tenant_1')
+        ->toEqual(DB::connection('tenant')->getDatabaseName())
+        ->toEqual(app(User::class)->getConnection()->getDatabaseName());
 
     $this->anotherTenant->makeCurrent();
 
-    $this->assertEquals('laravel_mt_tenant_2', DB::connection('tenant')->getDatabaseName());
-    $this->assertEquals('laravel_mt_tenant_2', app(User::class)->getConnection()->getDatabaseName());
+    expect('laravel_mt_tenant_2')
+        ->toEqual(DB::connection('tenant')->getDatabaseName())
+        ->toEqual(app(User::class)->getConnection()->getDatabaseName());
 
     Tenant::forgetCurrent();
-
-    $this->assertNull(DB::connection('tenant')->getDatabaseName());
+    expect(DB::connection('tenant'))->getDatabaseName()->toBeNull();
 });

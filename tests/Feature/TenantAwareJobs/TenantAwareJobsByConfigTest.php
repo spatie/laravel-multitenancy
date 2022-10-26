@@ -21,8 +21,8 @@ test('it succeeds with jobs in tenant aware jobs list', function () {
 
     app(Dispatcher::class)->dispatch(new TestJob($this->valuestore));
 
-    $this->assertTrue($this->valuestore->has('tenantIdInPayload'));
-    $this->assertNotNull($this->valuestore->get('tenantIdInPayload'));
+    expect($this->valuestore->has('tenantIdInPayload'))->toBeTrue()
+        ->and($this->valuestore->get('tenantIdInPayload'))->not->toBeNull();
 });
 
 test('it fails with jobs in not tenant aware jobs list', function () {
@@ -32,7 +32,7 @@ test('it fails with jobs in not tenant aware jobs list', function () {
 
     app(Dispatcher::class)->dispatch(new TestJob($this->valuestore));
 
-    $this->assertEquals($this->valuestore->get('tenantId'), $this->tenant->id);
-    $this->assertTrue($this->valuestore->has('tenantIdInPayload'));
-    $this->assertNull($this->valuestore->get('tenantIdInPayload'));
+    expect($this->valuestore->get('tenantId'))->toEqual($this->tenant->id)
+        ->and($this->valuestore->has('tenantIdInPayload'))->toBeTrue()
+        ->and($this->valuestore->get('tenantIdInPayload'))->toBeNull();
 });

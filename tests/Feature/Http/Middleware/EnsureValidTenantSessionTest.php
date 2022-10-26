@@ -15,13 +15,15 @@ beforeEach(function () {
 });
 
 test('it will set the tenant id if it has not been set', function () {
-    $this->assertNull(session('tenant_id'));
+    expect(session('tenant_id'))->toBeNull();
 
     $this
         ->get('test-middleware')
         ->assertOk();
 
-    $this->assertEquals($this->tenant->id, session('ensure_valid_tenant_session_tenant_id'));
+    expect(
+        session('ensure_valid_tenant_session_tenant_id')
+    )->toBe($this->tenant->id);
 });
 
 test('it will allow requests for the tenant set in the session', function () {

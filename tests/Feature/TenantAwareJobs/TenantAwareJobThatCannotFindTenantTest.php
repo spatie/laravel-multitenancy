@@ -26,7 +26,7 @@ test('it will fail a job when no tenant is present and queues are tenant aware b
         app(Dispatcher::class)->dispatch($job);
     } catch (CurrentTenantCouldNotBeDeterminedInTenantAwareJob $exception) {
         // Assert the job did not run
-        $this->assertFalse($this->valuestore->has('tenantId'));
+        expect($this->valuestore->has('tenantId'))->toBeFalse();
 
         return;
     }
@@ -42,7 +42,7 @@ test('it will fail a job when no tenant is present and job implements the Tenant
     try {
         app(Dispatcher::class)->dispatch($job);
     } catch (CurrentTenantCouldNotBeDeterminedInTenantAwareJob $exception) {
-        $this->assertFalse($this->valuestore->has('tenantId'));
+        expect($this->valuestore)->has('tenantId')->toBeFalse();
 
         return;
     }
@@ -57,20 +57,25 @@ test('it will not fail a job when no tenant is present and queues are not tenant
 
     app(Dispatcher::class)->dispatch($job);
 
-    $this->assertTrue($this->valuestore->has('tenantId'));
-    $this->assertNull($this->valuestore->get('tenantId'));
+    expect($this->valuestore)
+        ->has('tenantId')->toBeTrue()
+        ->get('tenantId')->toBeNull();
 });
 
-test('it will not fail a job when no tenant is present and job implements the NotTenantAware interface', function () {
-    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+test(
+    'it will not fail a job when no tenant is present and job implements the NotTenantAware interface',
+    function () {
+        config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
-    $job = new NotTenantAwareTestJob($this->valuestore);
+        $job = new NotTenantAwareTestJob($this->valuestore);
 
-    app(Dispatcher::class)->dispatch($job);
+        app(Dispatcher::class)->dispatch($job);
 
-    $this->assertTrue($this->valuestore->has('tenantId'));
-    $this->assertNull($this->valuestore->get('tenantId'));
-});
+        expect($this->valuestore)
+            ->has('tenantId')->toBeTrue()
+            ->get('tenantId')->toBeNull();
+    }
+);
 
 test('it will not touch the tenant if the job is not tenant aware', function () {
     $this->tenant->makeCurrent();
@@ -78,10 +83,10 @@ test('it will not touch the tenant if the job is not tenant aware', function () 
     $job = new NotTenantAwareTestJob($this->valuestore);
 
     // Simulate a tenant being set from a previous queue job
-    $this->assertTrue(Tenant::checkCurrent());
+    expect(Tenant::checkCurrent())->toBeTrue();
 
     app(Dispatcher::class)->dispatch($job);
 
     // Assert that the active tenant was not modified
-    $this->assertSame($this->tenant->id, Tenant::current()->id);
+    expect($this->tenant->id)->toBe(Tenant::current()->id);
 });

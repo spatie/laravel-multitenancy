@@ -13,13 +13,13 @@ test('it can find a tenant for the current domain', function () {
 
     $request = Request::create('https://my-domain.com');
 
-    $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
+    expect($tenant->id)->toEqual($this->tenantFinder->findForRequest($request)->id);
 });
 
 test('it will return null if there are no tenants', function () {
     $request = Request::create('https://my-domain.com');
 
-    $this->assertNull($this->tenantFinder->findForRequest($request));
+    expect($this->tenantFinder->findForRequest($request))->toBeNull();
 });
 
 test('it will return null if no tenant can be found the current domain', function () {
@@ -27,5 +27,5 @@ test('it will return null if no tenant can be found the current domain', functio
 
     $request = Request::create('https://another-domain.com');
 
-    $this->assertNull($this->tenantFinder->findForRequest($request));
+    expect($this->tenantFinder->findForRequest($request))->toBeNull();
 });

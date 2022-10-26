@@ -12,7 +12,7 @@ test('it will execute a callable as landlord and then restore the previous tenan
 
     $response = Landlord::execute(fn () => Tenant::current());
 
-    $this->assertNull($response);
+    expect($response)->toBeNull();
 
-    $this->assertEquals($this->tenant->id, Tenant::current()->id);
+    expect($this->tenant->id)->toEqual(Tenant::current()->id);
 });

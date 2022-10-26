@@ -16,15 +16,15 @@ beforeEach(function () {
 test('it will fail when no tenant is present and mailables are tenant aware by default', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
-    $this->expectException(CurrentTenantCouldNotBeDeterminedInTenantAwareJob::class);
-
     Mail::to('test@spatie.be')->queue(new MailableTenantAware());
-});
+})->throws(CurrentTenantCouldNotBeDeterminedInTenantAwareJob::class);
 
 test('it will inject the current tenant id', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $this->tenant->makeCurrent();
 
-    $this->assertEquals(Mail::to('test@spatie.be')->queue(new MailableTenantAware()), 0);
+    expect(
+        Mail::to('test@spatie.be')->queue(new MailableTenantAware())
+    )->toEqual(0);
 });

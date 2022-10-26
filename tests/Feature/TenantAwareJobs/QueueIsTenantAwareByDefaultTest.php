@@ -32,7 +32,7 @@ test('it will inject the current tenant id in a job', function () {
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
-    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+    expect($this->tenant->id)->toEqual($currentTenantIdInJob);
 });
 
 test('it will inject the right tenant even when the current tenant switches', function () {
@@ -46,7 +46,7 @@ test('it will inject the right tenant even when the current tenant switches', fu
     $this->artisan('queue:work --once');
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
-    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+    expect($this->tenant->id)->toEqual($currentTenantIdInJob);
 
     $anotherTenant->makeCurrent();
     $job = new TestJob($this->valuestore);
@@ -55,7 +55,8 @@ test('it will inject the right tenant even when the current tenant switches', fu
     $this->artisan('queue:work --once');
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
-    $this->assertEquals($anotherTenant->id, $currentTenantIdInJob);
+
+    expect($anotherTenant->id)->toEqual($currentTenantIdInJob);
 });
 
 test('it will not make jobs tenant aware if the config settings is set to false', function () {
@@ -69,7 +70,7 @@ test('it will not make jobs tenant aware if the config settings is set to false'
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
-    $this->assertNull($currentTenantIdInJob);
+    expect($currentTenantIdInJob)->toBeNull();
 });
 
 test('it will always make jobs tenant aware if they implement the TenantAware interface', function () {
@@ -83,7 +84,7 @@ test('it will always make jobs tenant aware if they implement the TenantAware in
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
-    $this->assertEquals($this->tenant->id, $currentTenantIdInJob);
+    expect($this->tenant->id)->toEqual($currentTenantIdInJob);
 });
 
 test('it will not make a job tenant aware if it implements NotTenantAware', function () {
@@ -97,5 +98,5 @@ test('it will not make a job tenant aware if it implements NotTenantAware', func
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
-    $this->assertNull($currentTenantIdInJob);
+    expect($currentTenantIdInJob)->toBeNull();
 });

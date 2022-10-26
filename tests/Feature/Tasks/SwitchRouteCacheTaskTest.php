@@ -11,21 +11,25 @@ test('it will use a different routes cache environment variable for each tenant'
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
     $tenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))
+        ->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
 
     /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
     $anotherTenant = Tenant::factory()->create();
     $anotherTenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$anotherTenant->id}.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))
+        ->toEqual("bootstrap/cache/routes-v7-tenant-{$anotherTenant->id}.php");
 
     $tenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))
+        ->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
 
     $anotherTenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenant-{$anotherTenant->id}.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))
+        ->toEqual("bootstrap/cache/routes-v7-tenant-{$anotherTenant->id}.php");
 
     Tenant::forgetCurrent();
-    $this->assertNull(env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))->toBeNull();
 });
 
 test('it will use a shared routes cache environment variable for all tenants', function () {
@@ -34,13 +38,13 @@ test('it will use a shared routes cache environment variable for all tenants', f
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
     $tenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenants.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenants.php");
 
     /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
     $anotherTenant = Tenant::factory()->create();
     $anotherTenant->makeCurrent();
-    $this->assertEquals("bootstrap/cache/routes-v7-tenants.php", env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenants.php");
 
     Tenant::forgetCurrent();
-    $this->assertNull(env('APP_ROUTES_CACHE'));
+    expect(env('APP_ROUTES_CACHE'))->toBeNull();
 });

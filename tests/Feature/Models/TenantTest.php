@@ -12,48 +12,48 @@ beforeEach(function () {
 });
 
 test('it can get the current tenant', function () {
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
     $this->tenant->makeCurrent();
 
-    $this->assertEquals($this->tenant->id, Tenant::current()->id);
+    expect(Tenant::current()->id)->toEqual($this->tenant->id);
 });
 
 test('it will bind the current tenant in the container', function () {
     $containerKey = config('multitenancy.current_tenant_container_key');
 
-    $this->assertFalse(app()->has($containerKey));
+    expect(app()->has($containerKey))->toBeFalse();
 
     $this->tenant->makeCurrent();
 
-    $this->assertTrue(app()->has($containerKey));
+    expect(app()->has($containerKey))->toBeTrue();
 
-    $this->assertInstanceOf(Tenant::class, app($containerKey));
-    $this->assertEquals($this->tenant->id, app($containerKey)->id);
+    expect(app($containerKey))->toBeInstanceOf(Tenant::class);
+    expect(app($containerKey)->id)->toEqual($this->tenant->id);
 });
 
 test('it can forget the current tenant', function () {
     $containerKey = config('multitenancy.current_tenant_container_key');
 
     $this->tenant->makeCurrent();
-    $this->assertEquals($this->tenant->id, Tenant::current()->id);
-    $this->assertTrue(app()->has($containerKey));
+    expect(Tenant::current()->id)->toEqual($this->tenant->id);
+    expect(app()->has($containerKey))->toBeTrue();
 
     Tenant::forgetCurrent();
-    $this->assertNull(Tenant::current());
-    $this->assertFalse(app()->has($containerKey));
+    expect(Tenant::current())->toBeNull();
+    expect(app())->has($containerKey)->toBeFalse();
 });
 
 test('it can check if a current tenant has been set', function () {
-    $this->assertFalse(Tenant::checkCurrent());
+    expect(Tenant::checkCurrent())->toBeFalse();
 
     $this->tenant->makeCurrent();
 
-    $this->assertTrue(Tenant::checkCurrent());
+    expect(Tenant::checkCurrent())->toBeTrue();
 
     Tenant::forgetCurrent();
 
-    $this->assertFalse(Tenant::checkCurrent());
+    expect(Tenant::checkCurrent())->toBeFalse();
 });
 
 test('it can check if a particular tenant is the current one', function () {
@@ -63,20 +63,20 @@ test('it can check if a particular tenant is the current one', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
     $anotherTenant = Tenant::factory()->create();
 
-    $this->assertFalse($tenant->isCurrent());
-    $this->assertFalse($anotherTenant->isCurrent());
+    expect($tenant->isCurrent())->toBeFalse()
+        ->and($anotherTenant->isCurrent())->toBeFalse();
 
     $tenant->makeCurrent();
-    $this->assertTrue($tenant->isCurrent());
-    $this->assertFalse($anotherTenant->isCurrent());
+    expect($tenant->isCurrent())->toBeTrue()
+        ->and($anotherTenant->isCurrent())->toBeFalse();
 
     $anotherTenant->makeCurrent();
-    $this->assertFalse($tenant->isCurrent());
-    $this->assertTrue($anotherTenant->isCurrent());
+    expect($tenant->isCurrent())->toBeFalse()
+        ->and($anotherTenant->isCurrent())->toBeTrue();
 
     Tenant::forgetCurrent();
-    $this->assertFalse($tenant->isCurrent());
-    $this->assertFalse($anotherTenant->isCurrent());
+    expect($tenant->isCurrent())->toBeFalse()
+        ->and($anotherTenant->isCurrent())->toBeFalse();
 });
 
 test('it will fire off events when making a tenant current', function () {
@@ -117,35 +117,34 @@ test('it will not fire off events when forgetting the current tenant when not cu
 test('it will execute a callable and then restore the previous state', function () {
     Tenant::forgetCurrent();
 
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
     $response = $this->tenant->execute(function (Tenant $tenant) {
-        $this->assertEquals($tenant->id, Tenant::current()->id);
+        expect(Tenant::current()->id)->toEqual($tenant->id);
 
         return $tenant->id;
     });
 
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
-    $this->assertEquals($response, $this->tenant->id);
+    expect($this->tenant->id)->toEqual($response);
 });
 
 test('it will execute a delayed callback in tenant context', function () {
     Tenant::forgetCurrent();
 
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
     $callback = $this->tenant->callback(function (Tenant $tenant) {
-        $this->assertEquals($tenant->id, Tenant::current()->id);
+        expect(Tenant::current()->id)->toEqual($tenant->id);
 
         return $tenant->id;
     });
-
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
     $response = $callback();
 
-    $this->assertNull(Tenant::current());
+    expect(Tenant::current())->toBeNull();
 
-    $this->assertEquals($response, $this->tenant->id);
+    expect($this->tenant->id)->toBe($response);
 });
