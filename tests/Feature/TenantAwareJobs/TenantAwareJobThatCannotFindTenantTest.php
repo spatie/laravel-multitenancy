@@ -17,7 +17,7 @@ beforeEach(function () {
     $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
 });
 
-test('it will fail a job when no tenant is present and queues are tenant aware by default', function () {
+it('will fail a job when no tenant is present and queues are tenant aware by default', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $job = new TestJob($this->valuestore);
@@ -34,7 +34,7 @@ test('it will fail a job when no tenant is present and queues are tenant aware b
     $this->fail();
 });
 
-test('it will fail a job when no tenant is present and job implements the TenantAware interface', function () {
+it('will fail a job when no tenant is present and job implements the TenantAware interface', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
     $job = new TenantAwareTestJob($this->valuestore);
@@ -50,7 +50,7 @@ test('it will fail a job when no tenant is present and job implements the Tenant
     $this->fail();
 });
 
-test('it will not fail a job when no tenant is present and queues are not tenant aware by default', function () {
+it('will not fail a job when no tenant is present and queues are not tenant aware by default', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
     $job = new TestJob($this->valuestore);
@@ -77,7 +77,7 @@ test(
     }
 );
 
-test('it will not touch the tenant if the job is not tenant aware', function () {
+it('will not touch the tenant if the job is not tenant aware', function () {
     $this->tenant->makeCurrent();
 
     $job = new NotTenantAwareTestJob($this->valuestore);

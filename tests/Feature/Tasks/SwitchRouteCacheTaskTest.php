@@ -7,7 +7,7 @@ beforeEach(function () {
     config()->set('multitenancy.switch_tenant_tasks', [SwitchRouteCacheTask::class]);
 });
 
-test('it will use a different routes cache environment variable for each tenant', function () {
+it('will use a different routes cache environment variable for each tenant', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
     $tenant->makeCurrent();
@@ -32,7 +32,7 @@ test('it will use a different routes cache environment variable for each tenant'
     expect(env('APP_ROUTES_CACHE'))->toBeNull();
 });
 
-test('it will use a shared routes cache environment variable for all tenants', function () {
+it('will use a shared routes cache environment variable for all tenants', function () {
     config()->set('multitenancy.shared_routes_cache', true);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */

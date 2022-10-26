@@ -15,7 +15,7 @@ beforeEach(function () {
     app('cache')->flush();
 });
 
-test('it will separate the cache prefix for each tenant', function () {
+it('will separate the cache prefix for each tenant', function () {
     $originalPrefix = config('cache.prefix') . ':';
 
     expect($originalPrefix)
@@ -41,7 +41,7 @@ test('it will separate the cache prefix for each tenant', function () {
         ->toEqual(app('cache.store')->getPrefix());
 });
 
-test('it will separate the cache for each tenant', function () {
+it('will separate the cache for each tenant', function () {
     cache()->put('key', 'cache-landlord');
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */

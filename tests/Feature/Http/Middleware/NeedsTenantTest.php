@@ -14,12 +14,12 @@ beforeEach(function () {
     $this->tenant = Tenant::factory()->create();
 });
 
-test('it will pass if there is current tenant set', function () {
+it('will pass if there is current tenant set', function () {
     $this->tenant->makeCurrent();
 
     $this->get('middleware-test')->assertOk();
 });
 
-test('it will throw an exception when there is not current tenant')
+it('will throw an exception when there is not current tenant')
     ->get('middleware-test')
     ->throws(NoCurrentTenant::class);

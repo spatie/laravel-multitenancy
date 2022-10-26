@@ -20,7 +20,7 @@ beforeEach(function () {
     Tenant::forgetCurrent();
 });
 
-test('it can migrate all tenant databases', function () {
+it('can migrate all tenant databases', function () {
     $this
         ->artisan('tenants:artisan migrate')
         ->assertExitCode(0);
@@ -30,7 +30,7 @@ test('it can migrate all tenant databases', function () {
         ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });
 
-test('it can migrate a specific tenant', function () {
+it('can migrate a specific tenant', function () {
     $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')->assertExitCode(0);
 
     $this
@@ -49,7 +49,7 @@ test("it can't migrate a specific tenant id when search by domain", function () 
         ->assertExitCode(-1);
 });
 
-test('it can migrate a specific tenant by domain', function () {
+it('can migrate a specific tenant by domain', function () {
     config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
 
     $this->artisan('tenants:artisan', [

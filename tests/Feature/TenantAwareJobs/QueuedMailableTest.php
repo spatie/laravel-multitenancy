@@ -13,13 +13,13 @@ beforeEach(function () {
     $this->tenant = Tenant::factory()->create();
 });
 
-test('it will fail when no tenant is present and mailables are tenant aware by default', function () {
+it('will fail when no tenant is present and mailables are tenant aware by default', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     Mail::to('test@spatie.be')->queue(new MailableTenantAware());
 })->throws(CurrentTenantCouldNotBeDeterminedInTenantAwareJob::class);
 
-test('it will inject the current tenant id', function () {
+it('will inject the current tenant id', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $this->tenant->makeCurrent();

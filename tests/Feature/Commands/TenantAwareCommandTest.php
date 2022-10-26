@@ -16,14 +16,12 @@ beforeEach(function () {
     Tenant::forgetCurrent();
 });
 
-test('it fails with a non-existing tenant', function () {
-    $this
-        ->artisan('tenant:noop --tenant=1000')
-        ->assertExitCode(-1)
-        ->expectsOutput('No tenant(s) found.');
-});
+it('fails with a non-existing tenant')
+    ->artisan('tenant:noop --tenant=1000')
+    ->assertExitCode(-1)
+    ->expectsOutput('No tenant(s) found.');
 
-test('it works with no tenant parameters', function () {
+it('works with no tenant parameters', function () {
     $this
         ->artisan('tenant:noop')
         ->assertExitCode(0)

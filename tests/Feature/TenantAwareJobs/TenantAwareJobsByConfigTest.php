@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->valuestore = Valuestore::make($this->tempFile('tenantAware.json'))->flush();
 });
 
-test('it succeeds with jobs in tenant aware jobs list', function () {
+it('succeeds with jobs in tenant aware jobs list', function () {
     config()->set('multitenancy.tenant_aware_jobs', [TestJob::class]);
 
     $this->tenant->makeCurrent();
@@ -25,7 +25,7 @@ test('it succeeds with jobs in tenant aware jobs list', function () {
         ->and($this->valuestore->get('tenantIdInPayload'))->not->toBeNull();
 });
 
-test('it fails with jobs in not tenant aware jobs list', function () {
+it('fails with jobs in not tenant aware jobs list', function () {
     config()->set('multitenancy.not_tenant_aware_jobs', [TestJob::class]);
 
     $this->tenant->makeCurrent();

@@ -13,7 +13,7 @@ beforeEach(function () {
     $this->tenant = TenantNotifiable::factory()->create();
 });
 
-test('it will fail when no tenant is present and mailables are tenant aware by default', function () {
+it('will fail when no tenant is present and mailables are tenant aware by default', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $this->tenant->notify((new NotificationTenantAware())->delay(now()->addSecond()));
@@ -21,7 +21,7 @@ test('it will fail when no tenant is present and mailables are tenant aware by d
     Notification::assertNothingSent();
 })->throws(CurrentTenantCouldNotBeDeterminedInTenantAwareJob::class);
 
-test('it will inject the current tenant id', function () {
+it('will inject the current tenant id', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $this->tenant->makeCurrent();

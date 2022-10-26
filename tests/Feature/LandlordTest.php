@@ -7,7 +7,7 @@ beforeEach(function () {
     $this->tenant = Tenant::factory()->create();
 });
 
-test('it will execute a callable as landlord and then restore the previous tenant', function () {
+it('will execute a callable as landlord and then restore the previous tenant', function () {
     $this->tenant->makeCurrent();
 
     $response = Landlord::execute(fn () => Tenant::current());

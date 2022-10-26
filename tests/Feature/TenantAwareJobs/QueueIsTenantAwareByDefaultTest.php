@@ -21,7 +21,7 @@ beforeEach(function () {
     Event::assertNotDispatched(JobFailed::class);
 });
 
-test('it will inject the current tenant id in a job', function () {
+it('will inject the current tenant id in a job', function () {
     $this->tenant->makeCurrent();
 
     $job = new TestJob($this->valuestore);
@@ -35,7 +35,7 @@ test('it will inject the current tenant id in a job', function () {
     expect($this->tenant->id)->toEqual($currentTenantIdInJob);
 });
 
-test('it will inject the right tenant even when the current tenant switches', function () {
+it('will inject the right tenant even when the current tenant switches', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
     $anotherTenant = Tenant::factory()->create();
 
@@ -59,7 +59,7 @@ test('it will inject the right tenant even when the current tenant switches', fu
     expect($anotherTenant->id)->toEqual($currentTenantIdInJob);
 });
 
-test('it will not make jobs tenant aware if the config settings is set to false', function () {
+it('will not make jobs tenant aware if the config settings is set to false', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
     $this->tenant->makeCurrent();
@@ -73,7 +73,7 @@ test('it will not make jobs tenant aware if the config settings is set to false'
     expect($currentTenantIdInJob)->toBeNull();
 });
 
-test('it will always make jobs tenant aware if they implement the TenantAware interface', function () {
+it('will always make jobs tenant aware if they implement the TenantAware interface', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
 
     $this->tenant->makeCurrent();
@@ -87,7 +87,7 @@ test('it will always make jobs tenant aware if they implement the TenantAware in
     expect($this->tenant->id)->toEqual($currentTenantIdInJob);
 });
 
-test('it will not make a job tenant aware if it implements NotTenantAware', function () {
+it('will not make a job tenant aware if it implements NotTenantAware', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
 
     $this->tenant->makeCurrent();

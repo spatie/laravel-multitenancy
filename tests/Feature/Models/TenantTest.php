@@ -11,7 +11,7 @@ beforeEach(function () {
     $this->tenant = Tenant::factory()->create();
 });
 
-test('it can get the current tenant', function () {
+it('can get the current tenant', function () {
     expect(Tenant::current())->toBeNull();
 
     $this->tenant->makeCurrent();
@@ -19,7 +19,7 @@ test('it can get the current tenant', function () {
     expect(Tenant::current()->id)->toEqual($this->tenant->id);
 });
 
-test('it will bind the current tenant in the container', function () {
+it('will bind the current tenant in the container', function () {
     $containerKey = config('multitenancy.current_tenant_container_key');
 
     expect(app()->has($containerKey))->toBeFalse();
@@ -32,7 +32,7 @@ test('it will bind the current tenant in the container', function () {
     expect(app($containerKey)->id)->toEqual($this->tenant->id);
 });
 
-test('it can forget the current tenant', function () {
+it('can forget the current tenant', function () {
     $containerKey = config('multitenancy.current_tenant_container_key');
 
     $this->tenant->makeCurrent();
@@ -44,7 +44,7 @@ test('it can forget the current tenant', function () {
     expect(app())->has($containerKey)->toBeFalse();
 });
 
-test('it can check if a current tenant has been set', function () {
+it('can check if a current tenant has been set', function () {
     expect(Tenant::checkCurrent())->toBeFalse();
 
     $this->tenant->makeCurrent();
@@ -56,7 +56,7 @@ test('it can check if a current tenant has been set', function () {
     expect(Tenant::checkCurrent())->toBeFalse();
 });
 
-test('it can check if a particular tenant is the current one', function () {
+it('can check if a particular tenant is the current one', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
 
@@ -79,7 +79,7 @@ test('it can check if a particular tenant is the current one', function () {
         ->and($anotherTenant->isCurrent())->toBeFalse();
 });
 
-test('it will fire off events when making a tenant current', function () {
+it('will fire off events when making a tenant current', function () {
     Event::fake();
 
     Event::assertNotDispatched(MakingTenantCurrentEvent::class);
@@ -91,7 +91,7 @@ test('it will fire off events when making a tenant current', function () {
     Event::assertDispatched(MadeTenantCurrentEvent::class);
 });
 
-test('it will fire off events when forgetting the current tenant', function () {
+it('will fire off events when forgetting the current tenant', function () {
     Event::fake();
 
     $this->tenant->makeCurrent();
@@ -105,7 +105,7 @@ test('it will fire off events when forgetting the current tenant', function () {
     Event::assertDispatched(ForgotCurrentTenantEvent::class);
 });
 
-test('it will not fire off events when forgetting the current tenant when not current tenant is set', function () {
+it('will not fire off events when forgetting the current tenant when not current tenant is set', function () {
     Event::fake();
 
     Tenant::forgetCurrent();
@@ -114,7 +114,7 @@ test('it will not fire off events when forgetting the current tenant when not cu
     Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
 });
 
-test('it will execute a callable and then restore the previous state', function () {
+it('will execute a callable and then restore the previous state', function () {
     Tenant::forgetCurrent();
 
     expect(Tenant::current())->toBeNull();
@@ -130,7 +130,7 @@ test('it will execute a callable and then restore the previous state', function 
     expect($this->tenant->id)->toEqual($response);
 });
 
-test('it will execute a delayed callback in tenant context', function () {
+it('will execute a delayed callback in tenant context', function () {
     Tenant::forgetCurrent();
 
     expect(Tenant::current())->toBeNull();

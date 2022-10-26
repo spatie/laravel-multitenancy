@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->tenant->makeCurrent();
 });
 
-test('it will set the tenant id if it has not been set', function () {
+it('will set the tenant id if it has not been set', function () {
     expect(session('tenant_id'))->toBeNull();
 
     $this
@@ -26,7 +26,7 @@ test('it will set the tenant id if it has not been set', function () {
     )->toBe($this->tenant->id);
 });
 
-test('it will allow requests for the tenant set in the session', function () {
+it('will allow requests for the tenant set in the session', function () {
     session()->put('ensure_valid_tenant_session_tenant_id', 1);
 
     $this
@@ -34,7 +34,7 @@ test('it will allow requests for the tenant set in the session', function () {
         ->assertOk();
 });
 
-test('it will not allow requests for other tenants', function () {
+it('will not allow requests for other tenants', function () {
     session()->put('ensure_valid_tenant_session_tenant_id', 2);
 
     $this
