@@ -2,8 +2,10 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
+use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
@@ -41,9 +43,13 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingProcessed(): self
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            if (! array_key_exists('tenantId', $event->job->payload())) {
-                $this->getTenantModel()::forgetCurrent();
+            $queueable = unserialize($event->job->payload()['data']['command']);
 
+            if (! $this->isTenantAware($queueable)) {
+                $this->getTenantModel()::forgetCurrent();
+            }
+
+            if (! array_key_exists('tenantId', $event->job->payload())) {
                 return;
             }
 
@@ -56,6 +62,12 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsRetryRequested(): self
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
+            $queueable = unserialize($event->job->payload()['data']['command']);
+
+            if (! $this->isTenantAware($queueable)) {
+                $this->getTenantModel()::forgetCurrent();
+            }
+
             if (! array_key_exists('tenantId', $event->payload())) {
                 return;
             }

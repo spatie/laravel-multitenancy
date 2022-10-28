@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.0.0 2022-10-28
+
+### Breaking change
+- `NotTenantAware` jobs will now forget any current tenant that might have been set when starting processing.
+
 ## 2.3.8 - 2022-09-08
 
 ### What's Changed

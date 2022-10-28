@@ -93,7 +93,7 @@ class TenantAwareJobThatCannotFindTenantTest extends TestCase
     }
 
     /** @test */
-    public function it_will_not_touch_the_tenant_if_the_job_is_not_tenant_aware()
+    public function it_will_forget_any_current_tenant_when_starting_a_not_tenant_aware_job()
     {
         $this->tenant->makeCurrent();
 
@@ -104,7 +104,7 @@ class TenantAwareJobThatCannotFindTenantTest extends TestCase
 
         app(Dispatcher::class)->dispatch($job);
 
-        // Assert that the active tenant was not modified
-        $this->assertSame($this->tenant->id, Tenant::current()->id);
+        // Assert that the active tenant was forgotten
+        $this->assertNull(Tenant::current());
     }
 }
