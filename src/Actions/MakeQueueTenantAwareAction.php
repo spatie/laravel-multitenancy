@@ -2,10 +2,8 @@
 
 namespace Spatie\Multitenancy\Actions;
 
-use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
-use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
