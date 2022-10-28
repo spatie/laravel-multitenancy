@@ -42,6 +42,7 @@ class MakeQueueTenantAwareAction
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
             if (! array_key_exists('tenantId', $event->job->payload())) {
+                $this->getTenantModel()::forgetCurrent();
                 return;
             }
 
