@@ -32,7 +32,7 @@ it('fails with jobs in not tenant aware jobs list', function () {
 
     app(Dispatcher::class)->dispatch(new TestJob($this->valuestore));
 
-    expect($this->valuestore->get('tenantId'))->toEqual($this->tenant->id)
+    expect($this->valuestore->get('tenantId'))->toBeNull()
         ->and($this->valuestore->has('tenantIdInPayload'))->toBeTrue()
         ->and($this->valuestore->get('tenantIdInPayload'))->toBeNull();
 });
