@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Cache\Repository;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Multitenancy\Models\Tenant;
 
@@ -43,6 +44,9 @@ class PrefixCacheTask implements SwitchTenantTask
 
         //This is important because the Cache Repository is using an old version of the CacheManager
         app()->forgetInstance('cache.store');
+
+        // Forget the cache repository in the container
+        app()->forgetInstance(Repository::class);
 
         Cache::clearResolvedInstances();
     }
