@@ -58,6 +58,7 @@ class MakeQueueTenantAwareAction
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
             if (! array_key_exists('tenantId', $event->payload())) {
                 $this->getTenantModel()::forgetCurrent();
+
                 return;
             }
 
