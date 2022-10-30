@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 2.3.9 - 2022-10-30
+
+- Fix an issue where the `Illuminate\Cache\Repository` was not being cleared from the container
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.8...2.3.9
+
 ## 2.3.8 - 2022-09-08
 
 ### What's Changed
