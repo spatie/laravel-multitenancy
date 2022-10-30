@@ -2,10 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+
 ## 3.0.0 2022-10-28
 
 ### Breaking change
 - `NotTenantAware` jobs will now forget any current tenant that might have been set when starting processing.
+
+## 2.3.9 - 2022-10-30
+
+- Fix an issue where the `Illuminate\Cache\Repository` was not being cleared from the container
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.8...2.3.9
+
 
 ## 2.3.8 - 2022-09-08
 
