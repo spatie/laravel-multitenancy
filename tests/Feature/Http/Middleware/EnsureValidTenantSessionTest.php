@@ -1,58 +1,43 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Http\Middleware;
-
 use Illuminate\Support\Facades\Route;
 use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureValidTenantSessionTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    Route::get('test-middleware', fn () => 'ok')->middleware(['web', EnsureValidTenantSession::class]);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
 
-        Route::get('test-middleware', fn () => 'ok')->middleware(['web', EnsureValidTenantSession::class]);
+    $this->tenant->makeCurrent();
+});
 
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
+it('will set the tenant id if it has not been set', function () {
+    expect(session('tenant_id'))->toBeNull();
 
-        $this->tenant->makeCurrent();
-    }
+    $this
+        ->get('test-middleware')
+        ->assertOk();
 
-    /** @test */
-    public function it_will_set_the_tenant_id_if_it_has_not_been_set()
-    {
-        $this->assertNull(session('tenant_id'));
+    expect(
+        session('ensure_valid_tenant_session_tenant_id')
+    )->toBe($this->tenant->id);
+});
 
-        $this
-            ->get('test-middleware')
-            ->assertOk();
+it('will allow requests for the tenant set in the session', function () {
+    session()->put('ensure_valid_tenant_session_tenant_id', 1);
 
-        $this->assertEquals($this->tenant->id, session('ensure_valid_tenant_session_tenant_id'));
-    }
+    $this
+        ->get('test-middleware')
+        ->assertOk();
+});
 
-    /** @test */
-    public function it_will_allow_requests_for_the_tenant_set_in_the_session()
-    {
-        session()->put('ensure_valid_tenant_session_tenant_id', 1);
+it('will not allow requests for other tenants', function () {
+    session()->put('ensure_valid_tenant_session_tenant_id', 2);
 
-        $this
-            ->get('test-middleware')
-            ->assertOk();
-    }
-
-    /** @test */
-    public function it_will_not_allow_requests_for_other_tenants()
-    {
-        session()->put('ensure_valid_tenant_session_tenant_id', 2);
-
-        $this
-            ->get('test-middleware')
-            ->assertStatus(Response::HTTP_UNAUTHORIZED);
-    }
-}
+    $this
+        ->get('test-middleware')
+        ->assertStatus(Response::HTTP_UNAUTHORIZED);
+});

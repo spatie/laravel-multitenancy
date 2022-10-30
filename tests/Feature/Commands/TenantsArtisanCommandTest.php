@@ -1,113 +1,60 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Commands;
-
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
-use Spatie\Multitenancy\Tests\TestCase;
 
-class TenantsArtisanCommandTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    config(['database.default' => 'tenant']);
 
-    protected Tenant $anotherTenant;
+    config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
+    $this->tenant->makeCurrent();
+    Schema::connection('tenant')->dropIfExists('migrations');
 
-        config(['database.default' => 'tenant']);
+    $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
+    $this->anotherTenant->makeCurrent();
+    Schema::connection('tenant')->dropIfExists('migrations');
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+    Tenant::forgetCurrent();
+});
 
-        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
-        $this->tenant->makeCurrent();
-        Schema::connection('tenant')->dropIfExists('migrations');
+it('can migrate all tenant databases', function () {
+    $this
+        ->artisan('tenants:artisan migrate')
+        ->assertExitCode(0);
 
-        $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
-        $this->anotherTenant->makeCurrent();
-        Schema::connection('tenant')->dropIfExists('migrations');
+    assertTenantDatabaseHasTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+});
 
-        Tenant::forgetCurrent();
-    }
+it('can migrate a specific tenant', function () {
+    $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')->assertExitCode(0);
 
-    /** @test */
-    public function it_can_migrate_all_tenant_databases()
-    {
-        $this
-            ->artisan('tenants:artisan migrate')
-            ->assertExitCode(0);
+    assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+});
 
-        $this
-            ->assertTenantDatabaseHasTable($this->tenant, 'migrations')
-            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
-    }
+test("it can't migrate a specific tenant id when search by domain", function () {
+    config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
 
-    /** @test */
-    public function it_can_migrate_a_specific_tenant()
-    {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')->assertExitCode(0);
+    $this->artisan('tenants:artisan', [
+        'artisanCommand' => 'migrate',
+        '--tenant' => $this->anotherTenant->id,
+    ])
+        ->expectsOutput("No tenant(s) found.")
+        ->assertExitCode(-1);
+});
 
-        $this
-            ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
-            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
-    }
+it('can migrate a specific tenant by domain', function () {
+    config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
 
-    /** @test */
-    public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
-    {
-        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
+    $this->artisan('tenants:artisan', [
+        'artisanCommand' => 'migrate',
+        '--tenant' => $this->anotherTenant->domain,
+    ])->assertExitCode(0);
 
-        $this->artisan('tenants:artisan', [
-                'artisanCommand' => 'migrate',
-                '--tenant' => $this->anotherTenant->id,
-            ])
-            ->expectsOutput("No tenant(s) found.")
-            ->assertExitCode(-1);
-    }
-
-    /** @test */
-    public function it_can_migrate_a_specific_tenant_by_domain()
-    {
-        config([ 'multitenancy.tenant_artisan_search_fields' => 'domain' ]);
-
-        $this->artisan('tenants:artisan', [
-            'artisanCommand' => 'migrate',
-            '--tenant' => $this->anotherTenant->domain,
-        ])->assertExitCode(0);
-
-        $this
-            ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
-            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
-    }
-
-    protected function assertTenantDatabaseHasTable(Tenant $tenant, string $tableName): self
-    {
-        $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);
-
-        $this->assertTrue($tenantHasDatabaseTable, "Tenant database does not have table  `{$tableName}`");
-
-        return $this;
-    }
-
-    protected function assertTenantDatabaseDoesNotHaveTable(Tenant $tenant, string $tableName): self
-    {
-        $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);
-
-        $this->assertFalse($tenantHasDatabaseTable, "Tenant database has unexpected table  `{$tableName}`");
-
-        return $this;
-    }
-
-    protected function tenantHasDatabaseTable(Tenant $tenant, string $tableName): bool
-    {
-        $tenant->makeCurrent();
-
-        $tenantHasDatabaseTable = Schema::connection('tenant')->hasTable($tableName);
-
-        Tenant::forgetCurrent();
-
-        return $tenantHasDatabaseTable;
-    }
-}
+    assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
+    assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+});

@@ -1,48 +1,31 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\TenantFinder;
-
 use Illuminate\Http\Request;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\TenantFinder\DomainTenantFinder;
-use Spatie\Multitenancy\Tests\TestCase;
 
-class DomainTenantFinderTest extends TestCase
-{
-    protected DomainTenantFinder $tenantFinder;
+beforeEach(function () {
+    $this->tenantFinder = new DomainTenantFinder();
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+it('can find a tenant for the current domain', function () {
+    $tenant = Tenant::factory()->create(['domain' => 'my-domain.com']);
 
-        $this->tenantFinder = new DomainTenantFinder();
-    }
+    $request = Request::create('https://my-domain.com');
 
-    /** @test */
-    public function it_can_find_a_tenant_for_the_current_domain()
-    {
-        $tenant = Tenant::factory()->create(['domain' => 'my-domain.com']);
+    expect($tenant->id)->toEqual($this->tenantFinder->findForRequest($request)->id);
+});
 
-        $request = Request::create('https://my-domain.com');
+it('will return null if there are no tenants', function () {
+    $request = Request::create('https://my-domain.com');
 
-        $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
-    }
+    expect($this->tenantFinder->findForRequest($request))->toBeNull();
+});
 
-    /** @test */
-    public function it_will_return_null_if_there_are_no_tenants()
-    {
-        $request = Request::create('https://my-domain.com');
+it('will return null if no tenant can be found the current domain', function () {
+    Tenant::factory()->create(['domain' => 'my-domain.com']);
 
-        $this->assertNull($this->tenantFinder->findForRequest($request));
-    }
+    $request = Request::create('https://another-domain.com');
 
-    /** @test */
-    public function it_will_return_null_if_no_tenant_can_be_found_for_the_current_domain()
-    {
-        $tenant = Tenant::factory()->create(['domain' => 'my-domain.com']);
-
-        $request = Request::create('https://another-domain.com');
-
-        $this->assertNull($this->tenantFinder->findForRequest($request));
-    }
-}
+    expect($this->tenantFinder->findForRequest($request))->toBeNull();
+});

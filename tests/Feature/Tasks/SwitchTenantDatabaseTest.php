@@ -1,58 +1,40 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Tasks;
-
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
-use Spatie\Multitenancy\Tests\TestCase;
 use Spatie\Multitenancy\Tests\TestClasses\User;
 
-class SwitchTenantDatabaseTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
 
-    protected Tenant $anotherTenant;
+    $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+});
 
-        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
+test('switch fails if tenant database connection name equals to landlord connection name', function () {
+    config()->set('multitenancy.tenant_database_connection_name', null);
 
-        $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
+    $this->tenant->makeCurrent();
+})->throws(InvalidConfiguration::class);
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
-    }
+test('when making a tenant current it will perform the tasks', function () {
+    expect(DB::connection('tenant'))->getDatabaseName()->toBeNull();
 
-    /** @test */
-    public function switch_fails_if_tenant_database_connection_name_equals_to_landlord_connection_name()
-    {
-        config()->set('multitenancy.tenant_database_connection_name', null);
+    $this->tenant->makeCurrent();
 
-        $this->expectException(InvalidConfiguration::class);
+    expect('laravel_mt_tenant_1')
+        ->toEqual(DB::connection('tenant')->getDatabaseName())
+        ->toEqual(app(User::class)->getConnection()->getDatabaseName());
 
-        $this->tenant->makeCurrent();
-    }
+    $this->anotherTenant->makeCurrent();
 
-    /** @test */
-    public function when_making_a_tenant_current_it_will_perform_the_tasks()
-    {
-        $this->assertNull(DB::connection('tenant')->getDatabaseName());
+    expect('laravel_mt_tenant_2')
+        ->toEqual(DB::connection('tenant')->getDatabaseName())
+        ->toEqual(app(User::class)->getConnection()->getDatabaseName());
 
-        $this->tenant->makeCurrent();
-
-        $this->assertEquals('laravel_mt_tenant_1', DB::connection('tenant')->getDatabaseName());
-        $this->assertEquals('laravel_mt_tenant_1', app(User::class)->getConnection()->getDatabaseName());
-
-        $this->anotherTenant->makeCurrent();
-
-        $this->assertEquals('laravel_mt_tenant_2', DB::connection('tenant')->getDatabaseName());
-        $this->assertEquals('laravel_mt_tenant_2', app(User::class)->getConnection()->getDatabaseName());
-
-        Tenant::forgetCurrent();
-
-        $this->assertNull(DB::connection('tenant')->getDatabaseName());
-    }
-}
+    Tenant::forgetCurrent();
+    expect(DB::connection('tenant'))->getDatabaseName()->toBeNull();
+});

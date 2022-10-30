@@ -16,12 +16,12 @@ abstract class TestCase extends Orchestra
 {
     use WithLaravelMigrations;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         $this->migrateDb();
@@ -30,7 +30,7 @@ abstract class TestCase extends Orchestra
 
         DB::table('jobs')->truncate();
 
-        View::addLocation(__DIR__ .'/stubs/views');
+        View::addLocation(__DIR__ . '/stubs/views');
     }
 
     protected function getPackageProviders($app)
@@ -109,10 +109,5 @@ abstract class TestCase extends Orchestra
             'retry_after' => 90,
             'connection' => 'landlord',
         ]);
-    }
-
-    public function tempFile(string $fileName): string
-    {
-        return __DIR__ . "/temp/{$fileName}";
     }
 }

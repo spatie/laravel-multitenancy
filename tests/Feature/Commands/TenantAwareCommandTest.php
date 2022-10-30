@@ -1,59 +1,30 @@
 <?php
 
-namespace Spatie\Multitenancy\Tests\Feature\Commands;
-
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
-use Spatie\Multitenancy\Tests\TestCase;
 
-class TenantAwareCommandTest extends TestCase
-{
-    protected Tenant $tenant;
+beforeEach(function () {
+    config(['database.default' => 'tenant']);
+    config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
 
-    protected Tenant $anotherTenant;
+    $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
+    $this->tenant->makeCurrent();
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
+    $this->anotherTenant->makeCurrent();
 
-        config(['database.default' => 'tenant']);
+    Tenant::forgetCurrent();
+});
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+it('fails with a non-existing tenant')
+    ->artisan('tenant:noop --tenant=1000')
+    ->assertExitCode(-1)
+    ->expectsOutput('No tenant(s) found.');
 
-        $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
-        $this->tenant->makeCurrent();
-
-        $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
-        $this->anotherTenant->makeCurrent();
-
-        Tenant::forgetCurrent();
-    }
-
-    /** @test */
-    public function it_fails_with_a_not_existent_tenant()
-    {
-        $this
-            ->artisan('tenant:noop --tenant=1000')
-            ->assertExitCode(-1)
-            ->expectsOutput('No tenant(s) found.');
-    }
-
-    /** @test */
-    public function it_prints_the_right_tenant()
-    {
-        $this
-            ->artisan('tenant:noop --tenant=1')
-            ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '. $this->tenant->id);
-    }
-
-    /** @test */
-    public function it_works_with_no_tenant_parameters()
-    {
-        $this
-            ->artisan('tenant:noop')
-            ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '. $this->tenant->id)
-            ->expectsOutput('Tenant ID is '. $this->anotherTenant->id);
-    }
-}
+it('works with no tenant parameters', function () {
+    $this
+        ->artisan('tenant:noop')
+        ->assertExitCode(0)
+        ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+        ->expectsOutput('Tenant ID is ' . $this->anotherTenant->id);
+});
