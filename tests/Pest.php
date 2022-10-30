@@ -1,9 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
+
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertTrue;
+
 use Spatie\Multitenancy\Models\Tenant;
-use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
