@@ -1,4 +1,4 @@
-# From v1 to v3
+# From v2 to v3
 
 There are no API changes between v2 and v3. There is one behaviour change where jobs that are `NotTenantAware` will forget any current tenant before processing.
 
