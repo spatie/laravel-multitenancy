@@ -77,7 +77,7 @@ test(
     }
 );
 
-it('will not touch the tenant if the job is not tenant aware', function () {
+it('will forget any current tenant when starting a not tenant aware job', function () {
     $this->tenant->makeCurrent();
 
     $job = new NotTenantAwareTestJob($this->valuestore);
@@ -87,6 +87,6 @@ it('will not touch the tenant if the job is not tenant aware', function () {
 
     app(Dispatcher::class)->dispatch($job);
 
-    // Assert that the active tenant was not modified
-    expect($this->tenant->id)->toBe(Tenant::current()->id);
+    // Assert that the active tenant was forgotten
+    $this->assertNull(Tenant::current());
 });

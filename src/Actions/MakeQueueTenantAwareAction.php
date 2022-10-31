@@ -15,7 +15,7 @@ class MakeQueueTenantAwareAction
 {
     use UsesTenantModel;
 
-    public function execute()
+    public function execute(): void
     {
         $this
             ->listenForJobsBeingQueued()
@@ -23,7 +23,7 @@ class MakeQueueTenantAwareAction
             ->listenForJobsRetryRequested();
     }
 
-    protected function listenForJobsBeingQueued(): self
+    protected function listenForJobsBeingQueued(): static
     {
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
             $queueable = $payload['data']['command'];
@@ -38,10 +38,12 @@ class MakeQueueTenantAwareAction
         return $this;
     }
 
-    protected function listenForJobsBeingProcessed(): self
+    protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
             if (! array_key_exists('tenantId', $event->job->payload())) {
+                $this->getTenantModel()::forgetCurrent();
+
                 return;
             }
 
@@ -51,10 +53,12 @@ class MakeQueueTenantAwareAction
         return $this;
     }
 
-    protected function listenForJobsRetryRequested(): self
+    protected function listenForJobsRetryRequested(): static
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
             if (! array_key_exists('tenantId', $event->payload())) {
+                $this->getTenantModel()::forgetCurrent();
+
                 return;
             }
 
