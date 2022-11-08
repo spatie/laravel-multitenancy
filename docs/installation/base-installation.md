@@ -6,7 +6,7 @@ weight: 1
 This package can be installed via composer:
 
 ```bash
-composer require "spatie/laravel-multitenancy:^2.0"
+composer require "spatie/laravel-multitenancy:^3.0"
 ```
 
 ### Publishing the config file
