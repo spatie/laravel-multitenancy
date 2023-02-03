@@ -2,10 +2,28 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.0.1 - 2023-02-03
+
+### What's Changed
+
+- Correct doc url version for v3 by @l3aro in https://github.com/spatie/laravel-multitenancy/pull/412
+- docs: update composer command for install by @alexrififi in https://github.com/spatie/laravel-multitenancy/pull/413
+- Add PHP 8.2 Support by @patinthehat in https://github.com/spatie/laravel-multitenancy/pull/424
+- Update broken shield badge by @erikn69 in https://github.com/spatie/laravel-multitenancy/pull/437
+- Laravel 10.x Support by @erikn69 in https://github.com/spatie/laravel-multitenancy/pull/435
+
+### New Contributors
+
+- @l3aro made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/412
+- @patinthehat made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/424
+- @erikn69 made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/437
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.0.0...3.0.1
 
 ## 3.0.0 2022-10-28
 
 ### Breaking change
+
 - `NotTenantAware` jobs will now forget any current tenant that might have been set when starting processing.
 
 ## 2.3.9 - 2022-10-30
@@ -13,7 +31,6 @@ All notable changes to `laravel-multitenancy` will be documented in this file
 - Fix an issue where the `Illuminate\Cache\Repository` was not being cleared from the container
 
 **Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/2.3.8...2.3.9
-
 
 ## 2.3.8 - 2022-09-08
 
