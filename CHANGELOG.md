@@ -20,7 +20,7 @@ All notable changes to `laravel-multitenancy` will be documented in this file
 
 **Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.0.0...3.0.1
 
-## 3.0.0 2022-10-28
+## 3.0.0 - 2022-10-28
 
 ### Breaking change
 
