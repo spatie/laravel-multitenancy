@@ -41,13 +41,11 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            if (! array_key_exists('tenantId', $event->job->payload())) {
-                $this->getTenantModel()::forgetCurrent();
+            $this->getTenantModel()::forgetCurrent();
 
-                return;
+            if (array_key_exists('tenantId', $event->job->payload())) {
+                $this->findTenant($event)->makeCurrent();
             }
-
-            $this->findTenant($event)->makeCurrent();
         });
 
         return $this;
@@ -56,13 +54,11 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsRetryRequested(): static
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
-            if (! array_key_exists('tenantId', $event->payload())) {
-                $this->getTenantModel()::forgetCurrent();
+            $this->getTenantModel()::forgetCurrent();
 
-                return;
+            if (array_key_exists('tenantId', $event->payload())) {
+                $this->findTenant($event)->makeCurrent();
             }
-
-            $this->findTenant($event)->makeCurrent();
         });
 
         return $this;
