@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.0.2 - 2023-02-09
+
+### What's Changed
+
+- Fresh Tenant on each job by @masterix21 in https://github.com/spatie/laravel-multitenancy/pull/438
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.0.1...3.0.2
+
 ## 3.0.1 - 2023-02-03
 
 ### What's Changed
