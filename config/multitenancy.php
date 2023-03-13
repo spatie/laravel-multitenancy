@@ -76,7 +76,7 @@ return [
     'shared_routes_cache' => false,
 
     /*
-     * You can customize some of the behavior of this package by using our own custom action.
+     * You can customize some of the behavior of this package by using your own custom action.
      * Your custom action should always extend the default one.
      */
     'actions' => [
