@@ -30,7 +30,7 @@ it('can migrate all tenant databases', function () {
 });
 
 it('can migrate a specific tenant', function () {
-    $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->id . '"')->assertExitCode(0);
+    $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->id . '"')->assertExitCode(0);
 
     assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
     assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
