@@ -2,7 +2,7 @@
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Support\Facades\Event;
+use Illuminate\Events\Dispatcher;
 use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
 use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
 use Spatie\LaravelPackageTools\Package;
@@ -25,17 +25,24 @@ class MultitenancyServiceProvider extends PackageServiceProvider
             ->hasCommand(TenantsArtisanCommand::class);
     }
 
-    public function packageBooted(): void
+    public function boot(): void
     {
-        $this->app->bind(Multitenancy::class, fn ($app) => new Multitenancy($app));
+        $this->app->singleton(Multitenancy::class, function ($app) {
+            return new Multitenancy($app);
+        });
 
-        if (! isset($_SERVER['LARAVEL_OCTANE'])) {
+        $dispatcher = app(Dispatcher::class);
+
+        if (!env('LARAVEL_OCTANE')) {
             app(Multitenancy::class)->start();
+        } else {
+            $dispatcher->listen(OctaneRequestReceived::class, function () {
+                app(Multitenancy::class)->start();
+            });
 
-            return;
+            $dispatcher->listen(OctaneRequestTerminated::class, function () {
+                app(Multitenancy::class)->end();
+            });
         }
-
-        Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
-        Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
     }
 }
