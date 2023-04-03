@@ -7,41 +7,43 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class TenantCollection extends Collection
 {
-    public function eachCurrent(callable $callable): self
+    public function eachCurrent(callable $callback): self
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'each',
-            callable: $callable
+            callback: $callback
         );
     }
 
-    public function filterCurrent(callable $callable): self
+    public function filterCurrent(callable $callback): self
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'filter',
-            callable: $callable
+            callback: $callback
         );
     }
 
-    public function mapCurrent(callable $callable): self
+    public function mapCurrent(callable $callback): self
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'map',
-            callable: $callable
+            callback: $callback
         );
     }
 
-    public function rejectCurrent(callable $callable): self
+    public function rejectCurrent(callable $callback): self
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'reject',
-            callable: $callable
+            callback: $callback
         );
     }
 
-    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): self
+    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callback): self
     {
-        $collection = $this->$operation(fn (Tenant $tenant) => $tenant->execute($callable));
+        $callbackWithTenant = fn (Tenant $tenant) => $tenant->execute($callback);
+
+        $collection = $this->map($callbackWithTenant);
 
         return new static($collection->items);
     }
