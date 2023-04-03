@@ -42,12 +42,10 @@ class Multitenancy
         /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
         $tenantFinder = $this->app[TenantFinder::class];
 
-        $tenant = $tenantFinder->findForRequest($this->app['request']);
-
-        $tenant?->makeCurrent();
+        $tenantFinder->findForRequest($this->app['request'])?->makeCurrent();
     }
 
-    protected function registerTasksCollection(): self
+    protected function registerTasksCollection(): Multitenancy
     {
         $this->app->singleton(TasksCollection::class, function () {
             $taskClassNames = $this->app['config']->get('multitenancy.switch_tenant_tasks');
@@ -62,15 +60,6 @@ class Multitenancy
     {
         if ($this->app['config']->get('multitenancy.tenant_finder')) {
             $this->app->bind(TenantFinder::class, $this->app['config']->get('multitenancy.tenant_finder'));
-        }
-
-        return $this;
-    }
-
-    protected function configureRequests(): self
-    {
-        if (! $this->app->runningInConsole()) {
-            $this->determineCurrentTenant();
         }
 
         return $this;
