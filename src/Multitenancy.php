@@ -69,7 +69,7 @@ class Multitenancy
 
     protected function configureRequests(): self
     {
-        if (! $this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()  || $this->app->runningUnitTests() ) {
             $this->determineCurrentTenant();
         }
 
