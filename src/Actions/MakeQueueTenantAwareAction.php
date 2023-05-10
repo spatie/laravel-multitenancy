@@ -5,6 +5,7 @@ namespace Spatie\Multitenancy\Actions;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
+use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
@@ -14,6 +15,7 @@ use Spatie\Multitenancy\Models\Tenant;
 class MakeQueueTenantAwareAction
 {
     use UsesTenantModel;
+    use BindAsCurrentTenant;
 
     public function execute(): void
     {
@@ -41,11 +43,7 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            $this->getTenantModel()::forgetCurrent();
-
-            if (array_key_exists('tenantId', $event->job->payload())) {
-                $this->findTenant($event)->makeCurrent();
-            }
+            $this->bindOrForgetCurrentTenant($event);
         });
 
         return $this;
@@ -54,11 +52,7 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsRetryRequested(): static
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
-            $this->getTenantModel()::forgetCurrent();
-
-            if (array_key_exists('tenantId', $event->payload())) {
-                $this->findTenant($event)->makeCurrent();
-            }
+            $this->bindOrForgetCurrentTenant($event);
         });
 
         return $this;
@@ -130,5 +124,16 @@ class MakeQueueTenantAwareAction
         }
 
         return $queueable->$job;
+    }
+
+    protected function bindOrForgetCurrentTenant(JobProcessing|JobRetryRequested $event): void
+    {
+        if (array_key_exists('tenantId', $this->getEventPayload($event))) {
+            $this->bindAsCurrentTenant($this->findTenant($event)->makeCurrent());
+
+            return;
+        }
+
+        $this->getTenantModel()::forgetCurrent();
     }
 }
