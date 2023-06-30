@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.0.3 - 2023-06-30
+
+### What's Changed
+
+- [no ci] Fix typo in config comment by @inmanturbo in https://github.com/spatie/laravel-multitenancy/pull/454
+- [FIX] unmatched double quote (typo) by @inmanturbo in https://github.com/spatie/laravel-multitenancy/pull/459
+- [FIX] Bind or forget current tenant by @raymadrona in https://github.com/spatie/laravel-multitenancy/pull/471
+
+### New Contributors
+
+- @inmanturbo made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/454
+- @raymadrona made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/471
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.0.2...3.0.3
+
 ## 3.0.2 - 2023-02-09
 
 ### What's Changed
