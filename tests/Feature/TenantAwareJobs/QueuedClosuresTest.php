@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
-use Spatie\Valuestore\Valuestore;
 
 beforeEach(function () {
     Event::fake(JobFailed::class);
