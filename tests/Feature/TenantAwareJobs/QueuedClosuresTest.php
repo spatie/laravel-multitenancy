@@ -8,33 +8,37 @@ use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 beforeEach(function () {
     Event::fake(JobFailed::class);
 
-    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
-
     config()->set('queue.default', 'database');
     config()->set('multitenancy.tenant_aware_jobs', [TestJob::class]);
 
-    $this->tenant1 = Tenant::factory()->create();
-    $this->tenant2 = Tenant::factory()->create();
+    $this->tenant = Tenant::factory()->create();
 
     Event::assertNotDispatched(JobFailed::class);
 });
 
-it('succeeds with closure jobs', function () {
-    $this->tenant1->execute(function (Tenant $tenant1) {
-        dispatch(function () use ($tenant1) {
+it('succeeds with closure jobs when queues are tenant aware by default', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+
+    $this->tenant->execute(function (Tenant $currentTenant) {
+        dispatch(function () use ($currentTenant) {
             $tenant = Tenant::current();
 
             expect($tenant)->not->toBeNull()
-                ->and($tenant->name)->toBe($tenant1->name);
+                ->and($tenant?->name)->toBe($currentTenant->name);
         });
     });
 
-    $this->tenant2->execute(function (Tenant $tenant2) {
-        dispatch(function () use ($tenant2) {
+    $this->artisan('queue:work --once');
+});
+
+it('fails with closure jobs when queues are not tenant aware by default', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
+
+    $this->tenant->execute(function (Tenant $currentTenant) {
+        dispatch(function () {
             $tenant = Tenant::current();
 
-            expect($tenant)->not->toBeNull()
-                ->and($tenant->name)->toBe($tenant2->name);
+            expect($tenant)->toBeNull();
         });
     });
 
