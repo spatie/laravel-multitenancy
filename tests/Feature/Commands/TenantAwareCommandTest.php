@@ -4,16 +4,11 @@ use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
 beforeEach(function () {
-    config(['database.default' => 'tenant']);
     config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
 
     $this->tenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_1']);
-    $this->tenant->makeCurrent();
 
     $this->anotherTenant = Tenant::factory()->create(['database' => 'laravel_mt_tenant_2']);
-    $this->anotherTenant->makeCurrent();
-
-    Tenant::forgetCurrent();
 });
 
 it('fails with a non-existing tenant')
