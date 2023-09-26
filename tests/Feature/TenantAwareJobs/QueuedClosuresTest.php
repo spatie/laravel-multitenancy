@@ -24,7 +24,7 @@ it('succeeds with closure job when queues are tenant aware by default', function
         $valuestore->put('tenantName', $tenant?->name);
     });
 
-    $this->artisan('queue:work --once')->assertOk();
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
     expect($valuestore->get('tenantId'))->toBe($this->tenant->getKey())
         ->and($valuestore->get('tenantName'))->toBe($this->tenant->name);
@@ -42,7 +42,7 @@ it('fails with closure job when queues are not tenant aware by default', functio
         $valuestore->put('tenantName', $tenant?->name);
     });
 
-    $this->artisan('queue:work --once')->assertOk();
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
     expect($valuestore->get('tenantId'))->toBeNull()
         ->and($valuestore->get('tenantName'))->toBeNull();
@@ -66,7 +66,7 @@ it('succeeds with closure job when a tenant is specified', function () {
         $currentTenant->forget();
     });
 
-    $this->artisan('queue:work --once')->assertOk();
+    $this->artisan('queue:work --once')->assertExitCode(0);
 
     expect($valuestore->get('tenantId'))->toBe($this->tenant->getKey())
         ->and($valuestore->get('tenantName'))->toBe($this->tenant->name);
