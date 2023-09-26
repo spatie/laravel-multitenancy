@@ -21,7 +21,7 @@ it('succeeds with closure job when queues are tenant aware by default', function
 
     $this->tenant->makeCurrent();
 
-    dispatch(function () use($valuestore) {
+    dispatch(function () use ($valuestore) {
         $tenant = Tenant::current();
 
         $valuestore->put('tenantId', $tenant?->getKey());
