@@ -17,7 +17,7 @@ it('succeeds with closure job when queues are tenant aware by default', function
 
     $this->tenant->makeCurrent();
 
-    app(Dispatcher::class)->dispatch(function () use ($valuestore) {
+    dispatch(function () use ($valuestore) {
         $tenant = Tenant::current();
 
         $valuestore->put('tenantId', $tenant?->getKey());
@@ -35,7 +35,7 @@ it('fails with closure job when queues are not tenant aware by default', functio
 
     $this->tenant->makeCurrent();
 
-    app(Dispatcher::class)->dispatch(function () use ($valuestore) {
+    dispatch(function () use ($valuestore) {
         $tenant = Tenant::current();
 
         $valuestore->put('tenantId', $tenant?->getKey());
@@ -53,7 +53,7 @@ it('succeeds with closure job when a tenant is specified', function () {
 
     $currentTenant = $this->tenant;
 
-    app(Dispatcher::class)->dispatch(function () use ($valuestore, $currentTenant) {
+    dispatch(function () use ($valuestore, $currentTenant) {
         $valuestore = Valuestore::make(tempFile('tenantAware.json'));
 
         $currentTenant->makeCurrent();
