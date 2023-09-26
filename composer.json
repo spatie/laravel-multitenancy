@@ -23,7 +23,7 @@
     "require-dev": {
         "laravel/legacy-factories": "^1.0.4",
         "laravel/octane": "^1.0",
-        "mockery/mockery": "^1.4",
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^6.35|^7.0|^8.0",
         "pestphp/pest": "^1.23",
         "phpunit/phpunit": "^9.6.13",
