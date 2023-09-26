@@ -55,6 +55,19 @@ or, using the config `multitenancy.php`:
 ],
 ```
 
+## Queueing Closures
+
+Dispatch a closure is slightly different from a job class because here, you can't implement `TenantAware` or `NotTenantAware` interfaces. The package can handle the queue closures by enabling the `queues_are_tenant_aware_by_default`, but if you enjoy keeping to `false` parameter, you can dispatch a tenant-aware job closure like so:
+
+```php
+$tenant = Tenant::current();
+
+dispatch(function () use ($tenant) {
+    $tenant->execute(function () {
+        // Your job
+    });
+});
+```
 
 ## When the tenant cannot be retrieved
 
