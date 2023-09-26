@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Bus\Dispatcher;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Valuestore\Valuestore;
 
