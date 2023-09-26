@@ -48,11 +48,11 @@ it('fails with closure job when queues are not tenant aware by default', functio
 });
 
 it('succeeds with closure job when a tenant is specified', function () {
+    $valuestore = Valuestore::make(tempFile('tenantAware.json'))->flush();
+
     $currentTenant = $this->tenant;
 
-    dispatch(function () use ($currentTenant) {
-        $valuestore = Valuestore::make(tempFile('tenantAware.json'))->flush();
-
+    dispatch(function () use ($valuestore, $currentTenant) {
         $currentTenant->makeCurrent();
 
         $tenant = Tenant::current();
@@ -64,8 +64,6 @@ it('succeeds with closure job when a tenant is specified', function () {
     });
 
     $this->artisan('queue:work --once')->assertExitCode(0);
-
-    $valuestore = Valuestore::make(tempFile('tenantAware.json'));
 
     expect($valuestore->get('tenantId'))->toBe($this->tenant->getKey())
         ->and($valuestore->get('tenantName'))->toBe($this->tenant->name);
