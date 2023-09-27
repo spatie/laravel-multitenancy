@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.1.0 - 2023-09-27
+
+### What's Changed
+
+- Add support to queued closures by @masterix21 in https://github.com/spatie/laravel-multitenancy/pull/492
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.0.3...3.1.0
+
 ## 3.0.3 - 2023-06-30
 
 ### What's Changed
