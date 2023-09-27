@@ -26,6 +26,7 @@ use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
+use Illuminate\Queue\CallQueuedClosure;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
@@ -55,7 +56,9 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        // add tasks here
+        // \Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
+        // \Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask::class,
+        // \Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
     ],
 
     /*
@@ -89,8 +92,14 @@ return [
      */
     'current_tenant_container_key' => 'currentTenant',
 
+    /**
+     * Set it to `true` if you like to cache the tenant(s) routes
+     * in a shared file using the `SwitchRouteCacheTask`.
+     */
+    'shared_routes_cache' => false,
+
     /*
-     * You can customize some of the behavior of this package by using our own custom action.
+     * You can customize some of the behavior of this package by using your own custom action.
      * Your custom action should always extend the default one.
      */
     'actions' => [
@@ -109,8 +118,23 @@ return [
     'queueable_to_job' => [
         SendQueuedMailable::class => 'mailable',
         SendQueuedNotifications::class => 'notification',
+        CallQueuedClosure::class => 'closure',
         CallQueuedListener::class => 'class',
         BroadcastEvent::class => 'event',
+    ],
+
+    /*
+     * Jobs tenant aware even if these don't implement the TenantAware interface.
+     */
+    'tenant_aware_jobs' => [
+        // ...
+    ],
+
+    /*
+     * Jobs not tenant aware even if these don't implement the NotTenantAware interface.
+     */
+    'not_tenant_aware_jobs' => [
+        // ...
     ],
 ];
 ```

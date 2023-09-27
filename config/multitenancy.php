@@ -4,6 +4,7 @@ use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
+use Illuminate\Queue\CallQueuedClosure;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
@@ -95,6 +96,7 @@ return [
     'queueable_to_job' => [
         SendQueuedMailable::class => 'mailable',
         SendQueuedNotifications::class => 'notification',
+        CallQueuedClosure::class => 'closure',
         CallQueuedListener::class => 'class',
         BroadcastEvent::class => 'event',
     ],
