@@ -32,6 +32,11 @@ class Tenant extends Model
         return $this;
     }
 
+    public function use(): static
+    {
+        return $this->makeCurrent();
+    }
+
     public function forget(): static
     {
         $this
