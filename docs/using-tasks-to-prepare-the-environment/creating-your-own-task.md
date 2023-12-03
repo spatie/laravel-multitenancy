@@ -82,7 +82,7 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     public function __construct(string $name, string $anotherName)
-    { 
+    {
         // do something
     }
 }
@@ -98,7 +98,7 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     public function __construct(string $name, string $anotherName, MyDepencency $myDependency)
-    { 
+    {
         // do something
     }
 }

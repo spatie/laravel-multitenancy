@@ -7,7 +7,6 @@ Facades behave like singletons. They only resolve once, and each use of the faca
 
 If you only have a couple of tenant specific facade, we recommend only clearing them when switching a tenant. Here's a task that you could use for this.
 
-
 ```php
 namespace App\Tenancy\SwitchTasks;
 

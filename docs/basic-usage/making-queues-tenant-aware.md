@@ -25,6 +25,7 @@ class TestJob implements ShouldQueue, TenantAware
 ```
 
 or, using the config `multitenancy.php`:
+
 ```php
 'tenant_aware_jobs' => [
     TestJob::class,
@@ -34,7 +35,7 @@ or, using the config `multitenancy.php`:
 ## Making specific jobs not tenant aware
 
 Jobs that never should be tenant aware should implement the empty marker interface `Spatie\Multitenancy\Jobs\NotTenantAware` or should be added to the config `not_tenant_aware_jobs`.
- 
+
 ```php
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
@@ -49,6 +50,7 @@ class TestJob implements ShouldQueue, NotTenantAware
 ```
 
 or, using the config `multitenancy.php`:
+
 ```php
 'not_tenant_aware_jobs' => [
     TestJob::class,

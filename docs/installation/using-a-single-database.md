@@ -5,7 +5,7 @@ weight: 2
 
 Before using the following instructions, make sure you have performed [the base installation steps](/docs/laravel-multitenancy/v3/installation/base-installation) first.
 
- Only use the instructions on this page if you want to use one database.
+Only use the instructions on this page if you want to use one database.
 
 ### Migrating the database
 
