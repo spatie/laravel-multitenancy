@@ -5,6 +5,7 @@ namespace Spatie\Multitenancy;
 use Illuminate\Contracts\Foundation\Application;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Events\TenantNotFoundForRequestEvent;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\TasksCollection;
@@ -44,7 +45,11 @@ class Multitenancy
 
         $tenant = $tenantFinder->findForRequest($this->app['request']);
 
-        $tenant?->makeCurrent();
+        if ($tenant instanceof Tenant) {
+            $tenant->makeCurrent();
+        } else {
+            event(new TenantNotFoundForRequestEvent($this->app['request']));
+        }
     }
 
     protected function registerTasksCollection(): self
