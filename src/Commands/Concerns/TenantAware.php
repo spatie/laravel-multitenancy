@@ -29,9 +29,19 @@ trait TenantAware
             return -1;
         }
 
-        return $tenantQuery
-            ->cursor()
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
-            ->sum();
+        $result = 0;
+
+        foreach ($tenantQuery->cursor() as $index => $tenant) {
+            if ($index > 0) {
+                $this->line('');
+            }
+
+            $this->info("Running command for tenant `{$tenant->name}` (ID: {$tenant->getKey()})...");
+            $this->line("---------------------------------------------------------");
+
+            $result += $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle']));
+        }
+
+        return $result;
     }
 }
