@@ -32,6 +32,7 @@ In the default scenario, all tenants have different routes. The package creates 
 It's the scenario where all tenants use the same routes. The package creates a shared route cache file for all tenants: `bootstrap/cache/routes-v7-tenants.php`.
 
 To enable the feature you should set to `true` the `shared_routes_cache` section of the `multitenancy` config file.
+
 ```php
 // in config/multitenancy.php
 

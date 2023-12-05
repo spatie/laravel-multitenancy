@@ -14,7 +14,7 @@ Here is an example where we flush the cache for a tenant using our landlord API:
 ```php
 Route::delete('/api/{tenant}/flush-cache', function (Tenant $tenant) {
     $result = $tenant->execute(fn (Tenant $tenant) => cache()->flush());
-   
+
     return json_encode(["success" => $result]);
 });
 ```
@@ -25,12 +25,14 @@ Here's another example, where a job is dispatched from a landlord API route:
 
 ```php
 Route::post('/api/{tenant}/reminder', function (Tenant $tenant) {
-    return json_encode([ 
+    return json_encode([
         'data' => $tenant->execute(fn () => dispatch(ExpirationReminder())),
     ]);
 });
 ```
+
 ### Executing a delayed callback in the correct Tenant context
+
 If you need to define a callback that will be executed in the correct Tenant context every time it is called, you can use the Tenant's `callback` method.
 A notable example for this is the use in the Laravel scheduler where you can loop through all the tenants and schedule callbacks to be executed at the given time:
 
@@ -45,7 +47,7 @@ protected function schedule(Schedule $schedule)
 
 ## Executing landlord code in tenant request
 
-To execute landlord code, from inside a tenant request, you can use the method `execute` on `Spatie\Multitenancy\Landlord`. 
+To execute landlord code, from inside a tenant request, you can use the method `execute` on `Spatie\Multitenancy\Landlord`.
 
 Here is an example where we will first clear the tenant cache, and next, the landlord cache:
 
@@ -56,10 +58,10 @@ use  Spatie\Multitenancy\Landlord;
 
 Tenant::first()->execute(function (Tenant $tenant) {
     // it will clear the tenant cache
-    Artisan::call('cache:clear'); 
-   
+    Artisan::call('cache:clear');
+
     // it will clear the landlord cache
-    Landlord::execute(fn () => Artisan::call('cache:clear')); 
+    Landlord::execute(fn () => Artisan::call('cache:clear'));
 });
 ```
 
@@ -112,7 +114,7 @@ protected function setUp(): void
     Event::listen(MadeTenantCurrentEvent::class, function () {
         $this->beginDatabaseTransaction();
     });
-    
+
     Tenant::first()->makeCurrent();
 }
 ```

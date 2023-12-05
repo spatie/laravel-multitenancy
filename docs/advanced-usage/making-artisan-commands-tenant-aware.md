@@ -5,13 +5,13 @@ weight: 3
 
 Commands can be made tenant aware by applying the `TenantAware` trait. When using the trait it is required to append `{--tenant=*}` or `{--tenant=}` to the command signature.
 
-Caution: If you append `{--tenant=*}`, then if no `tenant` option is provided when executing the command, the command will execute for *all* tenants.
- 
+Caution: If you append `{--tenant=*}`, then if no `tenant` option is provided when executing the command, the command will execute for _all_ tenants.
+
 ```php
 use Illuminate\Console\Command;
 use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 
-class YourFavouriteCommand extends Command
+class YourFavoriteCommand extends Command
 {
     use TenantAware;
 
@@ -24,17 +24,15 @@ class YourFavouriteCommand extends Command
 }
 ```
 
-When executing the command, the `handle` method will be called for each tenant. 
+When executing the command, the `handle` method will be called for each tenant.
 
 ```bash
-php artisan your-favorite-command 
+php artisan your-favorite-command
 ```
 
 Using the example above, the name of each tenant will be written to the output of the command.
 
-
 You can also execute the command for a specific tenant:
-
 
 ```bash
 php artisan your-favorite-command --tenant=1

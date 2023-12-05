@@ -11,7 +11,7 @@ You can easily [create your own tasks](/docs/laravel-multitenancy/v3/using-tasks
 
 The package ships with these tasks:
 
-- [switch the tenant database](/docs/laravel-multitenancy/v3/using-tasks-to-prepare-the-environment/switching-databases) (required when using multiple tenant databases)
-- [prefixing the cache](/docs/laravel-multitenancy/v3/using-tasks-to-prepare-the-environment/prefixing-cache)
+-   [switch the tenant database](/docs/laravel-multitenancy/v3/using-tasks-to-prepare-the-environment/switching-databases) (required when using multiple tenant databases)
+-   [prefixing the cache](/docs/laravel-multitenancy/v3/using-tasks-to-prepare-the-environment/prefixing-cache)
 
 These tasks are optional. When you need one, just add it to the `switch_tenant_tasks` key of the `multitenancy` config file.
