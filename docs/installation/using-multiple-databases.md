@@ -40,7 +40,6 @@ In the example below, the `mysql` driver is used, but you can use any driver you
     ],
 ```
 
-
 ### Migrating the landlord database
 
 With the database connection set up, we can migrate the landlord database.
@@ -101,7 +100,7 @@ php artisan tenants:artisan "migrate --database=tenant"
 If you want to have dedicated directory for tenant migrations (`database/migrations/tenant`) you can simply run:
 
 ```bash
-php artisan tenants:artisan "migrate --path=database/migrations/tenant --database=tenant" 
+php artisan tenants:artisan "migrate --path=database/migrations/tenant --database=tenant"
 ```
 
 ### Seeding tenant databases

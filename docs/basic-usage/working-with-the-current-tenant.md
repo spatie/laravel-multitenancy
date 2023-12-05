@@ -37,7 +37,6 @@ $tenant->makeCurrent();
 
 When a tenant is made the current one, the package will run the `makeCurrent` method of [all tasks configured](/docs/laravel-multitenancy/v3/using-tasks-to-prepare-the-environment/overview/) in the `switch_tenant_tasks` key of the `multitenancy` config file.
 
-
 ### Forgetting the current tenant
 
 You can forget the current tenant:

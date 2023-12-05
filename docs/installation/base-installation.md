@@ -44,7 +44,7 @@ return [
     'tenant_finder' => null,
 
     /*
-     * These fields are used by tenant:artisan command to match one or more tenant
+     * These fields are used by tenant:artisan command to match one or more tenant.
      */
     'tenant_artisan_search_fields' => [
         'id',
@@ -83,7 +83,7 @@ return [
     'tenant_database_connection_name' => null,
 
     /*
-     * The connection name to reach the landlord database
+     * The connection name to reach the landlord database.
      */
     'landlord_database_connection_name' => null,
 
@@ -110,7 +110,7 @@ return [
     ],
 
     /*
-     * You can customize the way in which the package resolves the queuable to a job.
+     * You can customize the way in which the package resolves the queueable to a job.
      *
      * For example, using the package laravel-actions (by Loris Leiva), you can
      * resolve JobDecorator to getAction() like so: JobDecorator::class => 'getAction'
