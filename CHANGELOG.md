@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.1.1 - 2024-01-09
+
+### What's Changed
+
+* Update migration stub by @sevannerse in https://github.com/spatie/laravel-multitenancy/pull/495
+* Correct Typos by @jacobmllr95 in https://github.com/spatie/laravel-multitenancy/pull/501
+* Add new `TenantNotFoundForRequestEvent` by @jacobmllr95 in https://github.com/spatie/laravel-multitenancy/pull/502
+
+### New Contributors
+
+* @sevannerse made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/495
+* @jacobmllr95 made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/501
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.1.0...3.1.1
+
 ## 3.1.0 - 2023-09-27
 
 ### What's Changed
