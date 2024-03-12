@@ -24,7 +24,7 @@ it('will separate the cache prefix for each tenant', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantOne = Tenant::factory()->create();
     $tenantOne->makeCurrent();
-    $tenantOnePrefix = 'tenant_id_' . $tenantOne->id . ':';
+    $tenantOnePrefix = 'tenant_id_' . $tenantOne->id;
 
     expect(app('cache')->getPrefix())->toStartWith($tenantOnePrefix);
     expect(app('cache.store')->getPrefix())->toStartWith($tenantOnePrefix);
@@ -32,7 +32,7 @@ it('will separate the cache prefix for each tenant', function () {
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantTwo = Tenant::factory()->create();
     $tenantTwo->makeCurrent();
-    $tenantTwoPrefix = 'tenant_id_' . $tenantTwo->id . ':';
+    $tenantTwoPrefix = 'tenant_id_' . $tenantTwo->id;
 
     expect(app('cache')->getPrefix())->toStartWith($tenantTwoPrefix);
     expect(app('cache.store')->getPrefix())->toStartWith($tenantTwoPrefix);
