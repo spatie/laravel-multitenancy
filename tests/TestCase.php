@@ -14,7 +14,6 @@ use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
 {
-    use WithLaravelMigrations;
 
     protected function setUp(): void
     {
