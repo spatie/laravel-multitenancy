@@ -13,7 +13,7 @@ trait TenantAware
     use UsesMultitenancyConfig;
     use UsesTenantModel;
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tenants = Arr::wrap($this->option('tenant'));
 
