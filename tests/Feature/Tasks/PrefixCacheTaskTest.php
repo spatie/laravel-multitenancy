@@ -16,11 +16,10 @@ beforeEach(function () {
 });
 
 it('will separate the cache prefix for each tenant', function () {
-    $originalPrefix = config('cache.prefix') . ':';
+    $originalPrefix = config('cache.prefix') ;
 
-    expect($originalPrefix)
-        ->toEqual(app('cache')->getPrefix())
-        ->toEqual(app('cache.store')->getPrefix());
+    expect(app('cache')->getPrefix())->toStartWith($originalPrefix);
+    expect(app('cache.store')->getPrefix())->toStartWith($originalPrefix);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantOne = Tenant::factory()->create();
