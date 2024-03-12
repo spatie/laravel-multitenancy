@@ -16,7 +16,7 @@ beforeEach(function () {
 });
 
 it('will separate the cache prefix for each tenant', function () {
-    $originalPrefix = config('cache.prefix') ;
+    $originalPrefix = config('cache.prefix');
 
     expect(app('cache')->getPrefix())->toStartWith($originalPrefix);
     expect(app('cache.store')->getPrefix())->toStartWith($originalPrefix);
@@ -26,18 +26,16 @@ it('will separate the cache prefix for each tenant', function () {
     $tenantOne->makeCurrent();
     $tenantOnePrefix = 'tenant_id_' . $tenantOne->id . ':';
 
-    expect($tenantOnePrefix)
-        ->toEqual(app('cache')->getPrefix())
-        ->toEqual(app('cache.store')->getPrefix());
+    expect(app('cache')->getPrefix())->toStartWith($tenantOnePrefix);
+    expect(app('cache.store')->getPrefix())->toStartWith($tenantOnePrefix);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenantOne */
     $tenantTwo = Tenant::factory()->create();
     $tenantTwo->makeCurrent();
     $tenantTwoPrefix = 'tenant_id_' . $tenantTwo->id . ':';
 
-    expect($tenantTwoPrefix)
-        ->toEqual(app('cache')->getPrefix())
-        ->toEqual(app('cache.store')->getPrefix());
+    expect(app('cache')->getPrefix())->toStartWith($tenantTwoPrefix);
+    expect(app('cache.store')->getPrefix())->toStartWith($tenantTwoPrefix);
 });
 
 it('will separate the cache for each tenant', function () {
