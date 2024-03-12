@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 3.2.0 - 2024-03-12
+
+### What's Changed
+
+* Laravel 11.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-multitenancy/pull/522
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/522
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.1.1...3.2.0
+
 ## 3.1.1 - 2024-01-09
 
 ### What's Changed
