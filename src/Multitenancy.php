@@ -65,8 +65,10 @@ class Multitenancy
 
     protected function registerTenantFinder(): self
     {
-        if ($this->app['config']->get('multitenancy.tenant_finder')) {
-            $this->app->bind(TenantFinder::class, $this->app['config']->get('multitenancy.tenant_finder'));
+        $tenantFinderConfig = $this->app['config']->get('multitenancy.tenant_finder');
+
+        if ($tenantFinderConfig) {
+            $this->app->bind(TenantFinder::class, $tenantFinderConfig);
         }
 
         return $this;
