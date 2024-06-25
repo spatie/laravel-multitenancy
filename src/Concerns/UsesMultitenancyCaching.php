@@ -17,7 +17,7 @@ trait UsesMultitenancyCaching
         return config('multitenancy.cache_duration'));
     }
 
-    public function getTenantCacheStore(): ?string
+    public function getTenantCacheStore(): mixed
     {
         return config('multitenancy.cache_store'));
     }
