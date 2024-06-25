@@ -19,7 +19,7 @@ return [
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
      *
      */
-    'tenant_finder' => null,
+    'tenant_finder' => \Spatie\Multitenancy\TenantFinder\DomainTenantFinder::class,
 
     /*
      * These fields are used by tenant:artisan command to match one or more tenant.
@@ -71,7 +71,9 @@ return [
     'current_tenant_container_key' => 'currentTenant',
 
     /**
-     * Set it to `true` if you like to cache the tenant models.
+     * This key specifies the name of a cache store. When set to `null`
+     * the default cache store will be used. If you do not want to use
+     * caching set this value to `false`.
      */
     'cache_store' => null,
 
@@ -79,7 +81,6 @@ return [
      * When cache_store is set to `true`, this value will be used to determine
      * how long the cache will be valid. If you set this to `null` the
      * cache will never expire.
-     *
      */
     'cache_duration' => null,
 
