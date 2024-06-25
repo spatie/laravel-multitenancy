@@ -2,9 +2,7 @@
 
 namespace Spatie\Multitenancy\Concerns;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 
 trait UsesMultitenancyCaching
 {
