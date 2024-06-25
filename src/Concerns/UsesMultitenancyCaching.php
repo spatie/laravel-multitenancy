@@ -9,9 +9,9 @@ use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 trait UsesMultitenancyCaching
 {
     protected function createTenantCache(): void
-    {        
+    {
         $cacheStore = $this->getTenantCacheStore();
-        
+
         if ($cacheStore === false) {
             return;
         }
@@ -23,23 +23,23 @@ trait UsesMultitenancyCaching
         if ($cacheDuration === null) {
             cache()
                 ->store($cacheStore)
-                ->rememberForever($cacheKey, fn () => getTenantCollection());
+                ->rememberForever($cacheKey, fn () => $this->getTenantCollection());
         }
 
         cache()
             ->store($cacheStore)
-            ->remember($cacheKey, $cacheDuration, fn () => getTenantCollection());
+            ->remember($cacheKey, $cacheDuration, fn () => $this->getTenantCollection());
     }
 
     protected function clearTenantCache(): void
-    {       
+    {
         cache()
             ->store($this->getTenantCacheStore())
             ->delete($this->getTenantCacheKey());
     }
 
     protected function getTenantCache(): Collection
-    {       
+    {
         return cache()
             ->store($this->getTenantCacheStore())
             ->get($this->getTenantCacheKey(), collect());
@@ -51,7 +51,7 @@ trait UsesMultitenancyCaching
 
         return app($tenantModelClass)::all();
     }
-    
+
     protected function getTenantCacheKey(): string
     {
         return config('multitenancy.cache_key', 'multitenancy');
