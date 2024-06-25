@@ -1,0 +1,13 @@
+<?php
+
+it('can cache tenants', function () {
+    $this
+        ->artisan('tenants:cache')
+        ->assertExitCode(0);
+});
+
+it('can refresh tenants', function () {
+    $this
+        ->artisan('tenants:refresh')
+        ->assertExitCode(0);
+});
