@@ -42,7 +42,7 @@ trait UsesMultitenancyCaching
     {       
         return cache()
             ->store($this->getTenantCacheStore())
-            ->get($this->getTenantCacheKey(), $this->getTenantCollection());
+            ->get($this->getTenantCacheKey(), collect());
     }
 
     protected function getTenantCollection(): Collection
