@@ -59,11 +59,11 @@ trait UsesMultitenancyCaching
 
     protected function getTenantCacheDuration(): ?int
     {
-        return config('multitenancy.cache_duration'));
+        return config('multitenancy.cache_duration');
     }
 
     protected function getTenantCacheStore(): mixed
     {
-        return config('multitenancy.cache_store'));
+        return config('multitenancy.cache_store');
     }
 }
