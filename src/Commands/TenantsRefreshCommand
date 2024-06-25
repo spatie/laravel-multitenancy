@@ -4,7 +4,6 @@ namespace Spatie\Multitenancy\Commands;
 
 use Illuminate\Console\Command;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyCaching;
-use Spatie\Multitenancy\Models\Tenant;
 
 class TenantsRefreshCommand extends Command
 {
