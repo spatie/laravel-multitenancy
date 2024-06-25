@@ -71,6 +71,19 @@ return [
     'current_tenant_container_key' => 'currentTenant',
 
     /**
+     * Set it to `true` if you like to cache the tenant models.
+     */
+    'cache_store' => null,
+
+    /*
+     * When cache_store is set to `true`, this value will be used to determine
+     * how long the cache will be valid. If you set this to `null` the
+     * cache will never expire.
+     *
+     */
+    'cache_duration' => null,
+
+    /**
      * Set it to `true` if you like to cache the tenant(s) routes
      * in a shared file using the `SwitchRouteCacheTask`.
      */
