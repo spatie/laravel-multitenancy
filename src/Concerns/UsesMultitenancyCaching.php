@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 
 trait UsesMultitenancyCaching
 {
-    public function getTenantCacheKey(): array
+    public function getTenantCacheKey(): string
     {
         return config('multitenancy.cache_key', 'multitenancy'));
     }
@@ -17,8 +17,8 @@ trait UsesMultitenancyCaching
         return config('multitenancy.cache_duration'));
     }
 
-    public function getTenantCacheStore(): array
+    public function getTenantCacheStore(): ?string
     {
-        return config('multitenancy.cache_store', 'multitenancy'));
+        return config('multitenancy.cache_store'));
     }
 }
