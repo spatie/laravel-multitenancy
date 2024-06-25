@@ -54,7 +54,7 @@ trait UsesMultitenancyCaching
     
     protected function getTenantCacheKey(): string
     {
-        return config('multitenancy.cache_key', 'multitenancy'));
+        return config('multitenancy.cache_key', 'multitenancy');
     }
 
     protected function getTenantCacheDuration(): ?int
