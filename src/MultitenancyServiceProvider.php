@@ -8,6 +8,8 @@ use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
+use Spatie\Multitenancy\Commands\TenantsCacheCommand;
+use Spatie\Multitenancy\Commands\TenantsRefreshCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 
@@ -22,7 +24,11 @@ class MultitenancyServiceProvider extends PackageServiceProvider
             ->name('laravel-multitenancy')
             ->hasConfigFile()
             ->hasMigration('landlord/create_landlord_tenants_table')
-            ->hasCommand(TenantsArtisanCommand::class);
+            ->hasCommands([
+                  TenantsArtisanCommand::class,
+                  TenantsCacheCommand::class,
+                  TenantsRefreshCommand::class,
+             ]);
     }
 
     public function packageBooted(): void
