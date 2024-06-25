@@ -38,6 +38,13 @@ trait UsesMultitenancyCaching
             ->delete($this->getTenantCacheKey());
     }
 
+    protected function getTenantCache(): Collection
+    {       
+        return cache()
+            ->store($this->getTenantCacheStore())
+            ->get($this->getTenantCacheKey(), $this->getTenantCollection());
+    }
+
     protected function getTenantCollection(): Collection
     {
         $tenantModelClass = config('multitenancy.tenant_model');
