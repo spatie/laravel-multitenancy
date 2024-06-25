@@ -22,6 +22,8 @@ trait UsesMultitenancyCaching
             cache()
                 ->store($cacheStore)
                 ->rememberForever($cacheKey, fn () => $this->getTenantCollection());
+
+            return;
         }
 
         cache()
