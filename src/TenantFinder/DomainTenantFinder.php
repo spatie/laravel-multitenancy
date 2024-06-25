@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\TenantFinder;
 
 use Illuminate\Http\Request;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyCaching;
+use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
 
 class DomainTenantFinder extends TenantFinder
@@ -16,12 +17,12 @@ class DomainTenantFinder extends TenantFinder
         $host = $request->getHost();
 
         if ($this->getTenantCacheStore() === false) {
-            return $this->findTenantByDomain($domain);
+            return $this->findTenantByDomain($host);
         }
 
         $cache = $this->getTenantCache();
 
-        return $cache->firstWhere('domain', $host) ?? $this->findTenantByDomain($domain);
+        return $cache->firstWhere('domain', $host) ?? $this->findTenantByDomain($host);
     }
 
     protected function findTenantByDomain(string $domain): ?Tenant
