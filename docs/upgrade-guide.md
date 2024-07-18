@@ -7,7 +7,7 @@ In the `4.x` version, we have introduced the contract concept to the Tenant so t
 
 The first step to reach our goal is upgrading our package version.
 
-```sh
+```bash
 composer require spatie/laravel-multitenancy:^4.0
 ```
 
