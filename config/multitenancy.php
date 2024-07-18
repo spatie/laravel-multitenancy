@@ -42,7 +42,8 @@ return [
     /*
      * This class is the model used for storing configuration on tenants.
      *
-     * It must implement `Spatie\Multitenancy\Contracts\IsTenant::class` interface
+     * It must  extend `Spatie\Multitenancy\Models\Tenant::class` or
+     * implement `Spatie\Multitenancy\Contracts\IsTenant::class` interface
      */
     'tenant_model' => Tenant::class,
 
