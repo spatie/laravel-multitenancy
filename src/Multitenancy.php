@@ -50,7 +50,7 @@ class Multitenancy
         }
     }
 
-    protected function registerTasksCollection(): self
+    protected function registerTasksCollection(): static
     {
         $this->app->singleton(TasksCollection::class, function () {
             $taskClassNames = $this->app['config']->get('multitenancy.switch_tenant_tasks');
@@ -61,7 +61,7 @@ class Multitenancy
         return $this;
     }
 
-    protected function registerTenantFinder(): self
+    protected function registerTenantFinder(): static
     {
         $tenantFinderConfig = $this->app['config']->get('multitenancy.tenant_finder');
 
@@ -72,7 +72,7 @@ class Multitenancy
         return $this;
     }
 
-    protected function configureRequests(): self
+    protected function configureRequests(): static
     {
         if (! $this->app->runningInConsole()) {
             $this->determineCurrentTenant();
@@ -81,7 +81,7 @@ class Multitenancy
         return $this;
     }
 
-    protected function configureQueue(): self
+    protected function configureQueue(): static
     {
         $this
             ->getMultitenancyActionClass(

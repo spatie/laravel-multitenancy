@@ -26,7 +26,7 @@ class ForgetCurrentTenantAction
         event(new ForgotCurrentTenantEvent($tenant));
     }
 
-    protected function performTaskToForgetCurrentTenant(): self
+    protected function performTaskToForgetCurrentTenant(): static
     {
         $this->tasksCollection->each(fn (SwitchTenantTask $task) => $task->forgetCurrent());
 

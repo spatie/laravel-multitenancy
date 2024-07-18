@@ -6,7 +6,7 @@ use Spatie\Multitenancy\Contracts\IsTenant;
 
 trait BindAsCurrentTenant
 {
-    protected function bindAsCurrentTenant(IsTenant $tenant): self
+    protected function bindAsCurrentTenant(IsTenant $tenant): static
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 
