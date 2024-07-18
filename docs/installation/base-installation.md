@@ -6,7 +6,7 @@ weight: 1
 This package can be installed via composer:
 
 ```bash
-composer require "spatie/laravel-multitenancy:^3.0"
+composer require "spatie/laravel-multitenancy:^4.0"
 ```
 
 ### Publishing the config file
@@ -64,7 +64,8 @@ return [
     /*
      * This class is the model used for storing configuration on tenants.
      *
-     * It must be or extend `Spatie\Multitenancy\Models\Tenant::class`
+     * It must  extend `Spatie\Multitenancy\Models\Tenant::class` or
+     * implement `Spatie\Multitenancy\Contracts\IsTenant::class` interface
      */
     'tenant_model' => Tenant::class,
 
