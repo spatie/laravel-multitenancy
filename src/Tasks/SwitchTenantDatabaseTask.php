@@ -22,7 +22,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         $this->setTenantConnectionDatabaseName(null);
     }
 
-    protected function setTenantConnectionDatabaseName(?string $databaseName)
+    protected function setTenantConnectionDatabaseName(?string $databaseName): void
     {
         $tenantConnectionName = $this->tenantDatabaseConnectionName();
 
