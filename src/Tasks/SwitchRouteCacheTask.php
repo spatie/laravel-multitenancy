@@ -3,11 +3,11 @@
 namespace Spatie\Multitenancy\Tasks;
 
 use Illuminate\Support\Env;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class SwitchRouteCacheTask implements SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         Env::getRepository()->set('APP_ROUTES_CACHE', $this->getCachedRoutesPath($tenant));
 
@@ -21,13 +21,13 @@ class SwitchRouteCacheTask implements SwitchTenantTask
         Env::getRepository()->clear('APP_ROUTES_CACHE');
     }
 
-    protected function getCachedRoutesPath(Tenant $tenant): string
+    protected function getCachedRoutesPath(IsTenant $tenant): string
     {
         if (config('multitenancy.shared_routes_cache')) {
             return "bootstrap/cache/routes-v7-tenants.php";
         }
 
-        return "bootstrap/cache/routes-v7-tenant-{$tenant->id}.php";
+        return "bootstrap/cache/routes-v7-tenant-{$tenant->getKey()}.php";
     }
 
     protected function shouldReinitializeRouter(): bool

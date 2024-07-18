@@ -6,15 +6,13 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Models\Tenant;
 
 class MakeQueueTenantAwareAction
 {
-    use UsesTenantModel;
     use BindAsCurrentTenant;
 
     public function execute(): void
@@ -34,7 +32,7 @@ class MakeQueueTenantAwareAction
                 return [];
             }
 
-            return ['tenantId' => Tenant::current()?->id];
+            return ['tenantId' => app(IsTenant::class)::current()?->getKey()];
         });
 
         return $this;
@@ -90,7 +88,7 @@ class MakeQueueTenantAwareAction
         };
     }
 
-    protected function findTenant(JobProcessing|JobRetryRequested $event): Tenant
+    protected function findTenant(JobProcessing|JobRetryRequested $event): IsTenant
     {
         $tenantId = $this->getEventPayload($event)['tenantId'] ?? null;
 
@@ -100,9 +98,7 @@ class MakeQueueTenantAwareAction
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
         }
 
-
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        if (! $tenant = $this->getTenantModel()::find($tenantId)) {
+        if (! $tenant = app(IsTenant::class)::find($tenantId)) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
@@ -134,6 +130,6 @@ class MakeQueueTenantAwareAction
             return;
         }
 
-        $this->getTenantModel()::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
     }
 }

@@ -5,15 +5,13 @@ namespace Spatie\Multitenancy;
 use Illuminate\Contracts\Foundation\Application;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Events\TenantNotFoundForRequestEvent;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class Multitenancy
 {
-    use UsesTenantModel;
     use UsesMultitenancyConfig;
 
     public function __construct(public Application $app)
@@ -31,7 +29,7 @@ class Multitenancy
 
     public function end(): void
     {
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
     }
 
     protected function determineCurrentTenant(): void
@@ -45,7 +43,7 @@ class Multitenancy
 
         $tenant = $tenantFinder->findForRequest($this->app['request']);
 
-        if ($tenant instanceof Tenant) {
+        if ($tenant instanceof IsTenant) {
             $tenant->makeCurrent();
         } else {
             event(new TenantNotFoundForRequestEvent($this->app['request']));

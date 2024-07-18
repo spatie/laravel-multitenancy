@@ -2,11 +2,11 @@
 
 namespace Spatie\Multitenancy\Concerns;
 
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 trait BindAsCurrentTenant
 {
-    protected function bindAsCurrentTenant(Tenant $tenant): self
+    protected function bindAsCurrentTenant(IsTenant $tenant): self
     {
         $containerKey = config('multitenancy.current_tenant_container_key');
 

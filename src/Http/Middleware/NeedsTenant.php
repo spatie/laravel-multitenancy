@@ -3,16 +3,14 @@
 namespace Spatie\Multitenancy\Http\Middleware;
 
 use Closure;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\NoCurrentTenant;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 
 class NeedsTenant
 {
-    use UsesTenantModel;
-
     public function handle($request, Closure $next)
     {
-        if (! $this->getTenantModel()::checkCurrent()) {
+        if (! app(IsTenant::class)::checkCurrent()) {
             return $this->handleInvalidRequest();
         }
 

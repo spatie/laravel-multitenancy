@@ -3,6 +3,7 @@
 namespace Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses;
 
 use Illuminate\Cache\Repository;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
@@ -25,7 +26,7 @@ class DummyTask implements SwitchTenantTask
         $this->b = $b;
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         $this->madeCurrentCalled = true;
     }

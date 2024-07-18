@@ -2,15 +2,15 @@
 
 namespace Spatie\Multitenancy;
 
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class Landlord
 {
     public static function execute(callable $callable)
     {
-        $originalCurrentTenant = Tenant::current();
+        $originalCurrentTenant = app(IsTenant::class)::current();
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
 
         $result = $callable();
 

@@ -3,7 +3,7 @@
 namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrateTenantAction
@@ -35,7 +35,7 @@ class MigrateTenantAction
         return $this;
     }
 
-    public function execute(Tenant $tenant): self
+    public function execute(IsTenant $tenant): self
     {
         $tenant->execute(function () {
             $migrationCommand = $this->fresh ? 'migrate:fresh' : 'migrate';
