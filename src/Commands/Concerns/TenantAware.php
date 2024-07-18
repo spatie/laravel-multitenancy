@@ -30,7 +30,7 @@ trait TenantAware
 
         return $tenantQuery
             ->cursor()
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
+            ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
 }
