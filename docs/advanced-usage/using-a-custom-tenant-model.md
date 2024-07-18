@@ -3,7 +3,12 @@ title: Using a custom tenant model
 weight: 6
 ---
 
-If you want to change or add behaviour on the `Tenant` model you can use your custom model. Make sure that your custom model extends the `Spatie\Multitenancy\Models\Tenant` model provided by the package.
+If you want to change or add behaviour on the `Tenant` model you can use your custom model. There are two ways of doing this by extending the `Tenant` model provided by the package, or by prepping a model of your own.
+
+## Option 1: extending the `Tenant` model provided by the package
+
+
+Make sure that your custom model extends the `Spatie\Multitenancy\Models\Tenant` model provided by the package.
 
 You should specify the class name of your model in the `tenant_model` key of the `multitenancy` config file.
 
@@ -14,6 +19,29 @@ You should specify the class name of your model in the `tenant_model` key of the
  * It must be or extend `Spatie\Multitenancy\Models\Tenant::class`
  */
 'tenant_model' => \App\Models\CustomTenantModel::class,
+```
+
+## Option 2: using a model of your own
+
+You don't have to extend our `Tenant` model. For example if you use Laravel Jetstream, then you probably want to use `Team` model provided by that package as your tenant model.
+
+To accomplish that, you can implement the `IsTenant` interface and use trait `ImplementsTenant` to fulfill that intervace. 
+
+Here's an example:
+
+```php
+namespace App\Models;
+
+use Laravel\Jetstream\Team as JetstreamTeam;
+use Spatie\Multitenancy\Contracts\IsTenant;
+use Spatie\Multitenancy\Models\Concerns\ImplementsTenant;
+
+class Team extends JetstreamTeam implements IsTenant
+{
+    use HasFactory;
+    use UsesLandlordConnection;
+    use ImplementsTenant;
+}
 ```
 
 ## Performing actions when a tenant gets created
@@ -40,26 +68,3 @@ class CustomTenantModel extends Tenant
     }
 }
 ```
-
-## How to create a tenant by any model
-
-You can't extend our `Tenant` model in many cases. An example could be when you like to use our package with Team features offered by  Laravel Jetstream, so your Team model is also your Tenant.
-
-To accomplish that, you can implement the contract `IsTenant` with our ready-to-use trait `ImplementsTenant`. Take a look at this example:
-
-```php
-namespace App\Models;
-
-use Laravel\Jetstream\Team as JetstreamTeam;
-use Spatie\Multitenancy\Contracts\IsTenant;
-use Spatie\Multitenancy\Models\Concerns\ImplementsTenant;
-
-class Team extends JetstreamTeam implements IsTenant
-{
-    use HasFactory;
-    use UsesLandlordConnection;
-    use ImplementsTenant;
-}
-```
-
-That's all.
