@@ -4,8 +4,9 @@ namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Context;
 use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
@@ -14,28 +15,13 @@ use Spatie\Multitenancy\Jobs\TenantAware;
 class MakeQueueTenantAwareAction
 {
     use BindAsCurrentTenant;
+    use UsesMultitenancyConfig;
 
     public function execute(): void
     {
         $this
-            ->listenForJobsBeingQueued()
             ->listenForJobsBeingProcessed()
             ->listenForJobsRetryRequested();
-    }
-
-    protected function listenForJobsBeingQueued(): static
-    {
-        app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
-            $queueable = $payload['data']['command'];
-
-            if (! $this->isTenantAware($queueable)) {
-                return [];
-            }
-
-            return ['tenantId' => app(IsTenant::class)::current()?->getKey()];
-        });
-
-        return $this;
     }
 
     protected function listenForJobsBeingProcessed(): static
@@ -56,9 +42,11 @@ class MakeQueueTenantAwareAction
         return $this;
     }
 
-    protected function isTenantAware(object $queueable): bool
+    protected function isTenantAware(JobProcessing|JobRetryRequested $event): bool
     {
-        $reflection = new \ReflectionClass($this->getJobFromQueueable($queueable));
+        $jobName = $this->getEventPayload($event)['data']['commandName'];
+
+        $reflection = new \ReflectionClass($jobName);
 
         if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
@@ -90,7 +78,7 @@ class MakeQueueTenantAwareAction
 
     protected function findTenant(JobProcessing|JobRetryRequested $event): IsTenant
     {
-        $tenantId = $this->getEventPayload($event)['tenantId'] ?? null;
+        $tenantId = Context::get($this->currentTenantContextKey());
 
         if (! $tenantId) {
             $event->job->delete();
@@ -107,24 +95,9 @@ class MakeQueueTenantAwareAction
         return $tenant;
     }
 
-    protected function getJobFromQueueable(object $queueable)
-    {
-        $job = Arr::get(config('multitenancy.queueable_to_job'), $queueable::class);
-
-        if (! $job) {
-            return $queueable;
-        }
-
-        if (method_exists($queueable, $job)) {
-            return $queueable->{$job}();
-        }
-
-        return $queueable->$job;
-    }
-
     protected function bindOrForgetCurrentTenant(JobProcessing|JobRetryRequested $event): void
     {
-        if (array_key_exists('tenantId', $this->getEventPayload($event))) {
+        if ($this->isTenantAware($event)) {
             $this->bindAsCurrentTenant($this->findTenant($event)->makeCurrent());
 
             return;

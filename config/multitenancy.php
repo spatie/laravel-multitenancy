@@ -67,6 +67,11 @@ return [
     'landlord_database_connection_name' => null,
 
     /*
+     * This key will be used to associate the current tenant in the context
+     */
+    'current_tenant_context_key' => 'tenantId',
+
+    /*
      * This key will be used to bind the current tenant in the container.
      */
     'current_tenant_container_key' => 'currentTenant',
@@ -86,20 +91,6 @@ return [
         'forget_current_tenant_action' => ForgetCurrentTenantAction::class,
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
-    ],
-
-    /*
-     * You can customize the way in which the package resolves the queueable to a job.
-     *
-     * For example, using the package laravel-actions (by Loris Leiva), you can
-     * resolve JobDecorator to getAction() like so: JobDecorator::class => 'getAction'
-     */
-    'queueable_to_job' => [
-        SendQueuedMailable::class => 'mailable',
-        SendQueuedNotifications::class => 'notification',
-        CallQueuedClosure::class => 'closure',
-        CallQueuedListener::class => 'class',
-        BroadcastEvent::class => 'event',
     ],
 
     /*

@@ -2,6 +2,8 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Support\Facades\Context;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
@@ -10,6 +12,8 @@ use Spatie\Multitenancy\Tasks\TasksCollection;
 
 class ForgetCurrentTenantAction
 {
+    use UsesMultitenancyConfig;
+
     public function __construct(
         protected TasksCollection $tasksCollection
     ) {
@@ -35,8 +39,8 @@ class ForgetCurrentTenantAction
 
     protected function clearBoundCurrentTenant(): void
     {
-        $containerKey = config('multitenancy.current_tenant_container_key');
+        app()->forgetInstance($this->currentTenantContainerKey());
 
-        app()->forgetInstance($containerKey);
+        Context::forget($this->currentTenantContextKey());
     }
 }
