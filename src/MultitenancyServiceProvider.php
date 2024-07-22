@@ -2,8 +2,6 @@
 
 namespace Spatie\Multitenancy;
 
-use Illuminate\Log\Context\Repository;
-use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
 use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
