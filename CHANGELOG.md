@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.0 - 2024-07-24
+
+### What's Changed
+
+* Refactor registerTenantFinder method to reduce complexity by @misaf in https://github.com/spatie/laravel-multitenancy/pull/536
+* Contract IsTenant replace Tenant uses by @masterix21 in https://github.com/spatie/laravel-multitenancy/pull/544
+
+### New Contributors
+
+* @misaf made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/536
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/3.2.0...4.0.0
+
 ## 3.2.0 - 2024-03-12
 
 ### What's Changed
