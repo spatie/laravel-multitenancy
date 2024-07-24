@@ -32,7 +32,9 @@ it('will inject the current tenant id in a job', function () {
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
-    expect($this->tenant->id)->toEqual($currentTenantIdInJob);
+
+    expect($this->valuestore->get('tenantIdInContext'))->toBe($this->tenant->getKey())
+        ->and($this->tenant->id)->toEqual($currentTenantIdInJob);
 });
 
 it('will inject the right tenant even when the current tenant switches', function () {
@@ -69,7 +71,7 @@ it('will not make jobs tenant aware if the config settings is set to false', fun
 
     $this->artisan('queue:work --once')->assertExitCode(0);
 
-    $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
     expect($currentTenantIdInJob)->toBeNull();
 });
 
@@ -97,6 +99,6 @@ it('will not make a job tenant aware if it implements NotTenantAware', function 
 
     $this->artisan('queue:work --once')->assertExitCode(0);
 
-    $currentTenantIdInJob = $this->valuestore->get('tenantIdInPayload');
+    $currentTenantIdInJob = $this->valuestore->get('tenantId');
     expect($currentTenantIdInJob)->toBeNull();
 });

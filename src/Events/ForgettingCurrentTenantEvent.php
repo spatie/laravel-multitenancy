@@ -2,12 +2,12 @@
 
 namespace Spatie\Multitenancy\Events;
 
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class ForgettingCurrentTenantEvent
 {
     public function __construct(
-        public Tenant $tenant
+        public IsTenant $tenant
     ) {
     }
 }

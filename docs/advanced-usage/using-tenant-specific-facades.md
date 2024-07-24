@@ -12,12 +12,12 @@ namespace App\Tenancy\SwitchTasks;
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class ClearFacadeInstancesTask implements SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         // tenant is already current
     }
@@ -43,12 +43,12 @@ namespace App\Tenancy\SwitchTasks;
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class ClearFacadeInstancesTask implements SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         // tenant is already current
     }

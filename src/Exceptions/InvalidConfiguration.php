@@ -6,17 +6,17 @@ use Exception;
 
 class InvalidConfiguration extends Exception
 {
-    public static function tenantConnectionDoesNotExist(string $expectedConnectionName): self
+    public static function tenantConnectionDoesNotExist(string $expectedConnectionName): static
     {
         return new static("Could not find a tenant connection named `{$expectedConnectionName}`. Make sure to create a connection with that name in the `connections` key of the `database` config file.");
     }
 
-    public static function tenantConnectionIsEmptyOrEqualsToLandlordConnection(): self
+    public static function tenantConnectionIsEmptyOrEqualsToLandlordConnection(): static
     {
         return new static("`SwitchTenantDatabaseTask` fails because `multitenancy.tenant_database_connection_name` is `null` or equals to `multitenancy.landlord_database_connection_name`.");
     }
 
-    public static function invalidAction(string $actionName, string $configuredClass, string $actionClass): self
+    public static function invalidAction(string $actionName, string $configuredClass, string $actionClass): static
     {
         return new static("The class currently specified in the `multitenancy.actions.{$actionName}` key '{$configuredClass}' should be or extend `{$actionClass}`.");
     }

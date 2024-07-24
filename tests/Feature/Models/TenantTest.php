@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
@@ -34,14 +35,19 @@ it('will bind the current tenant in the container', function () {
 
 it('can forget the current tenant', function () {
     $containerKey = config('multitenancy.current_tenant_container_key');
+    $contextKey = config('multitenancy.current_tenant_context_key');
 
     $this->tenant->makeCurrent();
-    expect(Tenant::current()->id)->toEqual($this->tenant->id);
-    expect(app()->has($containerKey))->toBeTrue();
+
+    expect(Tenant::current()->id)->toEqual($this->tenant->id)
+        ->and(app()->has($containerKey))->toBeTrue()
+        ->and(Context::get($contextKey))->toEqual($this->tenant->id);
 
     Tenant::forgetCurrent();
-    expect(Tenant::current())->toBeNull();
-    expect(app())->has($containerKey)->toBeFalse();
+
+    expect(Tenant::current())->toBeNull()
+        ->and(app())->has($containerKey)->toBeFalse()
+        ->and(Context::get($contextKey))->toBeNull();
 });
 
 it('can check if a current tenant has been set', function () {

@@ -3,11 +3,11 @@
 namespace Spatie\Multitenancy;
 
 use Illuminate\Database\Eloquent\Collection;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class TenantCollection extends Collection
 {
-    public function eachCurrent(callable $callable): self
+    public function eachCurrent(callable $callable): static
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'each',
@@ -15,7 +15,7 @@ class TenantCollection extends Collection
         );
     }
 
-    public function filterCurrent(callable $callable): self
+    public function filterCurrent(callable $callable): static
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'filter',
@@ -23,7 +23,7 @@ class TenantCollection extends Collection
         );
     }
 
-    public function mapCurrent(callable $callable): self
+    public function mapCurrent(callable $callable): static
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'map',
@@ -31,7 +31,7 @@ class TenantCollection extends Collection
         );
     }
 
-    public function rejectCurrent(callable $callable): self
+    public function rejectCurrent(callable $callable): static
     {
         return $this->performCollectionMethodWhileMakingTenantsCurrent(
             operation: 'reject',
@@ -39,9 +39,9 @@ class TenantCollection extends Collection
         );
     }
 
-    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): self
+    protected function performCollectionMethodWhileMakingTenantsCurrent(string $operation, callable $callable): static
     {
-        $collection = $this->$operation(fn (Tenant $tenant) => $tenant->execute($callable));
+        $collection = $this->$operation(fn (IsTenant $tenant) => $tenant->execute($callable));
 
         return new static($collection->items);
     }

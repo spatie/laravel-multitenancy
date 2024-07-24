@@ -3,7 +3,7 @@
 namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrateTenantAction
@@ -14,28 +14,28 @@ class MigrateTenantAction
 
     protected OutputInterface $output;
 
-    public function fresh(bool $fresh = true): self
+    public function fresh(bool $fresh = true): static
     {
         $this->fresh = $fresh;
 
         return $this;
     }
 
-    public function seed(bool $seed = true): self
+    public function seed(bool $seed = true): static
     {
         $this->seed = $seed;
 
         return $this;
     }
 
-    public function output(OutputInterface $output): self
+    public function output(OutputInterface $output): static
     {
         $this->output = $output;
 
         return $this;
     }
 
-    public function execute(Tenant $tenant): self
+    public function execute(IsTenant $tenant): static
     {
         $tenant->execute(function () {
             $migrationCommand = $this->fresh ? 'migrate:fresh' : 'migrate';

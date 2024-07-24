@@ -8,11 +8,9 @@ A task is any class that implements `Spatie\Multitenancy\Tasks\SwitchTenantTask`
 ```php
 namespace Spatie\Multitenancy\Tasks;
 
-use Spatie\Multitenancy\Models\Tenant;
-
-interface SwitchTenantTask
+use Spatie\Multitenancy\Contracts\IsTenant;interface SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant): void;
+    public function makeCurrent(IsTenant $tenant): void;
 
     public function forgetCurrent(): void;
 }
@@ -27,7 +25,7 @@ Here is an example implementation where we are going to use a prefix when a tena
 ```php
 namespace Spatie\Multitenancy\Tasks;
 
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class PrefixCacheTask implements SwitchTenantTask
 {
@@ -36,7 +34,7 @@ class PrefixCacheTask implements SwitchTenantTask
         $this->originalPrefix ??= config('cache.prefix');
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         $this->setCachePrefix("tenant_{$tenant->id}");
     }

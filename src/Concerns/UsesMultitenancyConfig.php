@@ -17,6 +17,11 @@ trait UsesMultitenancyConfig
         return config('multitenancy.landlord_database_connection_name') ?? config('database.default');
     }
 
+    public function currentTenantContextKey(): string
+    {
+        return config('multitenancy.current_tenant_context_key');
+    }
+
     public function currentTenantContainerKey(): string
     {
         return config('multitenancy.current_tenant_container_key');

@@ -9,11 +9,10 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class MultitenancyServiceProvider extends PackageServiceProvider
 {
-    use UsesTenantModel;
     use UsesMultitenancyConfig;
 
     public function configurePackage(Package $package): void
@@ -27,15 +26,24 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        $this->app->bind(IsTenant::class, config('multitenancy.tenant_model'));
+
         $this->app->bind(Multitenancy::class, fn ($app) => new Multitenancy($app));
 
+        $this->detectsLaravelOctane();
+    }
+
+    protected function detectsLaravelOctane(): static
+    {
         if (! isset($_SERVER['LARAVEL_OCTANE'])) {
             app(Multitenancy::class)->start();
 
-            return;
+            return $this;
         }
 
         Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
         Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
+
+        return $this;
     }
 }

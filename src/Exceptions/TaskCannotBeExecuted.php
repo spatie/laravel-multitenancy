@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class TaskCannotBeExecuted extends Exception
 {
-    public static function make(SwitchTenantTask $task, string $reason): self
+    public static function make(SwitchTenantTask $task, string $reason): static
     {
         $taskClass = $task::class;
 

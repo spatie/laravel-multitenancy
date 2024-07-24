@@ -17,15 +17,15 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^10.0|^11.0",
+        "illuminate/support": "^11.0",
         "spatie/laravel-package-tools": "^1.9"
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.0.4",
-        "laravel/octane": "^2.3",
+        "laravel/octane": "^2.5",
         "laravel/serializable-closure": "^1.1",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^8.0|^9.0",
+        "orchestra/testbench": "^9.0",
         "pestphp/pest": "^2.34",
         "spatie/valuestore": "^1.2"
     },

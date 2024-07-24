@@ -12,7 +12,7 @@ class CurrentTenantCouldNotBeDeterminedInTenantAwareJob extends Exception
         return new static("The current tenant could not be determined in a job named `" . $event->job->getName() . "`. No `tenantId` was set in the payload.");
     }
 
-    public static function noTenantFound(JobProcessing $event): self
+    public static function noTenantFound(JobProcessing $event): static
     {
         return new static("The current tenant could not be determined in a job named `" . $event->job->getName() . "`. The tenant finder could not find a tenant.");
     }

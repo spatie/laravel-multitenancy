@@ -8,7 +8,7 @@ use Spatie\Multitenancy\Jobs\TenantAware;
 
 class MailableTenantAware extends Mailable implements ShouldQueue, TenantAware
 {
-    public function build()
+    public function build(): Mailable
     {
         return $this->view('mailable');
     }

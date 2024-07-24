@@ -28,7 +28,7 @@ app('currentTenant') // will return the current tenant or `null`
 You can create a tenant finder of your own. A valid tenant finder is any class that extends `Spatie\Multitenancy\TenantFinder\TenantFinder`. You must implement this abstract method:
 
 ```php
-abstract public function findForRequest(Request $request): ?Tenant;
+abstract public function findForRequest(Request $request): ?IsTenant;
 ```
 
 Here's how the default `DomainTenantFinder` is implemented. The `getTenantModel` returns an instance of the class specified in the `tenant_model` key of the `multitenancy` config file.
@@ -37,18 +37,15 @@ Here's how the default `DomainTenantFinder` is implemented. The `getTenantModel`
 namespace Spatie\Multitenancy\TenantFinder;
 
 use Illuminate\Http\Request;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class DomainTenantFinder extends TenantFinder
 {
-    use UsesTenantModel;
-
-    public function findForRequest(Request $request):?Tenant
+    public function findForRequest(Request $request): ?IsTenant
     {
         $host = $request->getHost();
 
-        return $this->getTenantModel()::whereDomain($host)->first();
+        return app(IsTenant::class)::whereDomain($host)->first();
     }
 }
 ```

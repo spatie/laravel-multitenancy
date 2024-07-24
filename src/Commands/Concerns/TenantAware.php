@@ -4,20 +4,19 @@ namespace Spatie\Multitenancy\Commands\Concerns;
 
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 trait TenantAware
 {
     use UsesMultitenancyConfig;
-    use UsesTenantModel;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tenants = Arr::wrap($this->option('tenant'));
 
-        $tenantQuery = $this->getTenantModel()::query()
+        $tenantQuery = app(IsTenant::class)::query()
             ->when(! blank($tenants), function ($query) use ($tenants) {
                 collect($this->getTenantArtisanSearchFields())
                     ->each(fn ($field) => $query->orWhereIn($field, $tenants));
@@ -31,7 +30,7 @@ trait TenantAware
 
         return $tenantQuery
             ->cursor()
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
+            ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
 }
