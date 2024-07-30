@@ -135,32 +135,36 @@ return [
 
 To prevent users from a tenant abusing their session to access another tenant, you must use the `Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession` middleware on all tenant-aware routes.
 
-If all your application routes are tenant-aware, you can add it to your global middleware in `app\Http\Kernel.php`
+If all your application routes are tenant-aware, you can add it to your global middleware in `bootstrap/app.php`
 
 ```php
-// in `app\Http\Kernel.php`
+// in `bootstrap/app.php`
 
-protected $middlewareGroups = [
-    'web' => [
-        // ...
-        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
-        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
-    ]
-];
+return Application::configure(basePath: dirname(__DIR__))
+    // ...
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware
+            ->appendToGroup('web', [
+                \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+                \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
+            ]);
+    });
 ```
 
 If only some routes are tenant-aware, create a new middleware group:
 
 ```php
-// in `app\Http\Kernel.php`
+// in `bootstrap/app.php`
 
-protected $middlewareGroups = [
+return Application::configure(basePath: dirname(__DIR__))
     // ...
-    'tenant' => [
-        \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
-        \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
-    ]
-];
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware
+            ->group('tenant', [
+                \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+                \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
+            ]);
+    });
 ```
 
 Then apply the group to the appropriate routes:
