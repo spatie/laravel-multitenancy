@@ -71,7 +71,7 @@ return [
      */
     'current_tenant_container_key' => 'currentTenant',
 
-    /**
+    /*
      * Set it to `true` if you like to cache the tenant(s) routes
      * in a shared file using the `SwitchRouteCacheTask`.
      */
