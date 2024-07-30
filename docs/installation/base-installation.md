@@ -144,7 +144,7 @@ return Application::configure(basePath: dirname(__DIR__))
     // ...
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
-            ->appendToGroup('web', [
+            ->web(append: [
                 \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
                 \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
             ]);
