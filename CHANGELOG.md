@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.1 - 2024-08-19
+
+* Fix NotTenantAware notifications, mailables, closures, listeners & broadcast events in a default tenant aware application
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.0...4.0.1
+
 ## 4.0.0 - 2024-07-24
 
 ### What's Changed
