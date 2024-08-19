@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Mail;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\MailableNotTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\MailableTenantAware;
 
 beforeEach(function () {
@@ -18,6 +19,16 @@ it('will fail when no tenant is present and mailables are tenant aware by defaul
 
     Mail::to('test@spatie.be')->queue(new MailableTenantAware());
 })->throws(CurrentTenantCouldNotBeDeterminedInTenantAwareJob::class);
+
+it('will not fail when no tenant is present and mailables are tenant aware by default', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+
+    Mail::to('test@spatie.be')->queue(new MailableNotTenantAware());
+
+    $this->expectExceptionMessage("Method Illuminate\Mail\Mailer::assertSentCount does not exist.");
+
+    Mail::assertSentCount(1);
+});
 
 it('will inject the current tenant id', function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);

@@ -2,8 +2,12 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Notifications\SendQueuedNotifications;
+use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
 use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
@@ -44,9 +48,13 @@ class MakeQueueTenantAwareAction
 
     protected function isTenantAware(JobProcessing|JobRetryRequested $event): bool
     {
-        $jobName = $this->getEventPayload($event)['data']['commandName'];
+        $payload = $this->getEventPayload($event);
 
-        $reflection = new \ReflectionClass($jobName);
+        $command = unserialize($payload['data']['command']);
+
+        $job = $this->getJobFromQueueable($command);
+
+        $reflection = new \ReflectionClass($job);
 
         if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
@@ -65,6 +73,21 @@ class MakeQueueTenantAwareAction
         }
 
         return config('multitenancy.queues_are_tenant_aware_by_default') === true;
+    }
+
+    protected function getJobFromQueueable(object $queueable)
+    {
+        $job = Arr::get(config('multitenancy.queueable_to_job'), $queueable::class);
+
+        if (! $job) {
+            return $queueable;
+        }
+
+        if (method_exists($queueable, $job)) {
+            return $queueable->{$job}();
+        }
+
+        return $queueable->$job;
     }
 
     protected function getEventPayload($event): ?array
