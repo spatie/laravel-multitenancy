@@ -1,18 +1,13 @@
 <?php
 
-use Illuminate\Auth\Events\Authenticated;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\BroadcastNotTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\BroadcastTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\ListenerNotTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\ListenerTenantAware;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\MailableNotTenantAware;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\MailableTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestEvent;
 
 beforeEach(function () {

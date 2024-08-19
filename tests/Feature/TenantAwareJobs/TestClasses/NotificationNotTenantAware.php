@@ -7,7 +7,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
-use Spatie\Multitenancy\Jobs\TenantAware;
 
 class NotificationNotTenantAware extends Notification implements ShouldQueue, NotTenantAware
 {

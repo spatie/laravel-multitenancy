@@ -2,9 +2,6 @@
 
 namespace Spatie\Multitenancy\Actions;
 
-use Illuminate\Mail\SendQueuedMailable;
-use Illuminate\Notifications\SendQueuedNotifications;
-use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
