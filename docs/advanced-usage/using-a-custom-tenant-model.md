@@ -25,7 +25,7 @@ You should specify the class name of your model in the `tenant_model` key of the
 
 You don't have to extend our `Tenant` model. For example if you use Laravel Jetstream, then you probably want to use `Team` model provided by that package as your tenant model.
 
-To accomplish that, you can implement the `IsTenant` interface and use trait `ImplementsTenant` to fulfill that intervace. 
+To accomplish that, you can implement the `IsTenant` interface and use trait `ImplementsTenant` to fulfill that interface. 
 
 Here's an example:
 
