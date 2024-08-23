@@ -47,7 +47,21 @@ class MakeQueueTenantAwareAction
     {
         $payload = $this->getEventPayload($event);
 
-        $command = unserialize($payload['data']['command']);
+        try {
+            $command = unserialize($payload['data']['command']);
+        } catch (\Throwable) {
+            /**
+             * We might need the tenant to unserialize jobs as models could
+             * have global scopes set that require a current tenant to
+             * be active. bindOrForgetCurrentTenant wil reset it.
+             */
+            if ($tenantId = Context::get($this->currentTenantContextKey())) {
+                $tenant = app(IsTenant::class)::find($tenantId);
+                $tenant?->makeCurrent();
+            }
+
+            $command = unserialize($payload['data']['command']);
+        }
 
         $job = $this->getJobFromQueueable($command);
 
