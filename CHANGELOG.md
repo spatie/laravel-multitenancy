@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.2 - 2024-08-23
+
+### What's Changed
+
+* Update using-a-custom-tenant-model.md by @thoresuenert in https://github.com/spatie/laravel-multitenancy/pull/553
+* Fix an exception when requiring a tenant to be active to unserialize a model
+
+### New Contributors
+
+* @thoresuenert made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/553
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.1...4.0.2
+
 ## 4.0.1 - 2024-08-19
 
 * Fix NotTenantAware notifications, mailables, closures, listeners & broadcast events in a default tenant aware application
