@@ -8,7 +8,9 @@ A task is any class that implements `Spatie\Multitenancy\Tasks\SwitchTenantTask`
 ```php
 namespace Spatie\Multitenancy\Tasks;
 
-use Spatie\Multitenancy\Contracts\IsTenant;interface SwitchTenantTask
+use Spatie\Multitenancy\Contracts\IsTenant;
+
+interface SwitchTenantTask
 {
     public function makeCurrent(IsTenant $tenant): void;
 
