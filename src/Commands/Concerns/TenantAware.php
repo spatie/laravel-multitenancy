@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Commands\Concerns;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
@@ -31,7 +32,7 @@ trait TenantAware
         $tenantDriver = config('database.connections.'.app(IsTenant::class)->getConnectionName().'.driver');
 
         return $tenantQuery
-            ->when($tenantDriver === 'sqlite', fn ($q) => $q->get(), fn ($q) => $q->cursor())
+            ->when($tenantDriver === 'sqlite', fn (Builder $query) => $query->get(), fn (Builder $query) => $query->cursor())
             ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
