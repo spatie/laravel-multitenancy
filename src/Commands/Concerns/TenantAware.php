@@ -28,8 +28,10 @@ trait TenantAware
             return -1;
         }
 
+        $tenantDriver = config('database.connections.'.app(IsTenant::class)->getConnectionName().'.driver');
+
         return $tenantQuery
-            ->cursor()
+            ->when($tenantDriver === 'sqlite', fn ($q) => $q->get(), fn ($q) => $q->cursor())
             ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
