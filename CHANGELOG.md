@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.3 - 2024-12-22
+
+### What's Changed
+
+* Docs: Fix formatting in interface code block by @inmanturbo in https://github.com/spatie/laravel-multitenancy/pull/560
+* Show name of the job in the Exception by @michaelnabil230 in https://github.com/spatie/laravel-multitenancy/pull/570
+
+### New Contributors
+
+* @michaelnabil230 made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/570
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.2...4.0.3
+
 ## 4.0.2 - 2024-08-23
 
 ### What's Changed
