@@ -6,12 +6,14 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
+use ReflectionClass;
 use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
+use Throwable;
 
 class MakeQueueTenantAwareAction
 {
@@ -49,7 +51,7 @@ class MakeQueueTenantAwareAction
 
         try {
             $command = unserialize($payload['data']['command']);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             /**
              * We might need the tenant to unserialize jobs as models could
              * have global scopes set that require a current tenant to
@@ -65,7 +67,7 @@ class MakeQueueTenantAwareAction
 
         $job = $this->getJobFromQueueable($command);
 
-        $reflection = new \ReflectionClass($job);
+        $reflection = new ReflectionClass($job);
 
         if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
