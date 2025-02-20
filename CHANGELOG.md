@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.4 - 2025-02-20
+
+### What's Changed
+
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-multitenancy/pull/580
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.3...4.0.4
+
 ## 4.0.3 - 2024-12-22
 
 ### What's Changed
