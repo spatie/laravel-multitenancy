@@ -38,6 +38,7 @@ In the example below, the `mysql` driver is used, but you can use any driver you
         'password' => '',
         // And other options if needed ...
     ],
+],
 ```
 
 ### Migrating the landlord database
