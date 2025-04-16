@@ -1,8 +1,18 @@
-# An unopinionated multitenancy package for Laravel apps
+<div align="left">
+    <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-multitenancy">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-multitenancy/html/dark.webp?1">
+        <img alt="Logo for laravel-multitenancy" src=" https://spatie.be/packages/header/laravel-multitenancy/html/light.webp?1" height="190">
+      </picture>
+    </a>
+
+<h1>Unopinionated multitenancy package for Laravel</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-multitenancy)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-multitenancy/run-tests.yml?branch=main&label=Tests&style=flat-square)](https://github.com/spatie/laravel-multitenancy/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-multitenancy)
+    
+</div>
 
 This package can make a Laravel app tenant aware. The philosophy of this package is that it should only provide the bare essentials to enable multitenancy.
 
