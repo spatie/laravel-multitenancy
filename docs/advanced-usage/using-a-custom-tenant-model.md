@@ -44,6 +44,34 @@ class Team extends JetstreamTeam implements IsTenant
 }
 ```
 
+## Option 3: Using a model as both tenant and landlord
+
+It automatically detects when logged in as a `Tenant` or `Landlord`. It automatically sets the database connection name.
+
+With this method, the database connection error that occurs when matching roles and permissions while using the `Laravel spatie/permission ` package is also prevented.
+
+With this method, you do not need to use different Models that use the same table name on the `Landlord` and `Tenant` sides.
+
+You can use this instead of `Option 2`.
+
+To accomplish that use trait `UsesBothConnection` 
+
+Here's an example:
+
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Role as SpatieRole;
+use Spatie\Multitenancy\Models\Concerns\UsesBothConnection;
+
+class Role extends SpatieRole
+{
+    use HasFactory;
+    use UsesBothConnection;
+}
+```
+
 ## Performing actions when a tenant gets created
 
 You can leverage Eloquent's lifecycle callbacks to execute extra logic when a tenant gets created, updated, deleted, ...

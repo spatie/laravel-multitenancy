@@ -4,6 +4,7 @@ namespace Spatie\Multitenancy\Concerns;
 
 use Illuminate\Support\Arr;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
+use Spatie\Multitenancy\Models\Tenant;
 
 trait UsesMultitenancyConfig
 {
@@ -45,5 +46,12 @@ trait UsesMultitenancyConfig
     public function getTenantArtisanSearchFields(): array
     {
         return Arr::wrap(config('multitenancy.tenant_artisan_search_fields'));
+    }
+
+    public function getDedectedDatabaseConnectionName(): ?string
+    {
+        return Tenant::checkCurrent()
+            ? $this->tenantDatabaseConnectionName()
+            : $this->landlordDatabaseConnectionName();
     }
 }
