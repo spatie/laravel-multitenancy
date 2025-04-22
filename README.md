@@ -2,7 +2,7 @@
     <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-multitenancy">
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-multitenancy/html/dark.webp?1">
-        <img alt="Logo for laravel-multitenancy" src=" https://spatie.be/packages/header/laravel-multitenancy/html/light.webp?1" height="190">
+        <img alt="Logo for laravel-multitenancy" src="https://spatie.be/packages/header/laravel-multitenancy/html/light.webp?1" height="190">
       </picture>
     </a>
 
