@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
@@ -48,9 +49,15 @@ class MakeQueueTenantAwareAction
     protected function isTenantAware(JobProcessing|JobRetryRequested $event): bool
     {
         $payload = $this->getEventPayload($event);
+        
+        $serializedCommand = $payload['data']['command'];
+
+        if (!str_starts_with($serializedCommand, 'O:')) {
+            $serializedCommand = app(Encrypter::class)->decrypt($serializedCommand);
+        }
 
         try {
-            $command = unserialize($payload['data']['command']);
+            $command = unserialize($serializedCommand);
         } catch (Throwable) {
             /**
              * We might need the tenant to unserialize jobs as models could
@@ -62,7 +69,7 @@ class MakeQueueTenantAwareAction
                 $tenant?->makeCurrent();
             }
 
-            $command = unserialize($payload['data']['command']);
+            $command = unserialize($serializedCommand);
         }
 
         $job = $this->getJobFromQueueable($command);
