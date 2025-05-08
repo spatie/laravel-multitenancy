@@ -4,6 +4,7 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Event;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\EncryptedTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
@@ -101,4 +102,17 @@ it('will not make a job tenant aware if it implements NotTenantAware', function 
 
     $currentTenantIdInJob = $this->valuestore->get('tenantId');
     expect($currentTenantIdInJob)->toBeNull();
+});
+
+it('will decrypt encrypted jobs', function () {
+    config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
+
+    $this->tenant->makeCurrent();
+
+    $job = new EncryptedTenantAware($this->valuestore);
+    app(Dispatcher::class)->dispatch($job);
+
+    $this->artisan('queue:work --once')->assertExitCode(0);
+
+    Event::assertNotDispatched(JobFailed::class);
 });
