@@ -49,10 +49,10 @@ class MakeQueueTenantAwareAction
     protected function isTenantAware(JobProcessing|JobRetryRequested $event): bool
     {
         $payload = $this->getEventPayload($event);
-        
+
         $serializedCommand = $payload['data']['command'];
 
-        if (!str_starts_with($serializedCommand, 'O:')) {
+        if (! str_starts_with($serializedCommand, 'O:')) {
             $serializedCommand = app(Encrypter::class)->decrypt($serializedCommand);
         }
 
