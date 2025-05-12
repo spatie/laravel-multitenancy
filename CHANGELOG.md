@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.5 - 2025-05-12
+
+### What's Changed
+
+* Update using-multiple-databases.md by @najbo in https://github.com/spatie/laravel-multitenancy/pull/584
+* [Bugfix]: Jobs with `ShouldBeEncrypted` need to be decrypted by @Joel-Jensen in https://github.com/spatie/laravel-multitenancy/pull/588
+
+### New Contributors
+
+* @najbo made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/584
+* @Joel-Jensen made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/588
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.4...4.0.5
+
 ## 4.0.4 - 2025-02-20
 
 ### What's Changed
