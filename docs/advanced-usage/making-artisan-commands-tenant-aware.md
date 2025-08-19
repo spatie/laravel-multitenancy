@@ -67,10 +67,33 @@ php artisan tenants:artisan "migrate --seed" --tenant=123
 ```
 
 ### Using `before`
-When using `TenantAware`, the same command instance is executed for each tenant.
-This means that instance properties will retain their values between tenant executions unless explicitly reset.
 
-As a fluent solution, you can implement the `before` method, which is called before each tenant execution of the command.
+The `before` method offers a fluent way to execute code before each tenant execution. 
+This is particularly helpful when you need to reset variables or fluently encapsulate logic before each tenant execution 
+as state is persisted between tenant executions.
 
-This is useful for resetting variables or fluently encapsulating logic before each tenant execution.
+```php
+use Illuminate\Console\Command;
+use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 
+class YourFavoriteCommand extends Command
+{
+use TenantAware;
+
+    protected $signature = 'your-favorite-command {--tenant=*}';
+
+    protected int $counter = 0;
+
+    public function handle()
+    {
+        $this->incrementCounter();
+
+        return $this->line('Counter: '. $this->counter);
+    }
+
+    public function before(): void
+    {
+        $this->counter = 0;
+    }
+}
+```
