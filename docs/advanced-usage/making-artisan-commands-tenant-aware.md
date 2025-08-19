@@ -65,3 +65,12 @@ If the command only needs to run for a specific tenant, you can pass its `id` to
 ```bash
 php artisan tenants:artisan "migrate --seed" --tenant=123
 ```
+
+### Using `before`
+When using `TenantAware`, the same command instance is executed for each tenant.
+This means that instance properties will retain their values between tenant executions unless explicitly reset.
+
+As a fluent solution, you can implement the `before` method, which is called before each tenant execution of the command.
+
+This is useful for resetting variables or fluently encapsulating logic before each tenant execution.
+

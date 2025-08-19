@@ -23,3 +23,11 @@ it('works with no tenant parameters', function () {
         ->expectsOutput('Tenant ID is ' . $this->tenant->id)
         ->expectsOutput('Tenant ID is ' . $this->anotherTenant->id);
 });
+
+it('before is called', function () {
+    $this
+        ->artisan('tenant:before')
+        ->assertExitCode(0)
+        ->expectsOutput('Tenant count is: ' . 1)
+        ->expectsOutput('Tenant count is: ' . 1);
+});
