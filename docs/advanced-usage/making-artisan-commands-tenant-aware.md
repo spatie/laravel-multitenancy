@@ -65,3 +65,39 @@ If the command only needs to run for a specific tenant, you can pass its `id` to
 ```bash
 php artisan tenants:artisan "migrate --seed" --tenant=123
 ```
+
+### State Persistence
+When using `TenantAware`, the same command instance is executed for each tenant.
+This means that instance properties will retain their values between tenant executions unless explicitly reset.
+
+
+```php
+use Illuminate\Console\Command;
+use Spatie\Multitenancy\Commands\Concerns\TenantAware;
+
+class YourFavoriteCommand extends Command
+{
+use TenantAware;
+
+    protected $signature = 'your-favorite-command {--tenant=*}';
+
+    protected int $counter = 0;
+
+    public function handle()
+    {
+        // Reset state at the beginning of each tenant execution
+        $this->counter = 0;
+
+        // Without the reset above, $counter would start at the value 
+        // from the previous tenant's execution
+        $this->incrementCounter();
+
+        return $this->line('Counter: '. $this->counter);
+    }
+
+    public function incrementCounter()
+    {
+        $this->counter++;
+    }
+}
+```
