@@ -5,6 +5,11 @@ namespace Spatie\Multitenancy;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Multitenancy\Contracts\IsTenant;
 
+/**
+ * @template TKey of array-key
+ * @template TValue of IsTenant
+ * @extends Collection<TKey, TValue>
+ */
 class TenantCollection extends Collection
 {
     public function eachCurrent(callable $callable): static
