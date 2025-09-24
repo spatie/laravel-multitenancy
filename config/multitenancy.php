@@ -1,8 +1,10 @@
 <?php
 
+use Spatie\Multitenancy\Jobs\TenantAware;
 use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
+use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\CallQueuedClosure;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
@@ -106,6 +108,16 @@ return [
         CallQueuedListener::class => 'class',
         BroadcastEvent::class => 'event',
     ],
+
+    /*
+    * Interface that once implemented, will make the job tenant aware
+    */
+    `tenant_aware_interface` => TenantAware::class,
+
+    /*
+     * Interface that once implemented, will make the job not tenant aware
+     */
+    `not_tenant_aware_interface` => NotTenantAware::class,
 
     /*
      * Jobs tenant aware even if these don't implement the TenantAware interface.
