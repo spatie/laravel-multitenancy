@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.7 - 2025-09-26
+
+### What's Changed
+
+* Fix syntax for tenant aware interface config by @danharrin in https://github.com/spatie/laravel-multitenancy/pull/608
+
+### New Contributors
+
+* @danharrin made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/608
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.6...4.0.7
+
 ## 4.0.6 - 2025-09-26
 
 ### What's Changed
