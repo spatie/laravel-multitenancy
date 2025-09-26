@@ -2,6 +2,23 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.6 - 2025-09-26
+
+### What's Changed
+
+* Command state persistence with `TenantAware` by @SethSharp in https://github.com/spatie/laravel-multitenancy/pull/602
+* Add types to TenantCollection by @markieo1 in https://github.com/spatie/laravel-multitenancy/pull/596
+* Update issue template by @AlexVanderbist in https://github.com/spatie/laravel-multitenancy/pull/603
+* feat: Add configuration option to specify `TenantAware` and `NotTenantAware` interfaces by @przemyslaw-przylucki in https://github.com/spatie/laravel-multitenancy/pull/607
+
+### New Contributors
+
+* @SethSharp made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/602
+* @markieo1 made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/596
+* @przemyslaw-przylucki made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/607
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.5...4.0.6
+
 ## 4.0.5 - 2025-05-12
 
 ### What's Changed
