@@ -112,12 +112,12 @@ return [
     /*
     * Interface that once implemented, will make the job tenant aware
     */
-    `tenant_aware_interface` => TenantAware::class,
+    'tenant_aware_interface' => TenantAware::class,
 
     /*
      * Interface that once implemented, will make the job not tenant aware
      */
-    `not_tenant_aware_interface` => NotTenantAware::class,
+    'not_tenant_aware_interface' => NotTenantAware::class,
 
     /*
      * Jobs tenant aware even if these don't implement the TenantAware interface.
