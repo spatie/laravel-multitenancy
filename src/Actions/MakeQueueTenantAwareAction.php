@@ -76,11 +76,11 @@ class MakeQueueTenantAwareAction
 
         $reflection = new ReflectionClass($job);
 
-        if ($reflection->implementsInterface(TenantAware::class)) {
+        if ($reflection->implementsInterface(config('multitenancy.tenant_aware_interface', TenantAware::class))) {
             return true;
         }
 
-        if ($reflection->implementsInterface(NotTenantAware::class)) {
+        if ($reflection->implementsInterface(config('multitenancy.not_tenant_aware_interface', NotTenantAware::class))) {
             return false;
         }
 
