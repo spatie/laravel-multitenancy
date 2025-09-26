@@ -2,12 +2,12 @@
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
-use Spatie\Valuestore\Valuestore;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\CustomTenantAware;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\CustomNotTenantAware;
-use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJobCustomTenantAware;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\CustomTenantAware;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJobCustomNotTenantAware;
+use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\TestJobCustomTenantAware;
+use Spatie\Valuestore\Valuestore;
 
 beforeEach(function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
