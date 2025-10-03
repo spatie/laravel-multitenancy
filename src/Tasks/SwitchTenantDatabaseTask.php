@@ -36,6 +36,7 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
 
         config([
             "database.connections.{$tenantConnectionName}.database" => $databaseName,
+            "database.default" => $tenantConnectionName,
         ]);
 
         app('db')->extend($tenantConnectionName, function ($config, $name) use ($databaseName) {
