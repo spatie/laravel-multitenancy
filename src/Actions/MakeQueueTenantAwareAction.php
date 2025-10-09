@@ -141,7 +141,11 @@ class MakeQueueTenantAwareAction
     protected function bindOrForgetCurrentTenant(JobProcessing|JobRetryRequested $event): void
     {
         if ($this->isTenantAware($event)) {
-            $this->bindAsCurrentTenant($this->findTenant($event)->makeCurrent());
+            $tenant = $this->findTenant($event);
+
+            $tenant->makeCurrent();
+
+            $this->bindAsCurrentTenant($tenant);
 
             return;
         }
