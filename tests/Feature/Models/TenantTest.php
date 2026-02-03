@@ -136,6 +136,44 @@ it('will execute a callable and then restore the previous state', function () {
     expect($this->tenant->id)->toEqual($response);
 });
 
+it('will execute a callable and then restore the previous state when the callable throws an exception', function () {
+    Tenant::forgetCurrent();
+
+    expect(Tenant::current())->toBeNull();
+
+    try {
+        $this->tenant->execute(function (Tenant $tenant) {
+            expect(Tenant::current()->id)->toEqual($tenant->id);
+
+            throw new Exception('Exception on execute.');
+        });
+    } catch (Exception $e) {
+        expect($e->getMessage())->toBe('Exception on execute.');
+    }
+
+    expect(Tenant::current())->toBeNull();
+});
+
+it('will restore the original tenant when the callable throws an exception', function () {
+    /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+    $anotherTenant = Tenant::factory()->create();
+    $anotherTenant->makeCurrent();
+
+    expect(Tenant::current()->id)->toBe($anotherTenant->id);
+
+    try {
+        $this->tenant->execute(function (Tenant $tenant) {
+            expect(Tenant::current()->id)->toEqual($tenant->id);
+
+            throw new Exception('Exception on execute.');
+        });
+    } catch (Exception $e) {
+        expect($e->getMessage())->toBe('Exception on execute.');
+    }
+
+    expect(Tenant::current()->id)->toEqual($anotherTenant->id);
+});
+
 it('will execute a delayed callback in tenant context', function () {
     Tenant::forgetCurrent();
 
@@ -153,4 +191,26 @@ it('will execute a delayed callback in tenant context', function () {
     expect(Tenant::current())->toBeNull();
 
     expect($this->tenant->id)->toBe($response);
+});
+
+it('will execute a delayed callback in tenant context when the callable throws an exception', function () {
+    Tenant::forgetCurrent();
+
+    expect(Tenant::current())->toBeNull();
+
+    $callback = $this->tenant->callback(function (Tenant $tenant) {
+        expect(Tenant::current()->id)->toEqual($tenant->id);
+
+        throw new Exception('Exception on execute.');
+    });
+
+    expect(Tenant::current())->toBeNull();
+
+    try {
+        $callback();
+    } catch (Exception $e) {
+        expect($e->getMessage())->toBe('Exception on execute.');
+    }
+
+    expect(Tenant::current())->toBeNull();
 });
