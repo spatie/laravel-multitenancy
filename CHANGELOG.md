@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.8 - 2026-02-09
+
+### What's Changed
+
+* Fix tenant context not being restored when exception occurs in `execute()` by @moisish in https://github.com/spatie/laravel-multitenancy/pull/622
+
+### New Contributors
+
+* @moisish made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/622
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.7...4.0.8
+
 ## 4.0.7 - 2025-09-26
 
 ### What's Changed
