@@ -83,7 +83,7 @@ trait ImplementsTenant
 
         try {
             return $callable($this);
-        }finally {
+        } finally {
             $originalCurrentTenant
                 ? $originalCurrentTenant->makeCurrent()
                 : static::forgetCurrent();
