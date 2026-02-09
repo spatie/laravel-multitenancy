@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 class TasksCollection extends Collection
 {
-    public function __construct($taskClassNames)
+    public function __construct($taskClassNames = [])
     {
         $tasks = collect($taskClassNames)
             ->map(function ($taskParameters, $taskClass) {
