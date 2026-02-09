@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.0.9 - 2026-02-09
+
+### What's Changed
+
+* Fix #617: Add default value for TasksCollection constructor parameter by @freekmurze in https://github.com/spatie/laravel-multitenancy/pull/625
+* Fix #620: Handle JobRetryRequested in queue tenant awareness by @freekmurze in https://github.com/spatie/laravel-multitenancy/pull/624
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.0.8...4.0.9
+
 ## 4.0.8 - 2026-02-09
 
 ### What's Changed
