@@ -124,13 +124,17 @@ class MakeQueueTenantAwareAction
         $tenantId = Context::get($this->currentTenantContextKey());
 
         if (! $tenantId) {
-            $event->job->delete();
+            if ($event instanceof JobProcessing) {
+                $event->job->delete();
+            }
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
         }
 
         if (! $tenant = app(IsTenant::class)::find($tenantId)) {
-            $event->job->delete();
+            if ($event instanceof JobProcessing) {
+                $event->job->delete();
+            }
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
         }
