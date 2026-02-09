@@ -81,11 +81,13 @@ trait ImplementsTenant
 
         $this->makeCurrent();
 
-        return tap($callable($this), static function () use ($originalCurrentTenant) {
+        try {
+            return $callable($this);
+        }finally {
             $originalCurrentTenant
                 ? $originalCurrentTenant->makeCurrent()
                 : static::forgetCurrent();
-        });
+        }
     }
 
     public function callback(callable $callable): \Closure
