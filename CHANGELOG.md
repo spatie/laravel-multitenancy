@@ -7,6 +7,8 @@ All notable changes to `laravel-multitenancy` will be documented in this file
 ### What's Changed
 
 * Fix tenant context not being restored when exception occurs in `execute()` by @moisish in https://github.com/spatie/laravel-multitenancy/pull/622
+* Bump minimum testbench to ^9.1.4 to fix `$latestResponse` error on prefer-lowest
+* Fix notification test assertions for Laravel 11/12 compatibility
 
 ### New Contributors
 
