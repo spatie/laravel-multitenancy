@@ -8,6 +8,7 @@ use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Events\TenantNotFoundForRequestEvent;
 use Spatie\Multitenancy\Tasks\TasksCollection;
+use Spatie\Multitenancy\TenantFinder\CachingTenantFinder;
 use Spatie\Multitenancy\TenantFinder\TenantFinder;
 
 class Multitenancy
@@ -65,9 +66,27 @@ class Multitenancy
     {
         $tenantFinderConfig = $this->app['config']->get('multitenancy.tenant_finder');
 
-        if ($tenantFinderConfig) {
-            $this->app->bind(TenantFinder::class, $tenantFinderConfig);
+        if (! $tenantFinderConfig) {
+            return $this;
         }
+
+        $cacheConfig = $this->app['config']->get('multitenancy.tenant_finder_cache', []);
+
+        if (empty($cacheConfig['enabled'])) {
+            $this->app->bind(TenantFinder::class, $tenantFinderConfig);
+
+            return $this;
+        }
+
+        $cachingClass = $cacheConfig['class'] ?? CachingTenantFinder::class;
+
+        $this->app->bind(TenantFinder::class, function ($app) use ($tenantFinderConfig, $cacheConfig, $cachingClass) {
+            return new $cachingClass(
+                finder: $app->make($tenantFinderConfig),
+                cache: $app['cache']->store($cacheConfig['store'] ?? null),
+                cacheTtlInSeconds: $cacheConfig['ttl'] ?? 300,
+            );
+        });
 
         return $this;
     }
