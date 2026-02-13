@@ -24,6 +24,23 @@ return [
     'tenant_finder' => null,
 
     /*
+     * When enabled, the resolved tenant will be cached to avoid
+     * hitting the database on every request.
+     *
+     * Set `store` to `null` to use the default cache store.
+     * Set `ttl` to `0` to cache forever.
+     *
+     * To customize the cache key, extend CachingTenantFinder
+     * and override the `resolveCacheKey` method.
+     */
+    'tenant_finder_cache' => [
+        'enabled' => false,
+        'class' => Spatie\Multitenancy\TenantFinder\CachingTenantFinder::class,
+        'store' => null,
+        'ttl' => 300,
+    ],
+
+    /*
      * These fields are used by tenant:artisan command to match one or more tenant.
      */
     'tenant_artisan_search_fields' => [
