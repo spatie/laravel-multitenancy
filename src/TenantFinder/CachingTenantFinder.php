@@ -4,10 +4,10 @@ namespace Spatie\Multitenancy\TenantFinder;
 
 use Illuminate\Cache\Repository;
 use Illuminate\Http\Request;
-use Spatie\Multitenancy\Contracts\CachesTenantFinderResults;
+use Spatie\Multitenancy\Contracts\InvalidatesTenantCache;
 use Spatie\Multitenancy\Contracts\IsTenant;
 
-class CachingTenantFinder extends TenantFinder implements CachesTenantFinderResults
+class CachingTenantFinder extends TenantFinder implements InvalidatesTenantCache
 {
     public function __construct(
         protected TenantFinder $finder,

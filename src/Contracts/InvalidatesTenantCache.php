@@ -4,7 +4,7 @@ namespace Spatie\Multitenancy\Contracts;
 
 use Illuminate\Http\Request;
 
-interface CachesTenantFinderResults
+interface InvalidatesTenantCache
 {
     public function forget(Request $request): bool;
 
