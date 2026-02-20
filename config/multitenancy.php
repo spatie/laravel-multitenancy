@@ -24,6 +24,12 @@ return [
     'tenant_finder' => null,
 
     /*
+     * Set this to true if you want to determine the current tenant
+     * when running tests (e.g., during Pest browser tests).
+     */
+    'determine_current_tenant_in_tests' => false,
+
+    /*
      * These fields are used by tenant:artisan command to match one or more tenant.
      */
     'tenant_artisan_search_fields' => [

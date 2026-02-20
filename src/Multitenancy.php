@@ -74,7 +74,7 @@ class Multitenancy
 
     protected function configureRequests(): static
     {
-        if (! $this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole() || ($this->app->runningUnitTests() && $this->app['config']->get('multitenancy.determine_current_tenant_in_tests'))) {
             $this->determineCurrentTenant();
         }
 
