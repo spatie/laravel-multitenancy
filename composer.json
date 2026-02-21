@@ -26,7 +26,7 @@
         "laravel/serializable-closure": "^1.1|^2.0",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^9.1.4|^10.0|^11.0",
-        "pestphp/pest": "^2.34|^3.7",
+        "pestphp/pest": "^2.34|^3.7|^4.0",
         "spatie/valuestore": "^1.2"
     },
     "autoload": {
