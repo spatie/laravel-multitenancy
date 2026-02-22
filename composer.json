@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.0.4",
-        "laravel/octane": "^2.5|dev-develop",
+        "laravel/octane": "^2.5|dev-develop|dev-laravel13",
         "laravel/serializable-closure": "^1.1|^2.0",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^9.1.4|^10.0|^11.0",
