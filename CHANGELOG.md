@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.1.1 - 2026-04-12
+
+### What's Changed
+
+* Add description to TenantsArtisanCommand by @dac514 in https://github.com/spatie/laravel-multitenancy/pull/633
+
+### New Contributors
+
+* @dac514 made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/633
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.1.0...4.1.1
+
 ## 4.0.9 - 2026-02-09
 
 ### What's Changed
