@@ -15,6 +15,8 @@ class TenantsArtisanCommand extends Command
 
     protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
 
+    protected $description = 'Run an Artisan command for selected tenants.';
+
     public function handle(): void
     {
         if (! $artisanCommand = $this->argument('artisanCommand')) {
