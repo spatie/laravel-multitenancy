@@ -27,6 +27,11 @@ trait UsesMultitenancyConfig
         return config('multitenancy.current_tenant_container_key');
     }
 
+    public function currentTenantSessionKey(): string
+    {
+        return config('multitenancy.current_tenant_session_key');
+    }
+
     public function getMultitenancyActionClass(string $actionName, string $actionClass)
     {
         $configuredClass = config("multitenancy.actions.{$actionName}") ?? $actionClass;

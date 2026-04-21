@@ -79,6 +79,12 @@ return [
     'current_tenant_container_key' => 'currentTenant',
 
     /*
+    * This key will be used to store the tenant id in the session when using the
+    * `EnsureValidTenantSession` middleware.
+    */
+    'current_tenant_session_key' => 'ensure_valid_tenant_session_tenant_id',
+
+    /*
      * Set it to `true` if you like to cache the tenant(s) routes
      * in a shared file using the `SwitchRouteCacheTask`.
      */
