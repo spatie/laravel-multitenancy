@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.1.2 - 2026-05-13
+
+### What's Changed
+
+* Add Laravel Boost skill by @victoryoalli in https://github.com/spatie/laravel-multitenancy/pull/635
+
+### New Contributors
+
+* @victoryoalli made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/635
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.1.1...4.1.2
+
 ## 4.1.1 - 2026-04-12
 
 ### What's Changed
