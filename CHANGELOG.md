@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.1.3 - 2026-05-22
+
+### What's Changed
+
+* Resolve tenant from payload context when retrying jobs by @freekmurze in https://github.com/spatie/laravel-multitenancy/pull/638
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.1.2...4.1.3
+
 ## 4.1.2 - 2026-05-13
 
 ### What's Changed
