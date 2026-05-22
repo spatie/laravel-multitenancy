@@ -121,7 +121,7 @@ class MakeQueueTenantAwareAction
 
     protected function findTenant(JobProcessing|JobRetryRequested $event): IsTenant
     {
-        $tenantId = Context::get($this->currentTenantContextKey());
+        $tenantId = $this->resolveTenantId($event);
 
         if (! $tenantId) {
             if ($event instanceof JobProcessing) {
@@ -140,6 +140,37 @@ class MakeQueueTenantAwareAction
         }
 
         return $tenant;
+    }
+
+    protected function resolveTenantId(JobProcessing|JobRetryRequested $event): mixed
+    {
+        if ($event instanceof JobRetryRequested) {
+            return $this->tenantIdFromPayloadContext($event);
+        }
+
+        return Context::get($this->currentTenantContextKey());
+    }
+
+    /**
+     * When a job is retried through `queue:retry`, Laravel has not yet hydrated
+     * the stored context onto the `Context` facade, so we read the tenant id
+     * straight from the payload's serialized context instead.
+     */
+    protected function tenantIdFromPayloadContext(JobRetryRequested $event): mixed
+    {
+        $contextData = $this->getEventPayload($event)['illuminate:log:context']['data'] ?? [];
+
+        $serializedTenantId = $contextData[$this->currentTenantContextKey()] ?? null;
+
+        if ($serializedTenantId === null) {
+            return null;
+        }
+
+        try {
+            return unserialize($serializedTenantId);
+        } catch (Throwable) {
+            return null;
+        }
     }
 
     protected function bindOrForgetCurrentTenant(JobProcessing|JobRetryRequested $event): void
