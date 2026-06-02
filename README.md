@@ -9,7 +9,7 @@
 <h1>Unopinionated multitenancy package for Laravel</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-multitenancy)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-multitenancy/run-tests.yml?branch=main&label=Tests&style=flat-square)](https://github.com/spatie/laravel-multitenancy/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/spatie/laravel-multitenancy/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/laravel-multitenancy/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-multitenancy.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-multitenancy)
     
 </div>
