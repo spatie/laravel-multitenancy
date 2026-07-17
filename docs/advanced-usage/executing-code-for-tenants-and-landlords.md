@@ -25,11 +25,16 @@ Here's another example, where a job is dispatched from a landlord API route:
 
 ```php
 Route::post('/api/{tenant}/reminder', function (Tenant $tenant) {
-    return json_encode([
-        'data' => $tenant->execute(fn () => dispatch(ExpirationReminder())),
-    ]);
+    $tenant->execute(function () {
+        ExpirationReminder::dispatch();
+    });
+
+    return json_encode(['success' => true]);
 });
 ```
+
+> **Warning**
+> `dispatch()` and `Job::dispatch()` do not push the job to the queue right away: they return a `PendingDispatch` object, and the actual push only happens when that object is destroyed (in `PendingDispatch::__destruct()`). If you dispatch a job as the return value of the closure passed to `execute()` or `callback()` — e.g. `fn () => dispatch(SomeJob::class)` — the tenant context is already reverted by the time PHP eventually destroys the returned `PendingDispatch`, and the job ends up queued for the wrong tenant (or with no tenant at all). Always call `dispatch()` as its own statement inside the closure, and don't return its result.
 
 ### Executing a delayed callback in the correct Tenant context
 
@@ -40,10 +45,12 @@ A notable example for this is the use in the Laravel scheduler where you can loo
 protected function schedule(Schedule $schedule)
 {
     Tenant::all()->eachCurrent(function(Tenant $tenant) use ($schedule) {
-        $schedule->run($tenant->callback(fn() => cache()->flush()))->daily();
+        $schedule->call($tenant->callback(fn() => cache()->flush()))->daily();
     });
 }
 ```
+
+This same caveat applies here: if the scheduled callback dispatches a job, call `dispatch()` as a statement rather than returning it, for the same reason described above.
 
 ## Executing landlord code in tenant request
 
