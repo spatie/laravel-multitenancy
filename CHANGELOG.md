@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.1.4 - 2026-07-17
+
+### What's Changed
+
+* Support legacy queue payloads in tenant-awareness detection by @ragulka in https://github.com/spatie/laravel-multitenancy/pull/640
+
+### New Contributors
+
+* @ragulka made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/640
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.1.3...4.1.4
+
 ## 4.1.3 - 2026-05-22
 
 ### What's Changed
