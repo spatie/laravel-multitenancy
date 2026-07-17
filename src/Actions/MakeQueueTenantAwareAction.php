@@ -50,6 +50,15 @@ class MakeQueueTenantAwareAction
     {
         $payload = $this->getEventPayload($event);
 
+        /**
+         * Legacy string-job payloads ({"job":"Class@method","data":{...}}) - pushed by
+         * something other than Laravel's dispatcher, e.g. AWS EventBridge - have no
+         * serialized command. Resolve the class name straight from the payload instead.
+         */
+        if (! isset($payload['data']['command'])) {
+            return $this->resolveTenantAwarenessForJob($this->jobClassFromLegacyPayload($payload));
+        }
+
         $serializedCommand = $payload['data']['command'];
 
         if (! str_starts_with($serializedCommand, 'O:')) {
@@ -72,7 +81,19 @@ class MakeQueueTenantAwareAction
             $command = unserialize($serializedCommand);
         }
 
-        $job = $this->getJobFromQueueable($command);
+        return $this->resolveTenantAwarenessForJob($this->getJobFromQueueable($command));
+    }
+
+    /**
+     * Determine tenant-awareness from a job's interface declarations and the
+     * configured allow/deny lists, falling back to the package default. Accepts
+     * either a job instance (modern payloads) or a class name (legacy payloads).
+     */
+    protected function resolveTenantAwarenessForJob(object|string|null $job): bool
+    {
+        if ($job === null) {
+            return config('multitenancy.queues_are_tenant_aware_by_default') === true;
+        }
 
         $reflection = new ReflectionClass($job);
 
@@ -93,6 +114,23 @@ class MakeQueueTenantAwareAction
         }
 
         return config('multitenancy.queues_are_tenant_aware_by_default') === true;
+    }
+
+    /**
+     * Resolve the job class name from a legacy string-job payload's `job` key
+     * (`Fully\Qualified\ClassName@method`), or null when it cannot be resolved.
+     */
+    protected function jobClassFromLegacyPayload(array $payload): ?string
+    {
+        $jobName = $payload['job'] ?? null;
+
+        if (! is_string($jobName)) {
+            return null;
+        }
+
+        $class = explode('@', $jobName)[0];
+
+        return class_exists($class) ? $class : null;
     }
 
     protected function getJobFromQueueable(object $queueable)
