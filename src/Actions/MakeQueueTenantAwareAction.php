@@ -73,7 +73,7 @@ class MakeQueueTenantAwareAction
              * have global scopes set that require a current tenant to
              * be active. bindOrForgetCurrentTenant wil reset it.
              */
-            if ($tenantId = Context::get($this->currentTenantContextKey())) {
+            if ($tenantId = $this->resolveTenantId($event)) {
                 $tenant = app(IsTenant::class)::find($tenantId);
                 $tenant?->makeCurrent();
             }
