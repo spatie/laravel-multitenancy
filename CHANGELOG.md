@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.1.5 - 2026-07-22
+
+### What's Changed
+
+* Fix tenant id retrival during job retry by @gazben in https://github.com/spatie/laravel-multitenancy/pull/642
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.1.4...4.1.5
+
 ## 4.1.4 - 2026-07-17
 
 ### What's Changed
