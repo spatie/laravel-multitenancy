@@ -3,6 +3,8 @@
 namespace Spatie\Multitenancy\Actions;
 
 use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Queue\Events\JobExceptionOccurred;
+use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
@@ -21,17 +23,37 @@ class MakeQueueTenantAwareAction
     use BindAsCurrentTenant;
     use UsesMultitenancyConfig;
 
+    /** @var array<int, ?IsTenant> */
+    protected array $tenantsCurrentBeforeJob = [];
+
     public function execute(): void
     {
         $this
             ->listenForJobsBeingProcessed()
+            ->listenForJobsHavingBeenProcessed()
             ->listenForJobsRetryRequested();
     }
 
     protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
+            $this->tenantsCurrentBeforeJob[] = app(IsTenant::class)::current();
+
             $this->bindOrForgetCurrentTenant($event);
+        });
+
+        return $this;
+    }
+
+    /**
+     * A job may run in the same process as the code that dispatched it, on the
+     * `sync` connection or through `dispatchSync`. Processing it should not
+     * leave the dispatching context with a different tenant than it had.
+     */
+    protected function listenForJobsHavingBeenProcessed(): static
+    {
+        app('events')->listen([JobProcessed::class, JobExceptionOccurred::class], function () {
+            $this->restoreTenantCurrentBeforeJob();
         });
 
         return $this;
@@ -44,6 +66,27 @@ class MakeQueueTenantAwareAction
         });
 
         return $this;
+    }
+
+    protected function restoreTenantCurrentBeforeJob(): void
+    {
+        if ($this->tenantsCurrentBeforeJob === []) {
+            return;
+        }
+
+        $tenant = array_pop($this->tenantsCurrentBeforeJob);
+
+        if (app(IsTenant::class)::current()?->getKey() === $tenant?->getKey()) {
+            return;
+        }
+
+        if (! $tenant) {
+            app(IsTenant::class)::forgetCurrent();
+
+            return;
+        }
+
+        $tenant->makeCurrent();
     }
 
     protected function isTenantAware(JobProcessing|JobRetryRequested $event): bool

@@ -75,4 +75,18 @@ dispatch(function () use ($tenant) {
 
 If a tenant aware job is unable to retrieve the tenant, because the tenant was deleted before the job was processed, for example, the job will fail with an instance of `Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob`.
 
-On the other hand, a job that is not tenant aware will make no modifications to the current tenant, which may still be set from a previous job. As such, it is important that your jobs make no assumptions about the active tenant unless they are tenant aware.
+On the other hand, a job that is not tenant aware runs without a current tenant. As such, it is important that your jobs make no assumptions about the active tenant unless they are tenant aware.
+
+## The current tenant of the surrounding code
+
+Processing a job never leaves the surrounding code with a different current tenant than it had before. Whatever tenant was current before the job started is restored when the job finishes, both when it succeeds and when it fails.
+
+This matters when a job runs in the same process as the code that dispatched it, which is the case on the `sync` connection and when using `dispatchSync()`.
+
+```php
+$tenant->makeCurrent();
+
+SomeNotTenantAwareJob::dispatchSync(); // runs without a current tenant
+
+Tenant::current(); // still $tenant
+```
