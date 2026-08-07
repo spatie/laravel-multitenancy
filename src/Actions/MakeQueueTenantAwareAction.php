@@ -23,21 +23,31 @@ class MakeQueueTenantAwareAction
     use BindAsCurrentTenant;
     use UsesMultitenancyConfig;
 
-    /** @var array<int, ?IsTenant> */
-    protected array $tenantsCurrentBeforeJob = [];
+    /**
+     * Shared between instances, as an application that starts multitenancy more
+     * than once, like Laravel Octane does for every request, ends up with a set
+     * of these listeners per start. Popping in reverse registration order then
+     * still leaves the tenant of the outermost listener current.
+     *
+     * @var array<int, ?IsTenant>
+     */
+    protected static array $tenantsCurrentBeforeJob = [];
+
+    protected bool $listeningForJobsHavingBeenProcessed = false;
 
     public function execute(): void
     {
         $this
             ->listenForJobsBeingProcessed()
-            ->listenForJobsHavingBeenProcessed()
             ->listenForJobsRetryRequested();
     }
 
     protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            $this->tenantsCurrentBeforeJob[] = app(IsTenant::class)::current();
+            $this->listenForJobsHavingBeenProcessed();
+
+            static::$tenantsCurrentBeforeJob[] = app(IsTenant::class)::current();
 
             $this->bindOrForgetCurrentTenant($event);
         });
@@ -49,9 +59,19 @@ class MakeQueueTenantAwareAction
      * A job may run in the same process as the code that dispatched it, on the
      * `sync` connection or through `dispatchSync`. Processing it should not
      * leave the dispatching context with a different tenant than it had.
+     *
+     * Registering only once the first job starts processing keeps this listener
+     * behind the ones the application registered while booting. Those still see
+     * the tenant of the job they are handling.
      */
     protected function listenForJobsHavingBeenProcessed(): static
     {
+        if ($this->listeningForJobsHavingBeenProcessed) {
+            return $this;
+        }
+
+        $this->listeningForJobsHavingBeenProcessed = true;
+
         app('events')->listen([JobProcessed::class, JobExceptionOccurred::class], function () {
             $this->restoreTenantCurrentBeforeJob();
         });
@@ -70,11 +90,11 @@ class MakeQueueTenantAwareAction
 
     protected function restoreTenantCurrentBeforeJob(): void
     {
-        if ($this->tenantsCurrentBeforeJob === []) {
+        if (static::$tenantsCurrentBeforeJob === []) {
             return;
         }
 
-        $tenant = array_pop($this->tenantsCurrentBeforeJob);
+        $tenant = array_pop(static::$tenantsCurrentBeforeJob);
 
         if (app(IsTenant::class)::current()?->getKey() === $tenant?->getKey()) {
             return;

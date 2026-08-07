@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Facades\Queue;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Multitenancy;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\DispatchesNestedJobTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\FailingNotTenantAwareTestJob;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\NotTenantAwareTestJob;
@@ -69,6 +71,38 @@ it('does not leave a tenant current when none was current before the job', funct
     $this->artisan('queue:work --once')->assertExitCode(0);
 
     expect($this->valuestore->get('tenantId'))->toEqual($this->tenant->id)
+        ->and(Tenant::checkCurrent())->toBeFalse();
+});
+
+it('still restores the tenant when multitenancy was started more than once', function () {
+    app(Multitenancy::class)->start();
+
+    $this->tenant->makeCurrent();
+
+    app(Dispatcher::class)->dispatch(new NotTenantAwareTestJob($this->valuestore));
+
+    expect($this->valuestore->get('tenantId'))->toBeNull()
+        ->and(Tenant::current()?->id)->toEqual($this->tenant->id);
+});
+
+it('restores the tenant only after the callbacks of the application have run', function () {
+    config()->set('queue.default', 'database');
+
+    $tenantInCallback = false;
+
+    Queue::after(function () use (&$tenantInCallback) {
+        $tenantInCallback = Tenant::current()?->id;
+    });
+
+    $this->tenant->makeCurrent();
+
+    app(Dispatcher::class)->dispatch(new TenantAwareTestJob($this->valuestore));
+
+    Tenant::forgetCurrent();
+
+    $this->artisan('queue:work --once')->assertExitCode(0);
+
+    expect($tenantInCallback)->toEqual($this->tenant->id)
         ->and(Tenant::checkCurrent())->toBeFalse();
 });
 
