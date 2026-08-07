@@ -75,19 +75,21 @@ class MakeQueueTenantAwareAction
      * behind the ones the application registered while booting. Those still see
      * the tenant of the job they are handling.
      */
-    protected function listenForJobsHavingBeenProcessed(): static
+    protected function listenForJobsHavingBeenProcessed(): void
     {
         if ($this->listeningForJobsHavingBeenProcessed) {
-            return $this;
+            return;
         }
 
         $this->listeningForJobsHavingBeenProcessed = true;
 
         app('events')->listen([JobProcessed::class, JobExceptionOccurred::class], function () {
-            $this->restoreTenantCurrentBeforeJob();
-        });
+            if (static::$tenantsCurrentBeforeJob === []) {
+                return;
+            }
 
-        return $this;
+            $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeJob));
+        });
     }
 
     protected function listenForJobsRetryRequested(): static
@@ -111,41 +113,32 @@ class MakeQueueTenantAwareAction
      * Only when the command is done can the tenant of whatever started it, an
      * `Artisan::call('queue:retry')` in a request for instance, be put back.
      */
-    protected function listenForTheRetryCommandHavingFinished(): static
+    protected function listenForTheRetryCommandHavingFinished(): void
     {
         if ($this->listeningForTheRetryCommandHavingFinished) {
-            return $this;
+            return;
         }
 
         $this->listeningForTheRetryCommandHavingFinished = true;
 
         app('events')->listen(CommandFinished::class, function () {
-            $this->restoreTenantCurrentBeforeRetrying();
+            if (static::$tenantsCurrentBeforeRetrying === []) {
+                return;
+            }
+
+            $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeRetrying));
         });
-
-        return $this;
-    }
-
-    protected function restoreTenantCurrentBeforeJob(): void
-    {
-        if (static::$tenantsCurrentBeforeJob === []) {
-            return;
-        }
-
-        $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeJob));
-    }
-
-    protected function restoreTenantCurrentBeforeRetrying(): void
-    {
-        if (static::$tenantsCurrentBeforeRetrying === []) {
-            return;
-        }
-
-        $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeRetrying));
     }
 
     protected function makeTenantCurrentAgain(?IsTenant $tenant): void
     {
+        /**
+         * Comparing keys here instead of leaning on `makeCurrent`, which skips
+         * its work when the given tenant already is the current one. It reaches
+         * that conclusion through `current()`, typed as `?static`, which throws
+         * when the tenant to restore is of another class than the one the job
+         * bound, a subclass of the tenant model for instance.
+         */
         if (app(IsTenant::class)::current()?->getKey() === $tenant?->getKey()) {
             return;
         }
