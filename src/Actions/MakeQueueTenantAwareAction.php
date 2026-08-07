@@ -95,6 +95,10 @@ class MakeQueueTenantAwareAction
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
             $this->listenForTheRetryCommandHavingFinished();
 
+            if (static::$tenantsCurrentBeforeRetrying === []) {
+                static::$tenantsCurrentBeforeRetrying[] = app(IsTenant::class)::current();
+            }
+
             $this->bindOrForgetCurrentTenant($event);
         });
 
@@ -109,10 +113,6 @@ class MakeQueueTenantAwareAction
      */
     protected function listenForTheRetryCommandHavingFinished(): static
     {
-        if (static::$tenantsCurrentBeforeRetrying === []) {
-            static::$tenantsCurrentBeforeRetrying[] = app(IsTenant::class)::current();
-        }
-
         if ($this->listeningForTheRetryCommandHavingFinished) {
             return $this;
         }
