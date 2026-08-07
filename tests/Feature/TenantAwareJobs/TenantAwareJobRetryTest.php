@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Testing\WithConsoleEvents;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Feature\TenantAwareJobs\TestClasses\FailingTenantAwareTestJob;
 use Spatie\Valuestore\Valuestore;
+
+uses(WithConsoleEvents::class);
 
 beforeEach(function () {
     config()->set('multitenancy.queues_are_tenant_aware_by_default', true);
@@ -88,4 +91,44 @@ it('restores the right tenant when retrying failed jobs of different tenants', f
 
     expect($this->valuestore->get('tenantId'))->toEqual($this->tenant->id)
         ->and($otherValuestore->get('tenantId'))->toEqual($otherTenant->id);
+});
+
+it('keeps the current tenant of the code that ran the retry command', function () {
+    $otherTenant = Tenant::factory()->create();
+
+    $this->tenant->makeCurrent();
+
+    dispatch(new FailingTenantAwareTestJob($this->valuestore));
+
+    $this->artisan('queue:work --once');
+
+    $this->valuestore->put('shouldFail', false);
+
+    $otherTenant->makeCurrent();
+
+    $this->artisan('queue:retry all')->assertExitCode(0);
+
+    expect(Tenant::current()?->id)->toEqual($otherTenant->id);
+
+    $this->artisan('queue:work --once')->assertExitCode(0);
+
+    expect($this->valuestore->get('tenantId'))->toEqual($this->tenant->id)
+        ->and(Tenant::current()?->id)->toEqual($otherTenant->id);
+});
+
+it('leaves no tenant current after the retry command when there was none before', function () {
+    $this->tenant->makeCurrent();
+
+    dispatch(new FailingTenantAwareTestJob($this->valuestore));
+
+    $this->artisan('queue:work --once');
+
+    $this->valuestore->put('shouldFail', false);
+
+    Tenant::forgetCurrent();
+    Context::flush();
+
+    $this->artisan('queue:retry all')->assertExitCode(0);
+
+    expect(Tenant::checkCurrent())->toBeFalse();
 });

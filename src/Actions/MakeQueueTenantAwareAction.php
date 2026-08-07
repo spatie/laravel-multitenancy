@@ -2,6 +2,7 @@
 
 namespace Spatie\Multitenancy\Actions;
 
+use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Queue\Events\JobProcessed;
@@ -33,7 +34,17 @@ class MakeQueueTenantAwareAction
      */
     protected static array $tenantsCurrentBeforeJob = [];
 
+    /**
+     * Holds at most one tenant: the one that was current when `queue:retry`
+     * started pushing failed jobs back onto the queue.
+     *
+     * @var array<int, ?IsTenant>
+     */
+    protected static array $tenantsCurrentBeforeRetrying = [];
+
     protected bool $listeningForJobsHavingBeenProcessed = false;
+
+    protected bool $listeningForTheRetryCommandHavingFinished = false;
 
     public function execute(): void
     {
@@ -82,7 +93,34 @@ class MakeQueueTenantAwareAction
     protected function listenForJobsRetryRequested(): static
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
+            $this->listenForTheRetryCommandHavingFinished();
+
             $this->bindOrForgetCurrentTenant($event);
+        });
+
+        return $this;
+    }
+
+    /**
+     * `queue:retry` needs the tenant of a failed job to stay current after this
+     * event, as it reads the payload again to push the job back onto the queue.
+     * Only when the command is done can the tenant of whatever started it, an
+     * `Artisan::call('queue:retry')` in a request for instance, be put back.
+     */
+    protected function listenForTheRetryCommandHavingFinished(): static
+    {
+        if (static::$tenantsCurrentBeforeRetrying === []) {
+            static::$tenantsCurrentBeforeRetrying[] = app(IsTenant::class)::current();
+        }
+
+        if ($this->listeningForTheRetryCommandHavingFinished) {
+            return $this;
+        }
+
+        $this->listeningForTheRetryCommandHavingFinished = true;
+
+        app('events')->listen(CommandFinished::class, function () {
+            $this->restoreTenantCurrentBeforeRetrying();
         });
 
         return $this;
@@ -94,8 +132,20 @@ class MakeQueueTenantAwareAction
             return;
         }
 
-        $tenant = array_pop(static::$tenantsCurrentBeforeJob);
+        $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeJob));
+    }
 
+    protected function restoreTenantCurrentBeforeRetrying(): void
+    {
+        if (static::$tenantsCurrentBeforeRetrying === []) {
+            return;
+        }
+
+        $this->makeTenantCurrentAgain(array_pop(static::$tenantsCurrentBeforeRetrying));
+    }
+
+    protected function makeTenantCurrentAgain(?IsTenant $tenant): void
+    {
         if (app(IsTenant::class)::current()?->getKey() === $tenant?->getKey()) {
             return;
         }

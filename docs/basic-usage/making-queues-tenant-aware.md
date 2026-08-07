@@ -90,3 +90,5 @@ SomeNotTenantAwareJob::dispatchSync(); // runs without a current tenant
 
 Tenant::current(); // still $tenant
 ```
+
+Retrying a failed job works the same way. `queue:retry` needs the tenant of the failed job to be current while it pushes that job back onto the queue, but once the command has finished the tenant of the code that ran it is restored. This matters if you retry jobs from a request with `Artisan::call('queue:retry')`.
