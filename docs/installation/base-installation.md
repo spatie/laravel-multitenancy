@@ -44,7 +44,7 @@ return [
     'tenant_finder' => null,
 
     /*
-     * These fields are used by tenant:artisan command to match one or more tenant.
+     * These fields are used by tenants:artisan command to match one or more tenant.
      */
     'tenant_artisan_search_fields' => [
         'id',
