@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Tenant;
 
 it('returns null when tenant model is not configured', function () {

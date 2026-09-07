@@ -418,8 +418,8 @@ class MakeQueueTenantAwareAction
         return $this->tenantIdFromPayloadContext($event);
     }
 
-    
-    
+
+
     /**
      * When a job is retried through `queue:retry`, Laravel has not yet hydrated
      * the stored context onto the `Context` facade, so we read the tenant id

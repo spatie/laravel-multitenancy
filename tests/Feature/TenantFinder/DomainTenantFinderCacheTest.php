@@ -13,6 +13,7 @@ beforeEach(function () {
     config()->set('multitenancy.tenant_finder_manual_cache', true);
 
     $store = config('multitenancy.domain_cache.store', 'global');
+
     try {
         $this->cache = Cache::store($store);
     } catch (\Throwable) {
