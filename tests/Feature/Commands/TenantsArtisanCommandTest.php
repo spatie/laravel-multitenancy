@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
@@ -38,7 +39,15 @@ test("it can't migrate a specific tenant id when search by domain", function () 
         '--tenant' => $this->anotherTenant->id,
     ])
         ->expectsOutput("No tenant(s) found.")
-        ->assertExitCode(-1);
+        ->assertExitCode(Command::FAILURE);
+});
+
+it('succeeds when there are no tenants yet, so a first deploy is not aborted', function () {
+    Tenant::query()->delete();
+
+    $this->artisan('tenants:artisan "migrate --database=tenant"')
+        ->expectsOutput('No tenants found, skipping.')
+        ->assertExitCode(Command::SUCCESS);
 });
 
 it('can migrate a specific tenant by domain', function () {

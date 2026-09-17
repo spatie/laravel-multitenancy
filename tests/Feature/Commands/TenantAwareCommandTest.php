@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Command;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
@@ -13,8 +14,17 @@ beforeEach(function () {
 
 it('fails with a non-existing tenant')
     ->artisan('tenant:noop --tenant=1000')
-    ->assertExitCode(-1)
+    ->assertExitCode(Command::FAILURE)
     ->expectsOutput('No tenant(s) found.');
+
+it('succeeds when no tenants exist at all', function () {
+    Tenant::query()->delete();
+
+    $this
+        ->artisan('tenant:noop')
+        ->assertExitCode(Command::SUCCESS)
+        ->expectsOutput('No tenants found, skipping.');
+});
 
 it('works with no tenant parameters', function () {
     $this

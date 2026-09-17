@@ -23,9 +23,15 @@ trait TenantAware
             });
 
         if ($tenantQuery->count() === 0) {
+            if (blank($tenants)) {
+                $this->warn('No tenants found, skipping.');
+
+                return self::SUCCESS;
+            }
+
             $this->error('No tenant(s) found.');
 
-            return -1;
+            return self::FAILURE;
         }
 
         return $tenantQuery
