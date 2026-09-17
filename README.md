@@ -34,7 +34,7 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Documentation
 
-You can find the entire documentation for this package [on our documentation site](https://docs.spatie.be/laravel-multitenancy).
+You can find the entire documentation for this package [on our documentation site](https://spatie.be/docs/laravel-multitenancy/).
 
 ## Testing
 
