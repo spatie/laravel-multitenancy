@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.2.1 - 2026-09-22
+
+### What's Changed
+
+* Fix documentation link in README by @flavius-constantin in https://github.com/spatie/laravel-multitenancy/pull/649
+* Return SUCCESS from TenantAware when no tenants exist by @webard in https://github.com/spatie/laravel-multitenancy/pull/648
+
+### New Contributors
+
+* @flavius-constantin made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/649
+* @webard made their first contribution in https://github.com/spatie/laravel-multitenancy/pull/648
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.2.0...4.2.1
+
 ## 4.2.0 - 2026-08-07
 
 ### What's Changed
