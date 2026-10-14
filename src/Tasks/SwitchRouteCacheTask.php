@@ -11,14 +11,14 @@ class SwitchRouteCacheTask implements SwitchTenantTask
     {
         Env::getRepository()->set('APP_ROUTES_CACHE', $this->getCachedRoutesPath($tenant));
 
-        if (app()->routesAreCached() && $this->shouldReinitializeRouter()) {
-            require app()->getCachedRoutesPath();
-        }
+        $this->reinitializeRouter();
     }
 
     public function forgetCurrent(): void
     {
         Env::getRepository()->clear('APP_ROUTES_CACHE');
+
+        $this->reinitializeRouter();
     }
 
     protected function getCachedRoutesPath(IsTenant $tenant): string
@@ -35,5 +35,20 @@ class SwitchRouteCacheTask implements SwitchTenantTask
         return isset($_SERVER['LARAVEL_OCTANE'])
             || app()->runningInConsole()
             || app()->runningUnitTests();
+    }
+
+    protected function reinitializeRouter(): void
+    {
+        if (! $this->shouldReinitializeRouter()) {
+            return;
+        }
+
+        $cachedRoutesPath = app()->getCachedRoutesPath();
+
+        if (! is_file($cachedRoutesPath)) {
+            return;
+        }
+
+        require $cachedRoutesPath;
     }
 }
