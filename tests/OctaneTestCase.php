@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Env;
 use Laravel\Octane\Contracts\Client;
 use Laravel\Octane\CurrentApplication;
+use Laravel\Octane\Listeners\ReportException;
 use Laravel\Octane\OctaneServiceProvider;
 use Laravel\Octane\RequestContext;
 use Laravel\Octane\Testing\Fakes\FakeClient;
@@ -61,6 +62,12 @@ abstract class OctaneTestCase extends TestCase
         parent::getEnvironmentSetUp($app);
 
         $app->instance(Client::class, new FakeClient([]));
+
+        $app->extend(ReportException::class, fn () => new class () extends ReportException {
+            public function handle($event): void
+            {
+            }
+        });
 
         config()->set('multitenancy.tenant_finder', DomainTenantFinder::class);
 
