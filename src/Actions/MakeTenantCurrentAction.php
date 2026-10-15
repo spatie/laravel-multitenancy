@@ -6,7 +6,6 @@ use Spatie\Multitenancy\Concerns\BindAsCurrentTenant;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
-use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 
 class MakeTenantCurrentAction
@@ -33,7 +32,7 @@ class MakeTenantCurrentAction
 
     protected function performTasksToMakeTenantCurrent(IsTenant $tenant): static
     {
-        $this->tasksCollection->each(fn (SwitchTenantTask $task) => $task->makeCurrent($tenant));
+        $this->tasksCollection->makeCurrent($tenant);
 
         return $this;
     }

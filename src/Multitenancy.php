@@ -21,15 +21,20 @@ class Multitenancy
     public function start(): void
     {
         $this
-            ->registerTenantFinder()
-            ->registerTasksCollection()
-            ->configureRequests()
-            ->configureQueue();
+            ->registerBindings()
+            ->configureRequests();
     }
 
     public function end(): void
     {
         app(IsTenant::class)::forgetCurrent();
+    }
+
+    public function registerBindings(): static
+    {
+        return $this
+            ->registerTenantFinder()
+            ->registerTasksCollection();
     }
 
     protected function determineCurrentTenant(): void
@@ -81,7 +86,7 @@ class Multitenancy
         return $this;
     }
 
-    protected function configureQueue(): static
+    public function configureQueue(): static
     {
         $this
             ->getMultitenancyActionClass(

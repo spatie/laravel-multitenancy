@@ -32,6 +32,6 @@ class DummyTask implements SwitchTenantTask
 
     public function forgetCurrent(): void
     {
-        $this->forgotCurrentCalled = false;
+        $this->forgotCurrentCalled = true;
     }
 }

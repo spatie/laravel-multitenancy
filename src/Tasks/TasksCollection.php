@@ -3,6 +3,8 @@
 namespace Spatie\Multitenancy\Tasks;
 
 use Illuminate\Support\Collection;
+use Spatie\Multitenancy\Contracts\IsTenant;
+use Throwable;
 
 class TasksCollection extends Collection
 {
@@ -25,5 +27,29 @@ class TasksCollection extends Collection
             ->toArray();
 
         parent::__construct($tasks);
+    }
+
+    public function makeCurrent(IsTenant $tenant): void
+    {
+        $tasksMadeCurrent = [];
+
+        try {
+            foreach ($this as $task) {
+                $task->makeCurrent($tenant);
+
+                $tasksMadeCurrent[] = $task;
+            }
+        } catch (Throwable $exception) {
+            foreach (array_reverse($tasksMadeCurrent) as $task) {
+                $task->forgetCurrent();
+            }
+
+            throw $exception;
+        }
+    }
+
+    public function forgetCurrent(): void
+    {
+        $this->each(fn (SwitchTenantTask $task) => $task->forgetCurrent());
     }
 }

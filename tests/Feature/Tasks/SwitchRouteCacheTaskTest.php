@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Routing\Route;
-use Illuminate\Routing\RouteCollection;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
 use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\SwitchRouteCacheWithoutReinitializingRouterTask;
@@ -18,19 +17,6 @@ afterEach(function () {
     }
 });
 
-function writeRoutesCache(string $path, string $uri): void
-{
-    $route = new Route(['GET'], $uri, ['uses' => 'TenantsController@index', 'as' => $uri]);
-    $route->prepareForSerialization();
-
-    $routes = new RouteCollection();
-    $routes->add($route);
-
-    $compiledRoutes = var_export($routes->compile(), true);
-
-    file_put_contents($path, "<?php\n\napp('router')->setCompiledRoutes({$compiledRoutes});\n");
-}
-
 function tenantRoutesCachePath(Tenant $tenant): string
 {
     return app()->basePath("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
@@ -38,7 +24,7 @@ function tenantRoutesCachePath(Tenant $tenant): string
 
 function bootWithLandlordRoutesCache(): void
 {
-    writeRoutesCache(app()->getCachedRoutesPath(), 'landlord-only');
+    writeRoutesCache(app()->getCachedRoutesPath(), ['landlord-only' => 'TenantsController@index']);
 
     app()->forgetInstance('routes.cached');
 
@@ -101,7 +87,7 @@ it('will restore the landlord routes when forgetting the current tenant in a lon
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
-    writeRoutesCache(tenantRoutesCachePath($tenant), 'tenant-only');
+    writeRoutesCache(tenantRoutesCachePath($tenant), ['tenant-only' => 'TenantsController@index']);
 
     $tenant->makeCurrent();
     expect(cachedRouteUris())->toContain('tenant-only')->not->toContain('landlord-only');
@@ -115,11 +101,11 @@ it('will only keep the routes of the latest tenant when switching between tenant
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
-    writeRoutesCache(tenantRoutesCachePath($tenant), 'tenant-a-only');
+    writeRoutesCache(tenantRoutesCachePath($tenant), ['tenant-a-only' => 'TenantsController@index']);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
     $anotherTenant = Tenant::factory()->create();
-    writeRoutesCache(tenantRoutesCachePath($anotherTenant), 'tenant-b-only');
+    writeRoutesCache(tenantRoutesCachePath($anotherTenant), ['tenant-b-only' => 'TenantsController@index']);
 
     $tenant->makeCurrent();
     expect(cachedRouteUris())->toContain('tenant-a-only')->not->toContain('tenant-b-only');
@@ -146,7 +132,7 @@ it('will load the tenant routes cache even when the landlord routes are not cach
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
-    writeRoutesCache(tenantRoutesCachePath($tenant), 'tenant-only');
+    writeRoutesCache(tenantRoutesCachePath($tenant), ['tenant-only' => 'TenantsController@index']);
 
     $tenant->makeCurrent();
 
@@ -160,7 +146,7 @@ it('will not touch the router when the process does not reinitialize it', functi
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
-    writeRoutesCache(tenantRoutesCachePath($tenant), 'tenant-only');
+    writeRoutesCache(tenantRoutesCachePath($tenant), ['tenant-only' => 'TenantsController@index']);
 
     $landlordRoutes = app('router')->getRoutes();
 

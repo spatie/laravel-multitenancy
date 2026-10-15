@@ -1,7 +1,9 @@
 <?php
 
+use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\DummyTask;
+use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\FailingTask;
 
 it('will instantiate all class names', function () {
     $tasksCollection = new TasksCollection([DummyTask::class]);
@@ -30,4 +32,18 @@ it('can handle duplicate tasks with other parameters', function () {
         ->and($tasksCollection[0]->b)->toEqual(2)
         ->and($tasksCollection[1]->a)->toEqual(3)
         ->and($tasksCollection[1]->b)->toEqual(4);
+});
+
+it('will forget the tasks it already made current when a task fails to make a tenant current', function () {
+    $tasksCollection = new TasksCollection([DummyTask::class, FailingTask::class, DummyTask::class]);
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
+
+    expect(fn () => $tasksCollection->makeCurrent($tenant))->toThrow(RuntimeException::class);
+
+    expect($tasksCollection[0]->madeCurrentCalled)->toBeTrue()
+        ->and($tasksCollection[0]->forgotCurrentCalled)->toBeTrue()
+        ->and($tasksCollection[2]->madeCurrentCalled)->toBeFalse()
+        ->and($tasksCollection[2]->forgotCurrentCalled)->toBeFalse();
 });
