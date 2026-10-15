@@ -48,11 +48,13 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
         app(Multitenancy::class)->registerBindings();
 
-        Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
-        Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
-        Event::listen(fn (OctaneTaskTerminated $taskTerminated) => app(Multitenancy::class)->end());
-        Event::listen(fn (OctaneTickTerminated $tickTerminated) => app(Multitenancy::class)->end());
-        Event::listen(fn (OctaneWorkerErrorOccurred $workerErrorOccurred) => app(Multitenancy::class)->end());
+        $this->app->booted(function () {
+            Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
+            Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
+            Event::listen(fn (OctaneTaskTerminated $taskTerminated) => app(Multitenancy::class)->end());
+            Event::listen(fn (OctaneTickTerminated $tickTerminated) => app(Multitenancy::class)->end());
+            Event::listen(fn (OctaneWorkerErrorOccurred $workerErrorOccurred) => app(Multitenancy::class)->end());
+        });
 
         return $this;
     }
