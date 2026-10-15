@@ -35,9 +35,9 @@ class TasksCollection extends Collection
 
         try {
             foreach ($this as $task) {
-                $task->makeCurrent($tenant);
-
                 $tasksMadeCurrent[] = $task;
+
+                $task->makeCurrent($tenant);
             }
         } catch (Throwable $exception) {
             rescue(fn () => $this->forgetCurrentUsing(array_reverse($tasksMadeCurrent)));

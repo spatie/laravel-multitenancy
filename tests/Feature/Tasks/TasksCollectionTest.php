@@ -36,7 +36,7 @@ it('can handle duplicate tasks with other parameters', function () {
         ->and($tasksCollection[1]->b)->toEqual(4);
 });
 
-it('will forget the tasks it already made current when a task fails to make a tenant current', function () {
+it('will forget the tasks it ran, including the one that failed, when a task fails to make a tenant current', function () {
     $tasksCollection = new TasksCollection([DummyTask::class, FailingTask::class, DummyTask::class]);
 
     /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
@@ -46,6 +46,7 @@ it('will forget the tasks it already made current when a task fails to make a te
 
     expect($tasksCollection[0]->madeCurrentCalled)->toBeTrue()
         ->and($tasksCollection[0]->forgotCurrentCalled)->toBeTrue()
+        ->and($tasksCollection[1]->forgotCurrentCalled)->toBeTrue()
         ->and($tasksCollection[2]->madeCurrentCalled)->toBeFalse()
         ->and($tasksCollection[2]->forgotCurrentCalled)->toBeFalse();
 });
