@@ -25,6 +25,8 @@ The tasks that ship with the package take care of this:
 - [`PrefixCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/prefixing-cache/) rebuilds the cache store on every switch, so the prefix of the previous tenant is never reused;
 - [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten.
 
+The `octane` cache driver is the exception: Octane creates its store once when the worker boots and that store ignores the cache prefix, so `PrefixCacheTask` cannot separate tenants there. Keep tenant data in another store, like Redis.
+
 ## Writing your own tasks
 
 When [creating your own task](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/creating-your-own-task/), make sure `forgetCurrent` undoes everything `makeCurrent` changed. In a long running process nothing else restores the environment for the landlord.
