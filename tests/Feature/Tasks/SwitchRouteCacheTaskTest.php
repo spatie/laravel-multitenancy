@@ -3,6 +3,7 @@
 use Illuminate\Routing\Route;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
+use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\RegisterTenantRoutesTask;
 use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\SwitchRouteCacheWithoutReinitializingRouterTask;
 
 beforeEach(function () {
@@ -172,6 +173,58 @@ it('will restore the uncached landlord routes when forgetting the current tenant
 
     $tenant->makeCurrent();
     expect(cachedRouteUris())->toContain('tenant-only')->not->toContain('landlord-only');
+
+    Tenant::forgetCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
+});
+
+it('will put back the uncached landlord routes without the routes a later task registered', function () {
+    config()->set('multitenancy.switch_tenant_tasks', [SwitchRouteCacheTask::class, RegisterTenantRoutesTask::class]);
+
+    app('router')->get('landlord-only', fn () => 'landlord');
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
+
+    $tenant->makeCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only', 'tenant-only');
+
+    Tenant::forgetCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
+});
+
+it('will put back the uncached landlord routes without the routes an earlier task registered', function () {
+    config()->set('multitenancy.switch_tenant_tasks', [RegisterTenantRoutesTask::class, SwitchRouteCacheTask::class]);
+
+    app('router')->get('landlord-only', fn () => 'landlord');
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
+
+    $tenant->makeCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only', 'tenant-only');
+
+    Tenant::forgetCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
+});
+
+it('will put back the uncached landlord routes after every tenant in a row', function () {
+    config()->set('multitenancy.switch_tenant_tasks', [SwitchRouteCacheTask::class, RegisterTenantRoutesTask::class]);
+
+    app('router')->get('landlord-only', fn () => 'landlord');
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $anotherTenant */
+    $anotherTenant = Tenant::factory()->create();
+
+    $tenant->makeCurrent();
+    Tenant::forgetCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
+
+    $anotherTenant->makeCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only', 'tenant-only');
 
     Tenant::forgetCurrent();
     expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');

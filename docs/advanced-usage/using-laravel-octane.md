@@ -23,13 +23,13 @@ The tasks that ship with the package take care of this:
 
 - [`SwitchTenantDatabaseTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-databases/) purges the tenant connection and refreshes the connection resolver of Eloquent on every switch;
 - [`PrefixCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/prefixing-cache/) rebuilds the cache store on every switch, so the prefix of the previous tenant is never reused;
-- [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten. When the landlord routes are not cached, the routes the router held before the first switch are put back instead.
+- [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten. When the landlord routes are not cached, a copy of the routes the router held when the tasks were instantiated is put back instead, whatever the order of the tasks.
 
 The `octane` cache driver is the exception: Octane creates its store once when the worker boots and that store ignores the cache prefix, so `PrefixCacheTask` cannot separate tenants there. Keep tenant data in another store, like Redis.
 
 ## Writing your own tasks
 
-When [creating your own task](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/creating-your-own-task/), make sure `forgetCurrent` undoes everything `makeCurrent` changed. In a long running process nothing else restores the environment for the landlord.
+When [creating your own task](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/creating-your-own-task/), make sure `forgetCurrent` undoes everything `makeCurrent` changed. In a long running process nothing else restores the environment for the landlord. A task that registers routes must remove them in `forgetCurrent`, unless `SwitchRouteCacheTask` is configured too: that task puts the landlord routes back, and the routes other tasks registered go with the tenant.
 
 Inside an Octane worker the tasks are instantiated the first time a tenant is made current in a request, and reused until that request ends. Storing the original values as properties, like the tasks of the package do, keeps working.
 
