@@ -53,6 +53,11 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
+      - name: Download RoadRunner
+        run: vendor/bin/rr get-binary --no-config -n
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Execute tests
         run: vendor/bin/pest
         env:
