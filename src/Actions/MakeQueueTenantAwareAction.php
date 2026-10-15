@@ -25,10 +25,9 @@ class MakeQueueTenantAwareAction
     use UsesMultitenancyConfig;
 
     /**
-     * Shared between instances, as an application that starts multitenancy more
-     * than once, like Laravel Octane does for every request, ends up with a set
-     * of these listeners per start. Popping in reverse registration order then
-     * still leaves the tenant of the outermost listener current.
+     * Shared between instances, as every application booted in the same process
+     * registers its own set of these listeners. Popping in reverse registration
+     * order then still leaves the tenant of the outermost listener current.
      *
      * @var array<int, ?IsTenant>
      */

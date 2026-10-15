@@ -12,6 +12,8 @@ The `Spatie\Multitenancy\Tasks\SwitchRouteCacheTask` can switch the configured `
 
 To use this task, you should uncomment it in the `switch_tenant_tasks` section of the `multitenancy` config file.
 
+In long running processes such as Laravel Octane, queue workers and artisan commands that loop over tenants, the task also loads the cached routes of the current tenant into the router, and loads the landlord routes again when the current tenant is forgotten, from the landlord route cache or, when the landlord routes are not cached, from a copy of the routes the router held when the tasks were instantiated. If a route cache file does not exist for a tenant, the routes currently loaded in the router are kept.
+
 ```php
 // in config/multitenancy.php
 
