@@ -23,7 +23,7 @@ The tasks that ship with the package take care of this:
 
 - [`SwitchTenantDatabaseTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-databases/) purges the tenant connection and refreshes the connection resolver of Eloquent on every switch;
 - [`PrefixCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/prefixing-cache/) rebuilds the cache store on every switch, so the prefix of the previous tenant is never reused;
-- [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten.
+- [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten. When the landlord routes are not cached, the routes the router held before the first switch are put back instead.
 
 The `octane` cache driver is the exception: Octane creates its store once when the worker boots and that store ignores the cache prefix, so `PrefixCacheTask` cannot separate tenants there. Keep tenant data in another store, like Redis.
 

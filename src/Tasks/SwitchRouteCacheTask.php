@@ -2,11 +2,14 @@
 
 namespace Spatie\Multitenancy\Tasks;
 
+use Illuminate\Routing\RouteCollection;
 use Illuminate\Support\Env;
 use Spatie\Multitenancy\Contracts\IsTenant;
 
 class SwitchRouteCacheTask implements SwitchTenantTask
 {
+    protected ?RouteCollection $uncachedLandlordRoutes = null;
+
     public function makeCurrent(IsTenant $tenant): void
     {
         Env::getRepository()->set('APP_ROUTES_CACHE', $this->getCachedRoutesPath($tenant));
@@ -43,12 +46,25 @@ class SwitchRouteCacheTask implements SwitchTenantTask
             return;
         }
 
+        $this->uncachedLandlordRoutes ??= $this->uncachedRoutes();
+
         $cachedRoutesPath = app()->getCachedRoutesPath();
 
-        if (! is_file($cachedRoutesPath)) {
+        if (is_file($cachedRoutesPath)) {
+            require $cachedRoutesPath;
+
             return;
         }
 
-        require $cachedRoutesPath;
+        if ($this->uncachedLandlordRoutes) {
+            app('router')->setRoutes($this->uncachedLandlordRoutes);
+        }
+    }
+
+    protected function uncachedRoutes(): ?RouteCollection
+    {
+        $routes = app('router')->getRoutes();
+
+        return $routes instanceof RouteCollection ? $routes : null;
     }
 }

@@ -160,3 +160,19 @@ it('will not touch the router when the process does not reinitialize it', functi
     expect(app('router')->getRoutes())->toBe($landlordRoutes);
     expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
 });
+
+it('will restore the uncached landlord routes when forgetting the current tenant', function () {
+    expect(app()->routesAreCached())->toBeFalse();
+
+    app('router')->get('landlord-only', fn () => 'landlord');
+
+    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    $tenant = Tenant::factory()->create();
+    writeRoutesCache(tenantRoutesCachePath($tenant), ['tenant-only' => 'TenantsController@index']);
+
+    $tenant->makeCurrent();
+    expect(cachedRouteUris())->toContain('tenant-only')->not->toContain('landlord-only');
+
+    Tenant::forgetCurrent();
+    expect(cachedRouteUris())->toContain('landlord-only')->not->toContain('tenant-only');
+});
