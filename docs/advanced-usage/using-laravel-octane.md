@@ -13,7 +13,7 @@ In a PHP-FPM application the current tenant is determined when the application b
 - when Octane dispatches `RequestTerminated`, the package forgets the current tenant, so the switch tenant tasks restore the landlord environment before the worker picks up its next request;
 - when Octane dispatches `WorkerErrorOccurred`, because the request failed before it could terminate, for instance when the client disconnected while the response was being sent, the package forgets the current tenant as well.
 
-If a switch tenant task throws an exception while a tenant is being made current, the tasks that already ran are asked to forget the tenant again before the exception is rethrown. A failed switch leaves nothing behind in the worker.
+If a switch tenant task throws an exception while a tenant is being made current, the tasks that already ran are asked to forget the tenant again before the exception is rethrown. A failed switch leaves nothing behind in the worker. When a task throws while the tenant is being forgotten, the remaining tasks still forget it, and the exception is rethrown afterwards.
 
 ## What a worker shares between requests
 

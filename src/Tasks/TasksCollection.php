@@ -40,9 +40,7 @@ class TasksCollection extends Collection
                 $tasksMadeCurrent[] = $task;
             }
         } catch (Throwable $exception) {
-            foreach (array_reverse($tasksMadeCurrent) as $task) {
-                $task->forgetCurrent();
-            }
+            rescue(fn () => $this->forgetCurrentUsing(array_reverse($tasksMadeCurrent)));
 
             throw $exception;
         }
@@ -50,6 +48,24 @@ class TasksCollection extends Collection
 
     public function forgetCurrent(): void
     {
-        $this->each(fn (SwitchTenantTask $task) => $task->forgetCurrent());
+        $this->forgetCurrentUsing($this->all());
+    }
+
+    /** @param array<int, SwitchTenantTask> $tasks */
+    protected function forgetCurrentUsing(array $tasks): void
+    {
+        $exception = null;
+
+        foreach ($tasks as $task) {
+            try {
+                $task->forgetCurrent();
+            } catch (Throwable $throwable) {
+                $exception ??= $throwable;
+            }
+        }
+
+        if ($exception) {
+            throw $exception;
+        }
     }
 }
