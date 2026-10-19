@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Queue\Events\JobProcessing;
+use Laravel\Octane\Exceptions\TaskExceptionResult;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tests\Octane\TestClasses\DisconnectingFakeClient;
 
@@ -74,13 +75,36 @@ it('will register the queue listeners once for the whole worker', function () {
 it('will run the switch tenant tasks inside a concurrent task', function () {
     $tenant = $this->tenantA;
 
-    $result = $this->octaneWorker->handleTask(fn () => $tenant->execute(fn () => [
-        Tenant::current()?->id,
-        config('database.connections.tenant.database'),
-        env('APP_ROUTES_CACHE'),
-    ]));
+    $result = $this->octaneWorker->handleTask(function () use ($tenant) {
+        $tenant->makeCurrent();
+
+        return [
+            Tenant::current()?->id,
+            config('database.connections.tenant.database'),
+            env('APP_ROUTES_CACHE'),
+        ];
+    });
 
     expect($result->result)->toBe([$tenant->id, 'laravel_mt_tenant_1', "bootstrap/cache/routes-v7-tenant-{$tenant->id}.php"]);
 
+    expect(env('APP_ROUTES_CACHE'))->toBeNull();
+    expect($this->handleOctaneRequest('http://landlord.test/tenant-only')->getStatusCode())->toBe(404);
+    expect($this->handleOctaneRequest('http://landlord.test/current')->getContent())->toBe(json_encode([null, null]));
+});
+
+it('will restore landlord routes after a concurrent task fails', function () {
+    $tenant = $this->tenantA;
+
+    $result = $this->octaneWorker->handleTask(function () use ($tenant) {
+        $tenant->makeCurrent();
+
+        throw new RuntimeException('The concurrent task failed');
+    });
+
+    expect($result)->toBeInstanceOf(TaskExceptionResult::class);
+    expect($result->getOriginal()->getMessage())->toBe('The concurrent task failed');
+
+    expect(env('APP_ROUTES_CACHE'))->toBeNull();
+    expect($this->handleOctaneRequest('http://landlord.test/tenant-only')->getStatusCode())->toBe(404);
     expect($this->handleOctaneRequest('http://landlord.test/current')->getContent())->toBe(json_encode([null, null]));
 });

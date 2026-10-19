@@ -13,7 +13,7 @@ In a PHP-FPM application the current tenant is determined when the application b
 - when Octane dispatches `RequestTerminated`, the package forgets the current tenant, so the switch tenant tasks restore the landlord environment before the worker picks up its next request;
 - when Octane dispatches `WorkerErrorOccurred`, because the request failed before it could terminate, for instance when the client disconnected while the response was being sent, the package forgets the current tenant as well.
 
-If a switch tenant task throws an exception while a tenant is being made current, the task that threw and the tasks before it are asked to forget the tenant again before the exception is rethrown. A failed switch leaves nothing behind in the worker. When a task throws while the tenant is being forgotten, the remaining tasks still forget it, and the exception is rethrown afterwards.
+If a switch tenant task throws an exception while a tenant is being made current, the task that threw and the tasks before it are asked to forget the tenant again before the exception is rethrown. Cleanup is best effort: a custom task whose `forgetCurrent` also fails can still leave side effects behind. When a task throws while the tenant is being forgotten, the remaining tasks still forget it, the current tenant binding and context are cleared, and the exception is rethrown afterwards.
 
 ## What a worker shares between requests
 
@@ -26,6 +26,8 @@ The tasks that ship with the package take care of this:
 - [`SwitchRouteCacheTask`](/docs/laravel-multitenancy/v4/using-tasks-to-prepare-the-environment/switching-route-cache-paths/) loads the route cache of the tenant into the shared router, and loads the route cache of the landlord again when the tenant is forgotten. When the landlord routes are not cached, a copy of the routes the router held when the tasks were instantiated is put back instead, whatever the order of the tasks.
 
 The `octane` cache driver is the exception: Octane creates its store once when the worker boots and that store ignores the cache prefix, so `PrefixCacheTask` cannot separate tenants there. Keep tenant data in another store, like Redis.
+
+Do not set `APP_ROUTES_CACHE` in the worker's real environment when using `SwitchRouteCacheTask`. Laravel's immutable environment repository cannot override that value for each tenant. Request handlers that interleave tenant switches in the same process, such as concurrent coroutines or fibers, are not supported.
 
 ## Writing your own tasks
 

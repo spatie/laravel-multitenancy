@@ -22,9 +22,11 @@ class ForgetCurrentTenantAction
     {
         event(new ForgettingCurrentTenantEvent($tenant));
 
-        $this
-            ->performTaskToForgetCurrentTenant()
-            ->clearBoundCurrentTenant();
+        try {
+            $this->performTaskToForgetCurrentTenant();
+        } finally {
+            $this->clearBoundCurrentTenant();
+        }
 
         event(new ForgotCurrentTenantEvent($tenant));
     }
