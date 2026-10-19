@@ -2,6 +2,32 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.2.2 - 2026-10-19
+
+### Fixes
+
+- Restore landlord routes after tenant requests and operations in long-running workers, including uncached landlord routes.
+- Load existing tenant route caches without relying on Laravel's memoized landlord cache status, and skip missing cache files.
+- Clean up tenant state after Octane requests, concurrent tasks, ticks, and worker errors.
+- Register queue listeners once at application boot rather than on every Octane request.
+- Unwind partially completed tenant switches and continue remaining cleanup tasks after a failure. Always clear the current tenant binding and context when forget tasks throw.
+- Preserve protected configureQueue() overrides in custom Multitenancy subclasses.
+
+### Compatibility and upgrade notes
+
+- Requires PHP 8.3 or higher and Laravel 12 or 13.
+- Custom switch tasks must tolerate forgetCurrent() after a partially completed makeCurrent(). Cleanup failures still propagate; failed rollback cleanup is reported while preserving the original switch exception.
+- Do not set APP_ROUTES_CACHE in the worker's real environment when using SwitchRouteCacheTask. Interleaved tenant switches within the same process remain unsupported, and the Octane cache driver does not provide tenant isolation through cache prefixes.
+
+### Testing and tooling
+
+- Add real Octane worker and RoadRunner HTTP regression coverage.
+- Test PHP 8.3–8.5 and Laravel 12–13 using compatible Pest 4/5 versions; modernize Redis and formatting tooling.
+
+Thanks to @masterix21 for the original fixes in #650.
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.2.1...4.2.2
+
 ## 4.2.1 - 2026-09-22
 
 ### What's Changed
