@@ -3,6 +3,8 @@ title: Base installation
 weight: 1
 ---
 
+This package requires PHP 8.3 or higher and Laravel 12 or 13.
+
 This package can be installed via composer:
 
 ```bash
