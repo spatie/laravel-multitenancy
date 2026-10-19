@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Routing\Route;
+use Illuminate\Routing\RouteCollection;
 use Illuminate\Support\Facades\Schema;
 
 use function PHPUnit\Framework\assertFalse;
@@ -14,6 +16,7 @@ use Spatie\Multitenancy\Models\Tenant;
 */
 
 uses(Spatie\Multitenancy\Tests\TestCase::class)->in('Feature');
+uses(Spatie\Multitenancy\Tests\OctaneTestCase::class)->in('Octane');
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +58,21 @@ function assertTenantDatabaseDoesNotHaveTable(Tenant $tenant, string $tableName)
 function tempFile(string $fileName): string
 {
     return __DIR__ . "/temp/{$fileName}";
+}
+
+/** @param array<string, string|Closure> $routes */
+function writeRoutesCache(string $path, array $routes): void
+{
+    $routeCollection = new RouteCollection();
+
+    foreach ($routes as $uri => $action) {
+        $route = new Route(['GET'], $uri, ['uses' => $action, 'as' => $uri]);
+        $route->prepareForSerialization();
+
+        $routeCollection->add($route);
+    }
+
+    $compiledRoutes = var_export($routeCollection->compile(), true);
+
+    file_put_contents($path, "<?php\n\napp('router')->setCompiledRoutes({$compiledRoutes});\n");
 }

@@ -7,7 +7,6 @@ use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Events\ForgettingCurrentTenantEvent;
 use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
-use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 use Spatie\Multitenancy\Tasks\TasksCollection;
 
 class ForgetCurrentTenantAction
@@ -23,16 +22,18 @@ class ForgetCurrentTenantAction
     {
         event(new ForgettingCurrentTenantEvent($tenant));
 
-        $this
-            ->performTaskToForgetCurrentTenant()
-            ->clearBoundCurrentTenant();
+        try {
+            $this->performTaskToForgetCurrentTenant();
+        } finally {
+            $this->clearBoundCurrentTenant();
+        }
 
         event(new ForgotCurrentTenantEvent($tenant));
     }
 
     protected function performTaskToForgetCurrentTenant(): static
     {
-        $this->tasksCollection->each(fn (SwitchTenantTask $task) => $task->forgetCurrent());
+        $this->tasksCollection->forgetCurrent();
 
         return $this;
     }

@@ -1,0 +1,16 @@
+version: '3'
+
+server:
+  command: 'php vendor/laravel/octane/bin/roadrunner-worker'
+
+http:
+  address: 127.0.0.1:8000
+  pool:
+    num_workers: 1
+    max_jobs: 0
+
+logs:
+  mode: production
+  level: error
+  encoding: console
+  output: stderr

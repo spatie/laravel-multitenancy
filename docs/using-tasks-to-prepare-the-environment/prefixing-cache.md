@@ -3,7 +3,7 @@ title: Prefixing cache
 weight: 5
 ---
 
-You might want to use separate caches for each different tenant. The `Spatie\Multitenancy\Tasks\PrefixCacheTask` allows you to do just that. This task only works for memory based caches, such as APC and Redis.
+You might want to use separate caches for each different tenant. The `Spatie\Multitenancy\Tasks\PrefixCacheTask` allows you to do just that. This task only works for memory based caches, such as APC and Redis. The `octane` cache driver of Laravel Octane ignores the prefix, so it cannot be used for tenant data.
 
 To use this task, you should add it to the `switch_tenant_tasks` key in the `multitenancy` config file.
 

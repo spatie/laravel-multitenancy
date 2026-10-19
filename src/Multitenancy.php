@@ -18,18 +18,30 @@ class Multitenancy
     {
     }
 
+    public function boot(): void
+    {
+        $this
+            ->registerBindings()
+            ->configureQueue();
+    }
+
     public function start(): void
     {
         $this
-            ->registerTenantFinder()
-            ->registerTasksCollection()
-            ->configureRequests()
-            ->configureQueue();
+            ->registerBindings()
+            ->configureRequests();
     }
 
     public function end(): void
     {
         app(IsTenant::class)::forgetCurrent();
+    }
+
+    public function registerBindings(): static
+    {
+        return $this
+            ->registerTenantFinder()
+            ->registerTasksCollection();
     }
 
     protected function determineCurrentTenant(): void
@@ -38,25 +50,25 @@ class Multitenancy
             return;
         }
 
-        /** @var \Spatie\Multitenancy\TenantFinder\TenantFinder $tenantFinder */
+        /** @var TenantFinder $tenantFinder */
         $tenantFinder = $this->app[TenantFinder::class];
 
         $tenant = $tenantFinder->findForRequest($this->app['request']);
 
-        if ($tenant instanceof IsTenant) {
-            $tenant->makeCurrent();
-        } else {
+        if (! $tenant instanceof IsTenant) {
             event(new TenantNotFoundForRequestEvent($this->app['request']));
+
+            return;
         }
+
+        $tenant->makeCurrent();
     }
 
     protected function registerTasksCollection(): static
     {
-        $this->app->singleton(TasksCollection::class, function () {
-            $taskClassNames = $this->app['config']->get('multitenancy.switch_tenant_tasks');
-
-            return new TasksCollection($taskClassNames);
-        });
+        $this->app->singleton(TasksCollection::class, fn () => new TasksCollection(
+            $this->app['config']->get('multitenancy.switch_tenant_tasks')
+        ));
 
         return $this;
     }

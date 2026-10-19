@@ -7,6 +7,8 @@ use Spatie\Multitenancy\Events\ForgotCurrentTenantEvent;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\Events\MakingTenantCurrentEvent;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
+use Spatie\Multitenancy\Tests\Feature\Tasks\TestClasses\FailingToForgetTask;
 
 beforeEach(function () {
     $this->tenant = Tenant::factory()->create();
@@ -48,6 +50,28 @@ it('can forget the current tenant', function () {
     expect(Tenant::current())->toBeNull()
         ->and(app())->has($containerKey)->toBeFalse()
         ->and(Context::get($contextKey))->toBeNull();
+});
+
+it('will clear the current tenant and context even when a task fails to forget it', function () {
+    config()->set('multitenancy.switch_tenant_tasks', [FailingToForgetTask::class, SwitchTenantDatabaseTask::class]);
+
+    $this->tenant->makeCurrent();
+
+    expect(Tenant::current())->toBe($this->tenant)
+        ->and(Context::get(config('multitenancy.current_tenant_context_key')))->toBe($this->tenant->id)
+        ->and(config('database.connections.tenant.database'))->toBe($this->tenant->database);
+
+    Event::fake([ForgotCurrentTenantEvent::class]);
+
+    expect(fn () => Tenant::forgetCurrent())
+        ->toThrow(RuntimeException::class, 'This task cannot forget the current tenant');
+
+    expect(Tenant::current())->toBeNull()
+        ->and(app()->has(config('multitenancy.current_tenant_container_key')))->toBeFalse()
+        ->and(Context::get(config('multitenancy.current_tenant_context_key')))->toBeNull()
+        ->and(config('database.connections.tenant.database'))->toBeNull();
+
+    Event::assertNotDispatched(ForgotCurrentTenantEvent::class);
 });
 
 it('can check if a current tenant has been set', function () {

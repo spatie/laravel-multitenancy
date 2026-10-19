@@ -20,7 +20,7 @@ interface SwitchTenantTask
 
 The `makeCurrent` function will be called when making a tenant current. A common thing to do would be to dynamically change some configuration values.
 
-`forgetCurrent` will be called when forgetting a tenant. This function should restore the original environment. An important thing to note is that `SwitchTenantTask` are singletons, so you could store the original values as a property and reach for them later.
+`forgetCurrent` will be called when forgetting a tenant. This function should restore the original environment. An important thing to note is that `SwitchTenantTask` are singletons, so you could store the original values as a property and reach for them later. In long running processes such as [Laravel Octane](/docs/laravel-multitenancy/v4/advanced-usage/using-laravel-octane/) and queue workers, `forgetCurrent` is the only thing that restores the environment for the landlord.
 
 Here is an example implementation where we are going to use a prefix when a tenant is current, and clear out that prefix when forgetting the tenant.
 

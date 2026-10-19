@@ -44,6 +44,14 @@ You'll need to create the following 3 local MySql databases to be able to run th
 - `laravel_mt_tenant_1` 
 - `laravel_mt_tenant_2`
 
+The cache tests also require Redis and the PHP Redis extension. To include the real HTTP tests for Octane, download RoadRunner after installing the Composer dependencies:
+
+```bash
+vendor/bin/rr get-binary --no-config -n
+```
+
+Without the RoadRunner binary, those HTTP tests are skipped. CI always installs it.
+
 You can run the package's tests:
 
 ``` bash
