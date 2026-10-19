@@ -11,11 +11,27 @@ use Laravel\Octane\Events\TickReceived;
 use Laravel\Octane\Events\TickTerminated;
 use Laravel\Octane\Events\WorkerErrorOccurred;
 use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Multitenancy;
 use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
 use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     config()->set('multitenancy.switch_tenant_tasks', [SwitchRouteCacheTask::class]);
+});
+
+it('supports protected queue configuration overrides when booting', function () {
+    $multitenancy = new class (app()) extends Multitenancy {
+        protected function configureQueue(): static
+        {
+            config()->set('multitenancy.queues_are_tenant_aware_by_default', false);
+
+            return parent::configureQueue();
+        }
+    };
+
+    $multitenancy->boot();
+
+    expect(config('multitenancy.queues_are_tenant_aware_by_default'))->toBeFalse();
 });
 
 it('will register the queue listeners once for all requests', function () {

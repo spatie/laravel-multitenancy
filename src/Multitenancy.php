@@ -18,6 +18,13 @@ class Multitenancy
     {
     }
 
+    public function boot(): void
+    {
+        $this
+            ->registerBindings()
+            ->configureQueue();
+    }
+
     public function start(): void
     {
         $this
@@ -86,7 +93,7 @@ class Multitenancy
         return $this;
     }
 
-    public function configureQueue(): static
+    protected function configureQueue(): static
     {
         $this
             ->getMultitenancyActionClass(

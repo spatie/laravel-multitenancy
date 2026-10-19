@@ -33,7 +33,7 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
         $this->app->bind(Multitenancy::class, fn ($app) => new Multitenancy($app));
 
-        app(Multitenancy::class)->configureQueue();
+        app(Multitenancy::class)->boot();
 
         $this->detectsLaravelOctane();
     }
@@ -45,8 +45,6 @@ class MultitenancyServiceProvider extends PackageServiceProvider
 
             return $this;
         }
-
-        app(Multitenancy::class)->registerBindings();
 
         $this->app->booted(function () {
             Event::listen(RequestReceived::class, fn () => app(Multitenancy::class)->start());
