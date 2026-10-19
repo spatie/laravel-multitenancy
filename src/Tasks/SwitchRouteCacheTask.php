@@ -16,7 +16,11 @@ class SwitchRouteCacheTask implements SwitchTenantTask
             return;
         }
 
-        $this->uncachedLandlordRoutes = $this->uncachedRoutes();
+        $routes = app('router')->getRoutes();
+
+        if ($routes instanceof RouteCollection) {
+            $this->uncachedLandlordRoutes = clone $routes;
+        }
     }
 
     public function makeCurrent(IsTenant $tenant): void
@@ -31,7 +35,7 @@ class SwitchRouteCacheTask implements SwitchTenantTask
         Env::getRepository()->clear('APP_ROUTES_CACHE');
 
         if ($this->uncachedLandlordRoutes) {
-            $this->restoreUncachedLandlordRoutes();
+            app('router')->setRoutes(clone $this->uncachedLandlordRoutes);
 
             return;
         }
@@ -68,17 +72,5 @@ class SwitchRouteCacheTask implements SwitchTenantTask
         }
 
         require $cachedRoutesPath;
-    }
-
-    protected function restoreUncachedLandlordRoutes(): void
-    {
-        app('router')->setRoutes(clone $this->uncachedLandlordRoutes);
-    }
-
-    protected function uncachedRoutes(): ?RouteCollection
-    {
-        $routes = app('router')->getRoutes();
-
-        return $routes instanceof RouteCollection ? clone $routes : null;
     }
 }

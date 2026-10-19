@@ -18,88 +18,48 @@ beforeEach(function () {
     config()->set('multitenancy.switch_tenant_tasks', [SwitchRouteCacheTask::class]);
 });
 
-function receiveRequest(): Request
-{
-    $request = Request::create('/');
-
-    event(new RequestReceived(app(), app(), $request));
-
-    return $request;
-}
-
-function terminateRequest(Request $request): void
-{
-    event(new RequestTerminated(app(), app(), $request, new Response()));
-}
-
-function failRequest(): void
-{
-    event(new WorkerErrorOccurred(new RuntimeException('The client went away'), app()));
-}
-
 it('will register the queue listeners once for all requests', function () {
     $jobProcessingListeners = count(app('events')->getListeners(JobProcessing::class));
     $jobRetryRequestedListeners = count(app('events')->getListeners(JobRetryRequested::class));
 
-    terminateRequest(receiveRequest());
-    terminateRequest(receiveRequest());
+    foreach (['/first', '/second'] as $uri) {
+        $request = Request::create($uri);
+
+        event(new RequestReceived(app(), app(), $request));
+        event(new RequestTerminated(app(), app(), $request, new Response()));
+    }
 
     expect(app('events')->getListeners(JobProcessing::class))->toHaveCount($jobProcessingListeners)
         ->and(app('events')->getListeners(JobRetryRequested::class))->toHaveCount($jobRetryRequestedListeners);
 });
 
-it('will forget the current tenant when the request terminates', function () {
-    $request = receiveRequest();
+it('forgets the current tenant when an Octane operation ends', function (object $received, object $terminated) {
+    event($received);
 
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
     $tenant = Tenant::factory()->create();
     $tenant->makeCurrent();
+
     expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
 
-    terminateRequest($request);
+    event($terminated);
 
     expect(Tenant::checkCurrent())->toBeFalse()
         ->and(env('APP_ROUTES_CACHE'))->toBeNull();
-});
-
-it('will forget the current tenant when the worker fails before the request terminates', function () {
-    receiveRequest();
-
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-    $tenant = Tenant::factory()->create();
-    $tenant->makeCurrent();
-    expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
-
-    failRequest();
-
-    expect(Tenant::checkCurrent())->toBeFalse()
-        ->and(env('APP_ROUTES_CACHE'))->toBeNull();
-});
-
-it('will run the switch tenant tasks in a concurrent task and forget the tenant when the task terminates', function () {
-    event(new TaskReceived(app(), app(), []));
-
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-    $tenant = Tenant::factory()->create();
-    $tenant->makeCurrent();
-    expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
-
-    event(new TaskTerminated(app(), app(), [], null));
-
-    expect(Tenant::checkCurrent())->toBeFalse()
-        ->and(env('APP_ROUTES_CACHE'))->toBeNull();
-});
-
-it('will run the switch tenant tasks in a tick and forget the tenant when the tick terminates', function () {
-    event(new TickReceived(app(), app()));
-
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-    $tenant = Tenant::factory()->create();
-    $tenant->makeCurrent();
-    expect(env('APP_ROUTES_CACHE'))->toEqual("bootstrap/cache/routes-v7-tenant-{$tenant->id}.php");
-
-    event(new TickTerminated(app(), app()));
-
-    expect(Tenant::checkCurrent())->toBeFalse()
-        ->and(env('APP_ROUTES_CACHE'))->toBeNull();
-});
+})->with([
+    'request' => [
+        fn () => new RequestReceived(app(), app(), Request::create('/')),
+        fn () => new RequestTerminated(app(), app(), app('request'), new Response()),
+    ],
+    'worker error' => [
+        fn () => new RequestReceived(app(), app(), Request::create('/')),
+        fn () => new WorkerErrorOccurred(new RuntimeException('The client went away'), app()),
+    ],
+    'concurrent task' => [
+        fn () => new TaskReceived(app(), app(), []),
+        fn () => new TaskTerminated(app(), app(), [], null),
+    ],
+    'tick' => [
+        fn () => new TickReceived(app(), app()),
+        fn () => new TickTerminated(app(), app()),
+    ],
+]);

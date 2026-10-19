@@ -18,22 +18,16 @@ return Application::configure(basePath: default_skeleton_path())
     ->withMiddleware()
     ->withExceptions()
     ->booting(function (Application $app) {
+        $connection = $app['config']->get('database.connections.mysql');
+
         $app['config']->set([
             'database.default' => 'landlord',
             'database.connections.landlord' => [
-                'driver' => 'mysql',
-                'host' => env('DB_HOST', '127.0.0.1'),
-                'port' => env('DB_PORT', '3306'),
-                'username' => env('DB_USERNAME', 'root'),
-                'password' => env('DB_PASSWORD'),
+                ...$connection,
                 'database' => 'laravel_mt_landlord',
             ],
             'database.connections.tenant' => [
-                'driver' => 'mysql',
-                'host' => env('DB_HOST', '127.0.0.1'),
-                'port' => env('DB_PORT', '3306'),
-                'username' => env('DB_USERNAME', 'root'),
-                'password' => env('DB_PASSWORD'),
+                ...$connection,
                 'database' => null,
             ],
             'multitenancy.tenant_finder' => DomainTenantFinder::class,

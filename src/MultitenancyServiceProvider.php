@@ -3,11 +3,11 @@
 namespace Spatie\Multitenancy;
 
 use Illuminate\Support\Facades\Event;
-use Laravel\Octane\Events\RequestReceived as OctaneRequestReceived;
-use Laravel\Octane\Events\RequestTerminated as OctaneRequestTerminated;
-use Laravel\Octane\Events\TaskTerminated as OctaneTaskTerminated;
-use Laravel\Octane\Events\TickTerminated as OctaneTickTerminated;
-use Laravel\Octane\Events\WorkerErrorOccurred as OctaneWorkerErrorOccurred;
+use Laravel\Octane\Events\RequestReceived;
+use Laravel\Octane\Events\RequestTerminated;
+use Laravel\Octane\Events\TaskTerminated;
+use Laravel\Octane\Events\TickTerminated;
+use Laravel\Octane\Events\WorkerErrorOccurred;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand;
@@ -49,11 +49,14 @@ class MultitenancyServiceProvider extends PackageServiceProvider
         app(Multitenancy::class)->registerBindings();
 
         $this->app->booted(function () {
-            Event::listen(fn (OctaneRequestReceived $requestReceived) => app(Multitenancy::class)->start());
-            Event::listen(fn (OctaneRequestTerminated $requestTerminated) => app(Multitenancy::class)->end());
-            Event::listen(fn (OctaneTaskTerminated $taskTerminated) => app(Multitenancy::class)->end());
-            Event::listen(fn (OctaneTickTerminated $tickTerminated) => app(Multitenancy::class)->end());
-            Event::listen(fn (OctaneWorkerErrorOccurred $workerErrorOccurred) => app(Multitenancy::class)->end());
+            Event::listen(RequestReceived::class, fn () => app(Multitenancy::class)->start());
+
+            Event::listen([
+                RequestTerminated::class,
+                TaskTerminated::class,
+                TickTerminated::class,
+                WorkerErrorOccurred::class,
+            ], fn () => app(Multitenancy::class)->end());
         });
 
         return $this;

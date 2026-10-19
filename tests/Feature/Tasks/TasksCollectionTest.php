@@ -39,7 +39,7 @@ it('can handle duplicate tasks with other parameters', function () {
 it('will forget the tasks it ran, including the one that failed, when a task fails to make a tenant current', function () {
     $tasksCollection = new TasksCollection([DummyTask::class, FailingTask::class, DummyTask::class]);
 
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    /** @var Tenant $tenant */
     $tenant = Tenant::factory()->create();
 
     expect(fn () => $tasksCollection->makeCurrent($tenant))->toThrow(RuntimeException::class);
@@ -65,7 +65,7 @@ it('will rethrow the exception of the task that failed to make a tenant current 
 
     $tasksCollection = new TasksCollection([DummyTask::class, FailingToForgetTask::class, FailingTask::class]);
 
-    /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
+    /** @var Tenant $tenant */
     $tenant = Tenant::factory()->create();
 
     expect(fn () => $tasksCollection->makeCurrent($tenant))->toThrow(RuntimeException::class, 'This task cannot make a tenant current');

@@ -5,7 +5,6 @@ namespace Spatie\Multitenancy\Tests\Octane\TestClasses;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
-use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
 class RoadRunnerServer
@@ -36,7 +35,7 @@ class RoadRunnerServer
             '-c', "{$this->packagePath}/tests/Octane/RoadRunner/.rr.yaml",
             '-o', "http.address=127.0.0.1:{$this->port}",
             '-o', 'server.command=' . implode(',', [
-                (new PhpExecutableFinder())->find(),
+                PHP_BINARY,
                 '-d', 'variables_order=EGPCS',
                 "{$this->packagePath}/vendor/laravel/octane/bin/roadrunner-worker",
             ]),
