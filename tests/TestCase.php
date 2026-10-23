@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\View;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
+use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantAwareThrowForTenantCommand;
 use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
+use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\ThrowForTenantCommand;
 
 abstract class TestCase extends Orchestra
 {
@@ -44,6 +46,8 @@ abstract class TestCase extends Orchestra
         Artisan::starting(function ($artisan) {
             $artisan->resolveCommands([
                 TenantNoopCommand::class,
+                ThrowForTenantCommand::class,
+                TenantAwareThrowForTenantCommand::class,
             ]);
         });
 

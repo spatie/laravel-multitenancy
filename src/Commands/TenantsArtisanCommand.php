@@ -13,7 +13,7 @@ class TenantsArtisanCommand extends Command
     use UsesMultitenancyConfig;
     use TenantAware;
 
-    protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
+    protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*} {--continue-on-error}';
 
     protected $description = 'Run an Artisan command for selected tenants.';
 

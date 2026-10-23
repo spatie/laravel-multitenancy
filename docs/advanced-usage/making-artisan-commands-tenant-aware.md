@@ -66,6 +66,22 @@ If the command only needs to run for a specific tenant, you can pass its `id` to
 php artisan tenants:artisan "migrate --seed" --tenant=123
 ```
 
+### Continuing when a tenant fails
+
+By default, an exception thrown for one tenant stops the command, and the remaining tenants are skipped. That is the safe choice for commands like `migrate`, where you want to fix a failure before it is repeated for every tenant.
+
+For commands where each tenant is independent, such as scheduled maintenance, pass `--continue-on-error`. An exception is then reported to your exception handler, the failing tenant is written to the output, and the command continues with the next tenant. It exits with a failure code if any tenant failed.
+
+```bash
+php artisan tenants:artisan "model:prune" --continue-on-error
+```
+
+Your own tenant aware commands support this too when you add `{--continue-on-error}` to their signature.
+
+```php
+protected $signature = 'your-favorite-command {--tenant=*} {--continue-on-error}';
+```
+
 ### State Persistence
 When using `TenantAware`, the same command instance is executed for each tenant.
 This means that instance properties will retain their values between tenant executions unless explicitly reset.

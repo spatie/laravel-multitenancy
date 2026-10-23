@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
+use Spatie\Multitenancy\Tests\Feature\Commands\TestClasses\ThrowForTenantCommand;
 
 beforeEach(function () {
     config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
@@ -60,4 +62,25 @@ it('can migrate a specific tenant by domain', function () {
 
     assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
     assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+});
+
+it('stops at the first tenant whose artisan command throws by default', function () {
+    ThrowForTenantCommand::$ranForTenantIds = [];
+
+    expect(fn () => $this->artisan('tenants:artisan "throw-for-tenant ' . $this->tenant->id . '"')->run())
+        ->toThrow(RuntimeException::class);
+
+    expect(ThrowForTenantCommand::$ranForTenantIds)->toBe([$this->tenant->id]);
+});
+
+it('runs the artisan command for the remaining tenants when --continue-on-error is passed', function () {
+    Exceptions::fake();
+    ThrowForTenantCommand::$ranForTenantIds = [];
+
+    $this->artisan('tenants:artisan "throw-for-tenant ' . $this->tenant->id . '" --continue-on-error')
+        ->assertExitCode(Command::FAILURE);
+
+    expect(ThrowForTenantCommand::$ranForTenantIds)->toBe([$this->tenant->id, $this->anotherTenant->id]);
+
+    Exceptions::assertReported(RuntimeException::class);
 });
