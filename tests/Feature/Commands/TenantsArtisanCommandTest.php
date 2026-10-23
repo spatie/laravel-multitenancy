@@ -61,3 +61,15 @@ it('can migrate a specific tenant by domain', function () {
     assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations');
     assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
 });
+
+it('fails when the artisan command fails for a tenant', function () {
+    $this->artisan('tenants:artisan "fail-for-tenant ' . $this->tenant->id . '"')
+        ->expectsOutput('Ran for tenant ' . $this->tenant->id)
+        ->expectsOutput('Ran for tenant ' . $this->anotherTenant->id)
+        ->assertExitCode(Command::FAILURE);
+});
+
+it('succeeds when the artisan command fails only for an unselected tenant', function () {
+    $this->artisan('tenants:artisan "fail-for-tenant ' . $this->tenant->id . '" --tenant="' . $this->anotherTenant->id . '"')
+        ->assertExitCode(Command::SUCCESS);
+});

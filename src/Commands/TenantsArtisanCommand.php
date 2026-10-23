@@ -17,7 +17,7 @@ class TenantsArtisanCommand extends Command
 
     protected $description = 'Run an Artisan command for selected tenants.';
 
-    public function handle(): void
+    public function handle(): int
     {
         if (! $artisanCommand = $this->argument('artisanCommand')) {
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
@@ -31,6 +31,6 @@ class TenantsArtisanCommand extends Command
         $this->info("Running command for tenant `{$tenant->name}` (id: {$tenant->getKey()})...");
         $this->line("---------------------------------------------------------");
 
-        Artisan::call($artisanCommand, [], $this->output);
+        return Artisan::call($artisanCommand, [], $this->output);
     }
 }
