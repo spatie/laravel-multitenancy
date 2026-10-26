@@ -17,7 +17,7 @@ class TenantsArtisanCommand extends Command
         execute as protected executeForTenants;
     }
 
-    protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*}';
+    protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*} {--continue-on-error}';
 
     protected $description = 'Run an Artisan command for selected tenants.';
 

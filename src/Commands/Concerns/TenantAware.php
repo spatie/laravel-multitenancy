@@ -7,6 +7,7 @@ use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 trait TenantAware
 {
@@ -34,9 +35,36 @@ trait TenantAware
             return self::FAILURE;
         }
 
+        $continueOnError = $this->hasOption('continue-on-error') && $this->option('continue-on-error');
+
         return $tenantQuery
             ->cursor()
-            ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
-            ->sum();
+            ->map(function (IsTenant $tenant) use ($continueOnError) {
+                $originalCurrentTenant = $tenant::current();
+
+                try {
+                    return $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle']));
+                } catch (Throwable $exception) {
+                    if (! $continueOnError) {
+                        throw $exception;
+                    }
+
+                    report($exception);
+
+                    $originalCurrentTenant
+                        ? $originalCurrentTenant->makeCurrent()
+                        : $tenant::forgetCurrent();
+
+                    $this->error("Tenant (id: {$tenant->getKey()}) failed: {$exception->getMessage()}");
+
+                    return self::FAILURE;
+                }
+            })
+            ->reduce(
+                fn (int $exitCode, int $tenantExitCode) => $continueOnError
+                    ? (int) ($exitCode !== self::SUCCESS || $tenantExitCode !== self::SUCCESS)
+                    : $exitCode + $tenantExitCode,
+                self::SUCCESS
+            );
     }
 }
