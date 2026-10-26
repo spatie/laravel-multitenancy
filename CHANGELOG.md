@@ -2,6 +2,30 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.3.0 - 2026-10-26
+
+### Added
+
+- Add opt-in `--continue-on-error` to `tenants:artisan`. Custom commands using `TenantAware` can opt in by adding `{--continue-on-error}` to their signature.
+- Report tenant exceptions through the application exception handler, show the failing tenant and exception message, and continue processing the remaining selected tenants.
+
+### Safety and compatibility
+
+- Exceptions still stop the run by default. Keep that default for operations such as MySQL DDL migrations where continuing can repeat a partial failure across tenants.
+- In continuation mode, return status `1` if any selected tenant throws or returns a nonzero exit code, avoiding OS exit-status wraparound and cancellation by custom exit codes. Return status `0` when all selected tenants succeed.
+- Restore the original tenant context after activation failures before continuing. Stop if context restoration itself fails.
+- Preserve existing custom-command aggregation when continuation is not enabled, `TenantsArtisanCommand::handle(): void` subclass compatibility, and all 4.2.3 inner-command exit-status fixes.
+- PHP 8.3–8.5 and Laravel 12–13 remain supported; no dependencies or supported matrix combinations were removed.
+
+### Validation
+
+- Add regressions for both command invocation paths, selected/excluded tenants, first/last failures, exception reporting, repeated invocations, context restoration and failed recovery, and 255/256/257 failing tenants at the OS exit boundary.
+- All six PHP/Laravel CI combinations pass with 171 tests and 761 assertions each, including RoadRunner. Main tests and styling pass before publication.
+
+Thanks to @benddailey for the feature in #652.
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.2.3...4.3.0
+
 ## 4.2.3 - 2026-10-26
 
 ### Fixes
