@@ -2,6 +2,28 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.2.3 - 2026-10-26
+
+### Fixes
+
+- Return exit status 1 from `tenants:artisan` when any selected tenant command returns a nonzero exit code, while continuing to process the remaining tenants.
+- Avoid summed exit codes wrapping to success at the OS boundary.
+- Reset failure state between command invocations and preserve compatibility with existing subclasses that override `handle(): void`.
+
+### Upgrade notes
+
+Inner command failures were previously ignored. Deploy pipelines and scheduler failure hooks will now detect them. Successful commands, an empty tenant list with no explicit selection, and tenant selection behavior remain unchanged. Exceptions still stop the run; no exception-handling behavior was changed. PHP 8.3–8.5 and Laravel 12–13 remain supported.
+
+### Testing and tooling
+
+- Provision MySQL 8.4 explicitly in CI instead of relying on a removed hosted-runner init script.
+- Add regressions for selected and excluded tenants, first and last tenant failures, continued processing, repeated invocations, subclass compatibility, and OS exit status.
+- All six PHP/Laravel matrix jobs pass with 136 tests and 553 assertions each, including RoadRunner coverage.
+
+Thanks to @benddailey for the original fix in #651.
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.2.2...4.2.3
+
 ## 4.2.2 - 2026-10-19
 
 ### Fixes

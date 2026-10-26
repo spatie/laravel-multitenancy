@@ -7,15 +7,30 @@ use Illuminate\Support\Facades\Artisan;
 use Spatie\Multitenancy\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class TenantsArtisanCommand extends Command
 {
     use UsesMultitenancyConfig;
-    use TenantAware;
+    use TenantAware {
+        execute as protected executeForTenants;
+    }
 
     protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*} {--continue-on-error}';
 
     protected $description = 'Run an Artisan command for selected tenants.';
+
+    protected int $artisanCommandExitCode = self::SUCCESS;
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $this->artisanCommandExitCode = self::SUCCESS;
+
+        $exitCode = $this->executeForTenants($input, $output);
+
+        return $exitCode ?: $this->artisanCommandExitCode;
+    }
 
     public function handle(): void
     {
@@ -31,6 +46,8 @@ class TenantsArtisanCommand extends Command
         $this->info("Running command for tenant `{$tenant->name}` (id: {$tenant->getKey()})...");
         $this->line("---------------------------------------------------------");
 
-        Artisan::call($artisanCommand, [], $this->output);
+        if (Artisan::call($artisanCommand, [], $this->output) !== self::SUCCESS) {
+            $this->artisanCommandExitCode = self::FAILURE;
+        }
     }
 }
