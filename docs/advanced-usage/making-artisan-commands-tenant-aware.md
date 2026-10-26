@@ -52,7 +52,7 @@ We are using the `migrate` command here, but you can pass any command that you l
 
 If an inner command returns a non-zero exit code, `tenants:artisan` continues with the remaining tenants and exits with status `1`. It exits with status `0` when every selected tenant succeeds, or when there are no tenants and no selection was requested. An explicit selection that matches no tenants exits with status `1`.
 
-Previously, inner command exit codes were ignored. Deploy pipelines and scheduler failure hooks will now detect those failures. Exceptions still propagate and stop the run; this behavior has not changed.
+Previously, inner command exit codes were ignored. Deploy pipelines and scheduler failure hooks will now detect those failures. Exceptions still propagate and stop the run by default.
 
 ### Passing arguments and options
 
@@ -74,7 +74,9 @@ php artisan tenants:artisan "migrate --seed" --tenant=123
 
 By default, an exception thrown for one tenant stops the command, and the remaining tenants are skipped. That is the safe choice for commands like `migrate`, where you want to fix a failure before it is repeated for every tenant.
 
-For commands where each tenant is independent, such as scheduled maintenance, pass `--continue-on-error`. An exception is then reported to your exception handler, the failing tenant is written to the output, and the command continues with the next tenant. It exits with a failure code if any tenant failed.
+For commands where each tenant is independent, such as scheduled maintenance, pass `--continue-on-error`. An exception is then reported to your exception handler, the failing tenant is written to the output, and the command continues with the next tenant. It exits with status `1` if any tenant throws or returns a non-zero exit code, or `0` if all selected tenants succeed.
+
+The original tenant context is restored before continuing. If restoring that context fails, the command stops rather than running the next tenant with uncertain tenant state.
 
 ```bash
 php artisan tenants:artisan "model:prune" --continue-on-error

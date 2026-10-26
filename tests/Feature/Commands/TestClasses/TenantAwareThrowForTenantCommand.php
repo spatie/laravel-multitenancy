@@ -8,5 +8,5 @@ class TenantAwareThrowForTenantCommand extends ThrowForTenantCommand
 {
     use TenantAware;
 
-    protected $signature = 'tenant:throw-for-tenant {tenantId} {--tenant=*} {--continue-on-error}';
+    protected $signature = 'tenant:throw-for-tenant {tenantId?} {--exit-code=0} {--tenant=*} {--continue-on-error}';
 }

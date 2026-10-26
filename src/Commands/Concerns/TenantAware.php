@@ -40,6 +40,8 @@ trait TenantAware
         return $tenantQuery
             ->cursor()
             ->map(function (IsTenant $tenant) use ($continueOnError) {
+                $originalCurrentTenant = $tenant::current();
+
                 try {
                     return $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle']));
                 } catch (Throwable $exception) {
@@ -49,11 +51,20 @@ trait TenantAware
 
                     report($exception);
 
+                    $originalCurrentTenant
+                        ? $originalCurrentTenant->makeCurrent()
+                        : $tenant::forgetCurrent();
+
                     $this->error("Tenant (id: {$tenant->getKey()}) failed: {$exception->getMessage()}");
 
                     return self::FAILURE;
                 }
             })
-            ->sum();
+            ->reduce(
+                fn (int $exitCode, int $tenantExitCode) => $continueOnError
+                    ? (int) ($exitCode !== self::SUCCESS || $tenantExitCode !== self::SUCCESS)
+                    : $exitCode + $tenantExitCode,
+                self::SUCCESS
+            );
     }
 }
