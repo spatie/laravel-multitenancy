@@ -7,9 +7,9 @@ use Spatie\Multitenancy\Models\Tenant;
 
 class FailForTenantCommand extends Command
 {
-    protected $signature = 'fail-for-tenant {tenantId}';
+    protected $signature = 'fail-for-tenant {tenantId?} {--exit-code=1}';
 
-    protected $description = 'Fail when running for the given tenant';
+    protected $description = 'Fail for the given tenant, or all tenants when none is given';
 
     public function handle(): int
     {
@@ -17,8 +17,8 @@ class FailForTenantCommand extends Command
 
         $this->line('Ran for tenant ' . $tenantId);
 
-        return $tenantId === (int) $this->argument('tenantId')
-            ? self::FAILURE
+        return $this->argument('tenantId') === null || $tenantId === (int) $this->argument('tenantId')
+            ? (int) $this->option('exit-code')
             : self::SUCCESS;
     }
 }

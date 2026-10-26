@@ -50,6 +50,10 @@ php artisan tenants:artisan migrate
 
 We are using the `migrate` command here, but you can pass any command that you like.
 
+If an inner command returns a non-zero exit code, `tenants:artisan` continues with the remaining tenants and exits with status `1`. It exits with status `0` when every selected tenant succeeds, or when there are no tenants and no selection was requested. An explicit selection that matches no tenants exits with status `1`.
+
+Previously, inner command exit codes were ignored. Deploy pipelines and scheduler failure hooks will now detect those failures. Exceptions still propagate and stop the run; this behavior has not changed.
+
 ### Passing arguments and options
 
 If you use quotes around the command part you can use any argument and option that the command supports.
