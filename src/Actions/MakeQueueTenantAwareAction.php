@@ -164,6 +164,18 @@ class MakeQueueTenantAwareAction
             return $this->resolveTenantAwarenessForJob($this->jobClassFromLegacyPayload($payload));
         }
 
+        /**
+         * Read the job class from the payload prior to unserializing the command.
+         * Wrappers in `queueable_to_job` name the class they wrap in `displayName`.
+         */
+        $jobClass = Arr::get(config('multitenancy.queueable_to_job'), $payload['data']['commandName'])
+            ? $payload['displayName']
+            : $payload['data']['commandName'];
+
+        if (class_exists($jobClass)) {
+            return $this->resolveTenantAwarenessForJob($jobClass);
+        }
+
         $serializedCommand = $payload['data']['command'];
 
         if (! str_starts_with($serializedCommand, 'O:')) {
@@ -192,7 +204,7 @@ class MakeQueueTenantAwareAction
     /**
      * Determine tenant-awareness from a job's interface declarations and the
      * configured allow/deny lists, falling back to the package default. Accepts
-     * either a job instance (modern payloads) or a class name (legacy payloads).
+     * either a job instance or a class name read from the payload.
      */
     protected function resolveTenantAwarenessForJob(object|string|null $job): bool
     {
