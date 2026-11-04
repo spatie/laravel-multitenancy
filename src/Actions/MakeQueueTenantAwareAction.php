@@ -164,16 +164,15 @@ class MakeQueueTenantAwareAction
             return $this->resolveTenantAwarenessForJob($this->jobClassFromLegacyPayload($payload));
         }
 
-        /**
-         * Read the job class from the payload prior to unserializing the command.
-         * Wrappers in `queueable_to_job` name the class they wrap in `displayName`.
-         */
-        $jobClass = Arr::get(config('multitenancy.queueable_to_job'), $payload['data']['commandName'])
-            ? $payload['displayName']
-            : $payload['data']['commandName'];
+        // Custom actions and wrapper mappings may need the actual job instance.
+        if (static::class === self::class) {
+            $jobClass = $payload['data']['commandName'] ?? null;
 
-        if (class_exists($jobClass)) {
-            return $this->resolveTenantAwarenessForJob($jobClass);
+            if (is_string($jobClass) && class_exists($jobClass)) {
+                if (! Arr::get(config('multitenancy.queueable_to_job'), $jobClass)) {
+                    return $this->resolveTenantAwarenessForJob($jobClass);
+                }
+            }
         }
 
         $serializedCommand = $payload['data']['command'];

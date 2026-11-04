@@ -77,6 +77,14 @@ If a tenant aware job is unable to retrieve the tenant, because the tenant was d
 
 On the other hand, a job that is not tenant aware runs without a current tenant. As such, it is important that your jobs make no assumptions about the active tenant unless they are tenant aware.
 
+## Job deserialization
+
+For ordinary jobs, including encrypted jobs, the default queue action determines tenant awareness from the job class in the payload without deserializing the job first. This leaves model restoration to Laravel's queued handler, where `deleteWhenMissingModels` can be honored.
+
+Jobs configured in `queueable_to_job` still need to be deserialized to resolve their configured property or method. This includes queued mailables, notifications, listeners, broadcasts, and closures. Their display names are not used to determine tenant awareness.
+
+Custom subclasses of `MakeQueueTenantAwareAction` also retain the existing deserialization behavior, even when they inherit its methods unchanged. This preserves overrides that need a job instance. Payloads without a resolvable `data.commandName` use the same fallback. These paths retain the earlier model-restoration queries and missing-model limitations; the optimization does not change their behavior. Legacy string jobs without a serialized command continue to be resolved from their `job` key.
+
 ## The current tenant of the surrounding code
 
 Processing a job never leaves the surrounding code with a different current tenant than it had before. Whatever tenant was current before the job started is restored when the job finishes, both when it succeeds and when it fails.
