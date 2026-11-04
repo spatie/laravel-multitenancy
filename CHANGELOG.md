@@ -2,6 +2,30 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.3.1 - 2026-11-04
+
+### Fixed
+
+- Avoid deserializing ordinary queued jobs merely to determine tenant awareness. This removes redundant model-restoration queries and lets Laravel honor `deleteWhenMissingModels`, including for encrypted jobs.
+- Preserve configured `queueable_to_job` property/method targets instead of inferring their identity from `displayName`.
+- Preserve custom queue-action overrides, including resolvers that require a job instance.
+
+### Compatibility
+
+- The optimization applies only to unmapped jobs using the exact default `MakeQueueTenantAwareAction` class with a resolvable payload class name.
+- Configured wrappers (including queued mailables, notifications, listeners, broadcasts and closures), action subclasses, and payloads without a resolvable class retain the previous deserialization path and its model-restoration/missing-model limitations. Legacy string-job behavior is unchanged.
+- PHP 8.3–8.5 and Laravel 12–13 remain supported. No dependency constraints, public customization contracts or configuration APIs were changed.
+
+### Validation
+
+- Replace protected-method probes with real queue-worker regressions covering missing/present models, deletion policy, encryption, wrapper properties/methods, custom display names, distinct tenant contexts and object-sensitive action overrides.
+- Full local Laravel 12 and 13 suites pass: 184 tests and 830 assertions on each.
+- All six upstream PR CI combinations pass; formatter, PHP syntax and Composer validation pass. The changed action passes PHPStan level 0; full-source analysis retains eight identical pre-existing `new.static` warnings.
+
+Thanks to @stevethomas for the original contribution and @maxrice for the missing-model reproduction in #653.
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.3.0...4.3.1
+
 ## 4.3.0 - 2026-10-26
 
 ### Added
