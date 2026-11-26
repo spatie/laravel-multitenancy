@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Cache\RateLimiter;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\PrefixCacheTask;
 
@@ -69,4 +70,35 @@ it('will separate the cache for each tenant', function () {
 
     Tenant::forgetCurrent();
     expect(cache())->get('key')->toEqual('cache-landlord');
+});
+
+it('will separate rate limits resolved before switching tenants', function () {
+    $rateLimiter = app(RateLimiter::class);
+    $tenantOne = Tenant::factory()->create();
+    $tenantTwo = Tenant::factory()->create();
+
+    $tenantOne->execute(fn () => $rateLimiter->hit('sign-in'));
+
+    $tenantTwo->execute(function () use ($rateLimiter) {
+        expect($rateLimiter->attempts('sign-in'))->toBe(0);
+
+        $rateLimiter->hit('sign-in');
+        $rateLimiter->hit('sign-in');
+
+        expect($rateLimiter->attempts('sign-in'))->toEqual(2);
+    });
+
+    $tenantOne->execute(function () use ($rateLimiter) {
+        expect($rateLimiter->attempts('sign-in'))->toEqual(1);
+    });
+
+    expect($rateLimiter->attempts('sign-in'))->toBe(0);
+
+    $rateLimiter->hit('sign-in');
+
+    $tenantTwo->execute(function () use ($rateLimiter) {
+        expect($rateLimiter->attempts('sign-in'))->toEqual(2);
+    });
+
+    expect($rateLimiter->attempts('sign-in'))->toEqual(1);
 });

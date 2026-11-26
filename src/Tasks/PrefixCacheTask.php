@@ -35,6 +35,14 @@ class PrefixCacheTask implements SwitchTenantTask
     {
         config()->set('cache.prefix', $prefix);
 
+        $store = app('cache')->store($this->storeName)->getStore();
+
+        if (method_exists($store, 'setPrefix')) {
+            $store->setPrefix($prefix);
+
+            return;
+        }
+
         app('cache')->forgetDriver($this->storeName);
 
         // This is important because the `CacheManager` will have the `$app['config']` array cached
