@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-multitenancy` will be documented in this file
 
+## 4.3.2 - 2026-11-26
+
+### Fixed
+
+- Keep resolved cache stores in sync with the current tenant prefix, so rate limiters resolved before a tenant switch keep each tenant’s counts separate. Restore the landlord prefix when leaving a tenant. (#657)
+- Stores without `setPrefix()` retain the existing reset behavior. Named rate limiters remain registered.
+
+**Full Changelog**: https://github.com/spatie/laravel-multitenancy/compare/4.3.1...4.3.2
+
 ## 4.3.1 - 2026-11-04
 
 ### Fixed
